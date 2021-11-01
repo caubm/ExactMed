@@ -1,8 +1,8 @@
 ---
-title: "The EXACTMED function"
+title: "The exactmed function"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The EXACTMED function}
+  %\VignetteIndexEntry{The exactmed function}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,15 +17,15 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This note aims to illustrate the usage of the EXACTMED function and its behavior via additional examples.
+This note aims to illustrate the usage of exactmed() and its behavior via additional examples.
 
- We recall that EXACTMED computes natural mediation effects and controlled direct effects for a binary outcome and a binary mediator. Controlled direct effects are obtained for the two possible m values (0 and 1). Natural and controlled effects can either be unadjusted or adjusted for covariates (that is, conditional). Adjusted effect estimates are obtained for covariates fixed at their sample-specific mean values (default) or at specific values (user-provided). Also, by default, EXACTMED incorporates a mediator-exposure interaction term in the outcome model and generates $95\%$ confidence intervals obtained by the delta method.
+ We recall that exactmed() computes natural mediation effects and controlled direct effects for a binary outcome and a binary mediator. Controlled direct effects are obtained for the two possible m values (0 and 1). Natural and controlled effects can either be unadjusted or adjusted for covariates (that is, conditional). Adjusted effect estimates are obtained for covariates fixed at their sample-specific mean values (default) or at specific values (user-provided). Also, by default, exactmed() incorporates a mediator-exposure interaction term in the outcome model and generates $95\%$ confidence intervals obtained by the delta method.
  
 ## The dataset
  
  In all the examples presented below we will use the dataset 'datamed', available after loading the ExactMed package.
  
- Some of the features of this dataset can be found in its corresponding help file. We recall that the EXACTMED function only works on data frames with named columns and no missing values.
+ Some of the features of this dataset can be found in its corresponding help file. We recall that the exactmed() function only works on data frames with named columns and no missing values.
  
 ```{r}
 library(ExactMed)
@@ -48,38 +48,38 @@ as.logical(sum(is.na(datamed)))
  
 Suppose that one wishes to obtain mediation effects estimates for a change in exposure from $0$ to $1$, assuming there is no exposure-mediator interaction and using the delta method to construct $95\%$ confidence intervals.
 
-In this case, a valid call to EXACTMED would be:
+In this case, a valid call to exactmed() would be:
  
 
 ```{r}
 
 
-results1 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, interaction= FALSE)
+results1 <- exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, interaction= FALSE)
 
 results1
 
 ```
  
  
-Mediation effect estimates adjusted for covariates are obtained through the use of the vectors M_COV and Y_COV. The following call to EXACTMED incorporates covariates C1 and C2 in both the mediator and outcome models:
+Mediation effect estimates adjusted for covariates are obtained through the use of the vectors m_cov and y_cov. The following call to exactmed() incorporates covariates C1 and C2 in both the mediator and outcome models:
 
 ```{r}
 
-results2 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0,  
-            M_COV=c('C1', 'C2'), Y_COV=c('C1', 'C2'), interaction =FALSE)
+results2 <- exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0,  
+            m_cov=c('C1', 'C2'), y_cov=c('C1', 'C2'), interaction =FALSE)
 
 results2
 
 ```
 
 
-EXACTMED also allows for the specification of two different sets of covariates in the function call. For example:
+exactmed() also allows for the specification of two different sets of covariates in the function call. For example:
 
 
 ```{r}
 
-results3 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0,  
-            M_COV=c('C1', 'C2'), Y_COV=c('C1'), interaction=FALSE)
+results3 <- exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0,  
+            m_cov=c('C1', 'C2'), y_cov=c('C1'), interaction=FALSE)
 
 results3
 
@@ -89,12 +89,12 @@ results3
 However, we advise against this practice unless it is a priori known that excluded covariates are independent of the response being modeled given the rest of covariates.
 
 
-By default, the 'adjusted' parameter is TRUE. If the 'adjusted' parameter is set to FALSE, EXACTMED ignores the values of the vectors M_COV and Y_COV, and computes unadjusted (crude) effect estimates as in the first example above: 
+By default, the 'adjusted' parameter is TRUE. If the 'adjusted' parameter is set to FALSE, exactmed() ignores the values of the vectors m_cov and y_cov, and computes unadjusted (crude) effect estimates as in the first example above: 
  
 ```{r}
 
-results4 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, 
-            M_COV=c('C1', 'C2'), Y_COV=c('C1'), adjusted=FALSE, interaction=FALSE)
+results4 <- exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, 
+            m_cov=c('C1', 'C2'), y_cov=c('C1'), adjusted=FALSE, interaction=FALSE)
 
 results4
 
@@ -102,13 +102,13 @@ results4
 ```
  
 
-To perform an adjusted mediation analysis allowing for exposure-mediator interaction (by default TRUE) and using bootstrap based on $300$ samples with initial random seed $= 1985$ to construct $97\%$ confidence intervals, one should call EXACTMED as follows:
+To perform an adjusted mediation analysis allowing for exposure-mediator interaction (by default TRUE) and using bootstrap based on $300$ samples with initial random seed $= 1985$ to construct $97\%$ confidence intervals, one should call exactmed() as follows:
  
  
 ```{r, results='hide'}
 
-results5 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',a1=1, a0=0, M_COV=c('C1', 'C2'),  
-            Y_COV=c('C1', 'C2'), boot =TRUE, nboot =300, bootseed =1991, confcoef = 0.97)
+results5 <- exactmed(data=datamed, a='X', m='M', y='Y',a1=1, a0=0, m_cov=c('C1', 'C2'),  
+            y_cov=c('C1', 'C2'), boot =TRUE, nboot =300, bootseed =1991, confcoef = 0.97)
 
 
 ```
@@ -128,8 +128,8 @@ The 'Firth' parameter implements Firth penalization to reduce the bias of the re
 
 ```{r, results='hide'}
 
-results6 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',a1=1, a0=0, M_COV=c('C1', 'C2'),  
-            Y_COV=c('C1', 'C2'), Firth=TRUE, boot =TRUE, nboot =300, bootseed =1991, confcoef = 0.97)
+results6 <- exactmed(data=datamed, a='X', m='M', y='Y',a1=1, a0=0, m_cov=c('C1', 'C2'),  
+            y_cov=c('C1', 'C2'), Firth=TRUE, boot =TRUE, nboot =300, bootseed =1991, confcoef = 0.97)
 
 
 ```
@@ -147,14 +147,14 @@ results6
  
  For example, we can estimate mediation effects at values $0.1$ and $0.4$ for covariates C1 and  C2 respectively, assuming an exposure-mediator interaction and using the delta method to construct $95\%$ confidence intervals, as follows:
  
-The following call to EXACTMED returns mediation effects when the values of covariates C1 and C2 are $0.1$ and $0.4$, respectively, assuming an exposure-mediator interaction and using the delta method to construct $95\%$ confidence intervals:
+The following call to exactmed() returns mediation effects when the values of covariates C1 and C2 are $0.1$ and $0.4$, respectively, assuming an exposure-mediator interaction and using the delta method to construct $95\%$ confidence intervals:
  
  
 ```{r}
 
 
-results7 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'), 
-            Y_COV=c('C1', 'C2'),M_COV_cond =c(C1 =0.1, C2=0.4),Y_COV_cond <-c(C1=0.1, C2=0.4))
+results7 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), 
+            y_cov=c('C1', 'C2'),m_cov_cond =c(C1 =0.1, C2=0.4),y_cov_cond <-c(C1=0.1, C2=0.4))
 
 results7
 
@@ -163,26 +163,26 @@ results7
  
  
  
-Common adjustment covariates in vectors M_COV and Y_COV must have the same values; otherwise, the EXACTMED execution is
+Common adjustment covariates in vectors m_cov and y_cov must have the same values; otherwise, the exactmed() execution is
 aborted and error message is displayed in the R console. Example:
 
 
 ```{r, error=TRUE, collapse=TRUE}
 
-    EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'), 
-    Y_COV=c('C1', 'C2'),M_COV_cond =c(C1 =0.3, C2=0.4),Y_COV_cond <-c(C1=0.1, C2=0.4))
+    exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), 
+    y_cov=c('C1', 'C2'),m_cov_cond =c(C1 =0.3, C2=0.4),y_cov_cond <-c(C1=0.1, C2=0.4))
 
 
 ```
 
 
-If the covariates specified in M_COV_cond (Y_COV_cond) constitute some proper subset of M_COV (Y_COV) then the other covariates will be set to their sample-specific mean levels. Hence, the call:
+If the covariates specified in m_cov_cond (y_cov_cond) constitute some proper subset of m_cov (y_cov) then the other covariates will be set to their sample-specific mean levels. Hence, the call:
 
 ```{r}
 
 
-   results8 <-  EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'), 
-                 Y_COV=c('C1', 'C2'),M_COV_cond =c(C1 =0.1),Y_COV_cond <-c(C1=0.1))
+   results8 <-  exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), 
+                 y_cov=c('C1', 'C2'),m_cov_cond =c(C1 =0.1),y_cov_cond <-c(C1=0.1))
 
 
 
@@ -199,8 +199,8 @@ If the covariates specified in M_COV_cond (Y_COV_cond) constitute some proper su
  mc2
 
 
- results9 <-  EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'), 
-                 Y_COV=c('C1', 'C2'),M_COV_cond =c(C1 =0.1, C2=mc2),Y_COV_cond <-c(C1=0.1, C2=mc2))
+ results9 <-  exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), 
+                 y_cov=c('C1', 'C2'),m_cov_cond =c(C1 =0.1, C2=mc2),y_cov_cond <-c(C1=0.1, C2=mc2))
 
 
 
@@ -222,8 +222,8 @@ With this in mind, an error is easily predicted if one makes this call:
 
 ```{r,error=TRUE, collapse=FALSE}
 
-EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'), 
-        Y_COV=c('C1', 'C2'),M_COV_cond =c(C1 =0.1),Y_COV_cond <-c(C1=0.1, C2=0.4))
+exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), 
+        y_cov=c('C1', 'C2'),m_cov_cond =c(C1 =0.1),y_cov_cond <-c(C1=0.1, C2=0.4))
 
 
 ```
@@ -232,7 +232,7 @@ EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'),
  
 ### Categorical covariates
 
-EXACTMED also allows for categorical covariates. Covariates of this type must appear in the data frame as factor, character or logical columns. To illustrate how EXACTMED works with categorical covariates, we transform covariate C1 to as a random factor column:
+exactmed() also allows for categorical covariates. Covariates of this type must appear in the data frame as factor, character or logical columns. To illustrate how exactmed() works with categorical covariates, we transform covariate C1 to as a random factor column:
 
 ```{r}
 
@@ -243,15 +243,15 @@ datamed$C1 <- cate
 ```
 
 
-It is possible to estimate mediation effects at specific values of categorical covariates by means of the input parameters M_COV_cond and Y_COV_cond. Note that if the targeted covariates are both numerical and categorical, the above parameters require to be list-type vectors, instead of atomic vectors as when covariates are only numerical.
+It is possible to estimate mediation effects at specific values of categorical covariates by means of the input parameters m_cov_cond and y_cov_cond. Note that if the targeted covariates are both numerical and categorical, the above parameters require to be list-type vectors, instead of atomic vectors as when covariates are only numerical.
  
- Hence, if one wants to estimate mediation effects at level 'a' of C1 and at value $0.4$ of C2, assuming an exposure-mediator interaction and using the delta method to construct $95\%$ confidence intervals, EXACTMED should be called as follows:
+ Hence, if one wants to estimate mediation effects at level 'a' of C1 and at value $0.4$ of C2, assuming an exposure-mediator interaction and using the delta method to construct $95\%$ confidence intervals, exactmed() should be called as follows:
  
  
 ```{r}
 
-results10 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'), 
-            Y_COV=c('C1', 'C2'),M_COV_cond =list(C1 ='a', C2=0.4),Y_COV_cond <-list(C1='a', C2=0.4))
+results10 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), 
+            y_cov=c('C1', 'C2'),m_cov_cond =list(C1 ='a', C2=0.4),y_cov_cond <-list(C1='a', C2=0.4))
 
 results10
 
@@ -259,15 +259,15 @@ results10
 ```
  
 
-If one does not specify a value for the categorical covariate C1, EXACTMED computes the effects by assigning each dummy variable (created internally by EXACTMED) to a value equivalent to the proportion of observations belonging to the corresponding category (equivalent to setting each dummy variable to its mean value): 
+If one does not specify a value for the categorical covariate C1, exactmed() computes the effects by assigning each dummy variable (created internally by exactmed()) to a value equivalent to the proportion of observations belonging to the corresponding category (equivalent to setting each dummy variable to its mean value): 
 
 
 
 ```{r}
 
 
-results11 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'), 
-            Y_COV=c('C1', 'C2'),M_COV_cond =c(C2=0.4),Y_COV_cond <-c(C2=0.4))
+results11 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), 
+            y_cov=c('C1', 'C2'),m_cov_cond =c(C2=0.4),y_cov_cond <-c(C2=0.4))
 
 results11
 

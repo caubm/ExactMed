@@ -3,63 +3,63 @@ library(ExactMed)
 
 
 
-test_that("EXACTMED() with 'datamed' returns a list",{
+test_that("exactmed() with 'datamed' returns a list",{
 
-  result1 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'))
+  result1 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'))
 
-  result2 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), Firth=TRUE)
+  result2 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), Firth=TRUE)
 
-  result3 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), boot =TRUE, nboot=100)
+  result3 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), boot =TRUE, nboot=100)
 
-  result4 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), Firth=TRUE, boot=TRUE, nboot=60)
+  result4 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), Firth=TRUE, boot=TRUE, nboot=60)
 
-  result5 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), interaction=FALSE)
+  result5 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), interaction=FALSE)
 
-  result6 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), interaction=FALSE, Firth=TRUE)
+  result6 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), interaction=FALSE, Firth=TRUE)
 
-  result7 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), interaction=FALSE, boot=TRUE, nboot=100)
+  result7 <- exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), interaction=FALSE, boot=TRUE, nboot=100)
 
-  result8 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), interaction=FALSE, Firth=TRUE, boot=TRUE, nboot=60)
+  result8 <- exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), interaction=FALSE, Firth=TRUE, boot=TRUE, nboot=60)
 
-  result9 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), adjusted = FALSE)
+  result9 <- exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), adjusted = FALSE)
 
-  result10 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0)
+  result10 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0)
 
-  result11 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, Firth=TRUE)
+  result11 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, Firth=TRUE)
 
-  result12 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, boot=TRUE, nboot=100)
+  result12 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, boot=TRUE, nboot=100)
 
-  result13 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, Firth=TRUE, boot=TRUE, nboot=60)
+  result13 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, Firth=TRUE, boot=TRUE, nboot=60)
 
-  result14 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, interaction=FALSE)
+  result14 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, interaction=FALSE)
 
-  result15 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, interaction=FALSE, Firth=TRUE)
+  result15 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, interaction=FALSE, Firth=TRUE)
 
-  result16 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, interaction=FALSE, boot=TRUE, nboot=100)
+  result16 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, interaction=FALSE, boot=TRUE, nboot=100)
 
-  result17 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, interaction=FALSE, Firth=TRUE, boot=TRUE, nboot=60)
-
-
-  M_COV_cond <- c(0.3,0.2)
-
-  names(M_COV_cond) <- c('C1','C2')
+  result17 <- exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, interaction=FALSE, Firth=TRUE, boot=TRUE, nboot=60)
 
 
-  Y_COV_cond <- c(0.3,0.2)
+  m_cov_cond <- c(0.3,0.2)
 
-  names(Y_COV_cond) <- c('C1', 'C2')
+  names(m_cov_cond) <- c('C1','C2')
 
-  result18 <- EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                       Y_COV=c('C1', 'C2'), M_COV_cond =M_COV_cond, Y_COV_cond=Y_COV_cond)
+
+  y_cov_cond <- c(0.3,0.2)
+
+  names(y_cov_cond) <- c('C1', 'C2')
+
+  result18 <- exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                       y_cov=c('C1', 'C2'), m_cov_cond =m_cov_cond, y_cov_cond=y_cov_cond)
 
 
 
@@ -68,9 +68,9 @@ test_that("EXACTMED() with 'datamed' returns a list",{
   datamed4$M <- as.factor(datamed4$M)
   levels(datamed4$M) <- c(1,2)
 
-  result19 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueM="2")
+  result19 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_m="2")
 
-  result20 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueM=2)
+  result20 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_m=2)
 
   datamed4 <- datamed
   lv <- vector("integer", length=n)
@@ -78,7 +78,7 @@ test_that("EXACTMED() with 'datamed' returns a list",{
   lv[which(datamed4$M==1)] <- 2
   datamed4$M <- lv
 
-  result21 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueM=2)
+  result21 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_m=2)
 
 
   datamed4 <- datamed
@@ -86,9 +86,9 @@ test_that("EXACTMED() with 'datamed' returns a list",{
   datamed4$Y <- as.factor(datamed4$Y)
   levels(datamed4$Y) <- c(1,2)
 
-  result22 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueY="2")
+  result22 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_y="2")
 
-  result23 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueY=2)
+  result23 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_y=2)
 
   datamed4 <- datamed
   lv <- vector("integer", length=n)
@@ -96,33 +96,33 @@ test_that("EXACTMED() with 'datamed' returns a list",{
   lv[which(datamed4$Y==1)] <- 2
   datamed4$Y <- lv
 
-  result24 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueY=2)
+  result24 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_y=2)
 
   datamed4 <- datamed
   datamed4$C1 <- sample(c("a","b","c"), nrow(datamed4), replace =TRUE)
 
-  result25 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, M_COV = c('C1', 'C2'), Y_COV = c('C1', 'C2'))
+  result25 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, m_cov = c('C1', 'C2'), y_cov = c('C1', 'C2'))
 
-  M_COV_cond <- list('a',2)
-  names(M_COV_cond) <- c('C1', 'C2')
+  m_cov_cond <- list('a',2)
+  names(m_cov_cond) <- c('C1', 'C2')
 
-  Y_COV_cond <- list('a',2)
-  names(Y_COV_cond) <- c('C1', 'C2')
+  y_cov_cond <- list('a',2)
+  names(y_cov_cond) <- c('C1', 'C2')
 
-  result26 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0,
-                       M_COV = c('C1', 'C2'), Y_COV = c('C1', 'C2'),
-                       M_COV_cond=M_COV_cond, Y_COV_cond=Y_COV_cond)
+  result26 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0,
+                       m_cov = c('C1', 'C2'), y_cov = c('C1', 'C2'),
+                       m_cov_cond=m_cov_cond, y_cov_cond=y_cov_cond)
 
 
-  M_COV_cond <- list('b',2)
-  names(M_COV_cond) <- c('C1', 'C2')
+  m_cov_cond <- list('b',2)
+  names(m_cov_cond) <- c('C1', 'C2')
 
-  Y_COV_cond <- list('b',2)
-  names(Y_COV_cond) <- c('C1', 'C2')
+  y_cov_cond <- list('b',2)
+  names(y_cov_cond) <- c('C1', 'C2')
 
-  result27 <- EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0,
-                       M_COV = c('C1', 'C2'), Y_COV = c('C1', 'C2'),
-                       M_COV_cond=M_COV_cond, Y_COV_cond=Y_COV_cond)
+  result27 <- exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0,
+                       m_cov = c('C1', 'C2'), y_cov = c('C1', 'C2'),
+                       m_cov_cond=m_cov_cond, y_cov_cond=y_cov_cond)
 
 
 
@@ -156,7 +156,7 @@ test_that("EXACTMED() with 'datamed' returns a list",{
 })
 
 
-test_that("EXACTMED() with 'datamed2' returns a list",{
+test_that("exactmed() with 'datamed2' returns a list",{
 
   datamed2 <- datamed
 
@@ -168,42 +168,42 @@ test_that("EXACTMED() with 'datamed2' returns a list",{
 
   datamed2$Y <- Y2
 
-  result1 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'))
+  result1 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'))
 
-  result2 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), boot =TRUE, nboot=100)
+  result2 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), boot =TRUE, nboot=100)
 
-  result3 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), Firth=TRUE)
+  result3 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), Firth=TRUE)
 
-  result4 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), Firth=TRUE, boot=TRUE, nboot=60)
+  result4 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), Firth=TRUE, boot=TRUE, nboot=60)
 
-  result5 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), interaction=FALSE)
+  result5 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), interaction=FALSE)
 
-  result6 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), adjusted = FALSE)
+  result6 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), adjusted = FALSE)
 
-  result7 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0)
+  result7 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0)
 
-  result8 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, interaction =FALSE)
+  result8 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, interaction =FALSE)
 
-  result9 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                      Y_COV=c('C1', 'C2'), adjusted = FALSE, interaction =FALSE)
+  result9 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                      y_cov=c('C1', 'C2'), adjusted = FALSE, interaction =FALSE)
 
-  M_COV_cond <- c(0.3,0.2)
+  m_cov_cond <- c(0.3,0.2)
 
-  names(M_COV_cond) <- c('C1','C2')
+  names(m_cov_cond) <- c('C1','C2')
 
 
-  Y_COV_cond <- c(0.3,0.2)
+  y_cov_cond <- c(0.3,0.2)
 
-  names(Y_COV_cond) <- c('C1', 'C2')
+  names(y_cov_cond) <- c('C1', 'C2')
 
-  result10 <- EXACTMED(DATA=datamed2, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                       Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond,Y_COV_cond=Y_COV_cond )
+  result10 <- exactmed(data=datamed2, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                       y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond,y_cov_cond=y_cov_cond )
 
   expect_type(result1, "list")
   expect_type(result2, "list")
@@ -221,89 +221,89 @@ test_that("EXACTMED() with 'datamed2' returns a list",{
 test_that("Getting a message",{
 
 
-  expect_message(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0))
+  expect_message(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0))
 
 
-  expect_message(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                 Y_COV=c('C1', 'C2'), adjusted = FALSE))
+  expect_message(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                 y_cov=c('C1', 'C2'), adjusted = FALSE))
 
 
 
 })
 
 
-test_that("Getting an error due to incorrect type of 'DATA' parameter",{
+test_that("Getting an error due to incorrect type of 'data' parameter",{
 
   datamed3 <- as.matrix(datamed)
 
-  expect_error(EXACTMED(DATA=datamed3, A='X', M='M', Y='Y',  a1=1, a0=0),
-               "'DATA' must be a data frame with column names"
+  expect_error(exactmed(data=datamed3, a='X', m='M', y='Y',  a1=1, a0=0),
+               "'data' must be a data frame with column names"
                )
 
 })
 
 
-test_that("Getting an error due to missing values in 'DATA'",{
+test_that("Getting an error due to missing values in 'data'",{
 
   datamed4 <- datamed
   datamed4[1,2] <- NA
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y',  a1=1, a0=0),
-               "'DATA' contains missing values"
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y',  a1=1, a0=0),
+               "'data' contains missing values"
   )
 
 })
 
 
-test_that("Getting an error due to missing values in 'DATA'",{
+test_that("Getting an error due to missing values in 'data'",{
 
   datamed4 <- datamed
   datamed4[1,2] <- NA
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y',  a1=1, a0=0),
-               "'DATA' contains missing values"
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y',  a1=1, a0=0),
+               "'data' contains missing values"
   )
 
 })
 
 
-test_that("Getting an error due to duplicated column names in 'DATA'",{
+test_that("Getting an error due to duplicated column names in 'data'",{
 
   datamed4 <- datamed
   colnames(datamed4)[5] <- 'C1'
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y',  a1=1, a0=0),
-               "'DATA' has duplicated column names"
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y',  a1=1, a0=0),
+               "'data' has duplicated column names"
   )
 
 })
 
-test_that("Getting an error due to an unnamed column in 'DATA'",{
+test_that("Getting an error due to an unnamed column in 'data'",{
 
   datamed4 <- datamed
   colnames(datamed4)[5] <- NA
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y',  a1=1, a0=0),
-               "'DATA' has some unnamed columns"
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y',  a1=1, a0=0),
+               "'data' has some unnamed columns"
   )
 
 })
 
 
 
-test_that("Getting an error due to incorrect value for the 'A', 'M' or 'Y' parameter",{
+test_that("Getting an error due to incorrect value for the 'a', 'm' or 'y' parameter",{
 
 
-  expect_error(EXACTMED(DATA=datamed, A='V', M='M', Y='Y',  a1=1, a0=0),
-               "'A' has to be a column name of 'DATA'"
+  expect_error(exactmed(data=datamed, a='V', m='M', y='Y',  a1=1, a0=0),
+               "'a' has to be a column name of 'data'"
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M=3, Y='Y',  a1=1, a0=0),
-               "'M' has to be a column name of 'DATA'"
+  expect_error(exactmed(data=datamed, a='X', m=3, y='Y',  a1=1, a0=0),
+               "'m' has to be a column name of 'data'"
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y= c(1,2),  a1=1, a0=0),
-               "'Y' has to be a column name of 'DATA'"
+  expect_error(exactmed(data=datamed, a='X', m='M', y= c(1,2),  a1=1, a0=0),
+               "'y' has to be a column name of 'data'"
   )
 
 
@@ -316,12 +316,12 @@ test_that("Getting an error due to incorrect value for the 'A', 'M' or 'Y' param
 test_that("Getting an error due to an incorrect value related to the mediator, the exposure or the response",{
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, hvalueM=c(1,2)),
-               "Invalid type or length for input parameter 'hvalueM'"
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, hvalue_m=c(1,2)),
+               "Invalid type or length for input parameter 'hvalue_m'"
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, hvalueY=NA),
-               "Invalid type or length for input parameter 'hvalueY'"
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, hvalue_y=NA),
+               "Invalid type or length for input parameter 'hvalue_y'"
   )
 
   datamed4 <- datamed
@@ -329,7 +329,7 @@ test_that("Getting an error due to an incorrect value related to the mediator, t
   Xb <- factor(sample(c("a","b","c"),n, replace =TRUE))
   datamed4$X <- Xb
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0),
                "Exposure must be numerical variable"
   )
 
@@ -337,19 +337,19 @@ test_that("Getting an error due to an incorrect value related to the mediator, t
   Mb <- sample(c(1, 2, 3),n, replace =TRUE)
   datamed4$M <- Mb
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0),
-               "Mediator takes more than two different values in 'DATA'"
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0),
+               "Mediator takes more than two different values in 'data'"
   )
 
   datamed4 <- datamed
   Mb <- factor(sample(c(1, 2),n, replace =TRUE))
   datamed4$M <- Mb
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueM=NULL),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_m=NULL),
                "High level for the mediator must be specified"
   )
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueM="3"),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_m="3"),
                "Invalid value for high level of mediator"
   )
 
@@ -358,11 +358,11 @@ test_that("Getting an error due to an incorrect value related to the mediator, t
   Mb <- sample(c(1, 2),n, replace =TRUE)
   datamed4$M <- Mb
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueM=NULL),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_m=NULL),
                "High level for the mediator must be specified"
   )
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueM=3),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_m=3),
                "Invalid value for high level of mediator"
   )
 
@@ -371,8 +371,8 @@ test_that("Getting an error due to an incorrect value related to the mediator, t
   Yb <- sample(c(1, 2, 3),n, replace =TRUE)
   datamed4$Y <- Yb
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0),
-               "Outcome takes more than two different values in 'DATA'"
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0),
+               "Outcome takes more than two different values in 'data'"
   )
 
 
@@ -380,11 +380,11 @@ test_that("Getting an error due to an incorrect value related to the mediator, t
   Yb <- factor(sample(c(1, 2),n, replace =TRUE))
   datamed4$Y <- Yb
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueY=NULL),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_y=NULL),
                "High level for the outcome must be specified"
   )
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueY="3"),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_y="3"),
                "Invalid value for high level of outcome"
   )
 
@@ -393,11 +393,11 @@ test_that("Getting an error due to an incorrect value related to the mediator, t
   Yb <- sample(c(1, 2),n, replace =TRUE)
   datamed4$Y <- Yb
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueY=NULL),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_y=NULL),
                "High level for the outcome must be specified"
   )
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0, hvalueY=3),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0, hvalue_y=3),
                "Invalid value for high level of outcome"
   )
 
@@ -409,16 +409,16 @@ test_that("Getting an error due to an incorrect value related to the mediator, t
 test_that("Getting an error due to incorrect value for a numeric parameter",{
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=2+3i, a0=0),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=2+3i, a0=0),
                "'a1' has to be a real number"
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0='hjk'),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0='hjk'),
                "'a0' has to be a real number"
   )
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, confcoef=1.25),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, confcoef=1.25),
                "'confcoef' has to be a valid real number"
   )
 
@@ -428,19 +428,19 @@ test_that("Getting an error due to incorrect value for a numeric parameter",{
 test_that("Getting an error due to incorrect value for a logical parameter",{
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, interaction='k'),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, interaction='k'),
                "'interaction' must specify a logical value"
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, Firth = 4),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, Firth = 4),
                "'Firth' must specify a logical value"
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, adjusted = c(1,2)),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, adjusted = c(1,2)),
                "'adjusted' must specify a logical value"
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, boot =NULL),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, boot =NULL),
                "'boot' must specify a logical value"
   )
 
@@ -452,11 +452,11 @@ test_that("Getting an error due to incorrect value for a logical parameter",{
 test_that("Getting an error due to incorrect value for the 'boot' or 'bootseed' parameter",{
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, boot=TRUE, nboot=34.4),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, boot=TRUE, nboot=34.4),
                "'nboot' has to be an integer"
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0,boot=TRUE, bootseed = NA),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0,boot=TRUE, bootseed = NA),
                "'bootseed' has to be an integer"
   )
 
@@ -466,66 +466,66 @@ test_that("Getting an error due to incorrect value for the 'boot' or 'bootseed' 
 
 
 
-test_that("Getting an error due to incorrect value for the 'M_COV' or 'Y_COV' parameter",{
+test_that("Getting an error due to incorrect value for the 'm_cov' or 'y_cov' parameter",{
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=3,
-                             Y_COV=c('C1', 'C2')),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=3,
+                             y_cov=c('C1', 'C2')),
 
-               "'M_COV' must be NULL or a vector of covariate names"
-
-  )
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1',NA),
-                        Y_COV=c('C1', 'C2')),
-
-               "'M_COV' has NAs"
+               "'m_cov' must be NULL or a vector of covariate names"
 
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1','C1'),
-                        Y_COV=c('C1', 'C2')),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1',NA),
+                        y_cov=c('C1', 'C2')),
 
-               "'M_COV' has duplicated covariates names"
+               "'m_cov' has NAs"
 
   )
 
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1','C1'),
+                        y_cov=c('C1', 'C2')),
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2','C3'),
-                        Y_COV=c('C1', 'C2')),
-
-               "'M_COV' can only contain names of covariates included in the data frame"
-
+               "'m_cov' has duplicated covariates names"
 
   )
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=3),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2','C3'),
+                        y_cov=c('C1', 'C2')),
 
+               "'m_cov' can only contain names of covariates included in the data frame"
 
-               "'Y_COV' must be NULL or a vector of covariate names"
 
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1',NA)),
 
-               "'Y_COV' has NAs"
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=3),
 
-  )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1','C1')),
-
-               "'Y_COV' has duplicated covariates names"
+               "'y_cov' must be NULL or a vector of covariate names"
 
   )
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2','C3')),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1',NA)),
 
-               "'Y_COV' can only contain names of covariates included in the data frame"
+               "'y_cov' has NAs"
+
+  )
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1','C1')),
+
+               "'y_cov' has duplicated covariates names"
+
+  )
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2','C3')),
+
+               "'y_cov' can only contain names of covariates included in the data frame"
   )
 
 
@@ -535,203 +535,203 @@ test_that("Getting an error due to incorrect value for the 'M_COV' or 'Y_COV' pa
 
 
 
-test_that("Getting an error due to incorrect value for the 'M_COV_cond' or 'Y_COV_cond' parameter",{
+test_that("Getting an error due to incorrect value for the 'm_cov_cond' or 'y_cov_cond' parameter",{
 
-  Y_COV_cond <- c(0.5,0.2)
-  names(Y_COV_cond) <- c('C1', 'C2')
+  y_cov_cond <- c(0.5,0.2)
+  names(y_cov_cond) <- c('C1', 'C2')
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =datamed, Y_COV_cond = Y_COV_cond),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =datamed, y_cov_cond = y_cov_cond),
 
-               "'M_COV_cond' must be NULL or a vector"
-
-  )
-
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =c(0.5,0.2), Y_COV_cond = Y_COV_cond),
-
-               "'M_COV_cond' must be a named vector"
-
-
-  )
-
-  M_COV_cond <- c(0.5,0.2)
-  names(M_COV_cond) <- c('C1')
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
-
-               "'M_COV_cond' has missing names"
-
+               "'m_cov_cond' must be NULL or a vector"
 
   )
 
 
-  names(M_COV_cond) <- c('C1', 'C1')
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =c(0.5,0.2), y_cov_cond = y_cov_cond),
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
+               "'m_cov_cond' must be a named vector"
 
-               "'M_COV_cond' has duplicated names"
+
+  )
+
+  m_cov_cond <- c(0.5,0.2)
+  names(m_cov_cond) <- c('C1')
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
+
+               "'m_cov_cond' has missing names"
 
 
   )
 
 
-  names(M_COV_cond) <- c('C1', 'C3')
+  names(m_cov_cond) <- c('C1', 'C1')
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
 
-               "The names of the elements of 'M_COV_cond' must be in 'M_COV'"
-
-
-  )
-
-  M_COV_cond <- list(0.5,list(0.2, 0.5))
-  names(M_COV_cond) <- c('C1', 'C2')
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
-
-               "'M_COV_cond' has a invalid value in the "
+               "'m_cov_cond' has duplicated names"
 
 
   )
 
 
+  names(m_cov_cond) <- c('C1', 'C3')
 
-  rm(Y_COV_cond)
-  M_COV_cond <- c(0.5,0.2)
-  names(M_COV_cond) <- c('C1', 'C2')
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = datamed),
-
-               "'Y_COV_cond' must be NULL or a vector"
-
-  )
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond , Y_COV_cond = c(0.5,0.2)),
-
-               "'Y_COV_cond' must be a named vector"
+               "The names of the elements of 'm_cov_cond' must be in 'm_cov'"
 
 
   )
 
+  m_cov_cond <- list(0.5,list(0.2, 0.5))
+  names(m_cov_cond) <- c('C1', 'C2')
 
-  Y_COV_cond <- c(0.5,0.2)
-  names(Y_COV_cond) <- c('C1')
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
-
-               "'Y_COV_cond' has missing names"
-
-
-  )
-
-
-  names(Y_COV_cond) <- c('C1', 'C1')
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
-
-               "'Y_COV_cond' has duplicated names"
-
-
-  )
-
-
-  names(Y_COV_cond) <- c('C1', 'C3')
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
-
-               "The names of the elements of 'Y_COV_cond' must be in 'Y_COV'"
-
-
-  )
-
-  Y_COV_cond <- list(0.5,list(0.2, 0.5))
-  names(Y_COV_cond) <- c('C1', 'C2')
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
-
-               "'Y_COV_cond' has a invalid value in the "
+               "'m_cov_cond' has a invalid value in the "
 
 
   )
 
 
 
+  rm(y_cov_cond)
+  m_cov_cond <- c(0.5,0.2)
+  names(m_cov_cond) <- c('C1', 'C2')
 
-  Y_COV_cond <- c(0.4,0.2)
-  names(Y_COV_cond) <- c('C1', 'C2')
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = datamed),
+
+               "'y_cov_cond' must be NULL or a vector"
+
+  )
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond , y_cov_cond = c(0.5,0.2)),
+
+               "'y_cov_cond' must be a named vector"
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
+  )
+
+
+  y_cov_cond <- c(0.5,0.2)
+  names(y_cov_cond) <- c('C1')
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
+
+               "'y_cov_cond' has missing names"
+
+
+  )
+
+
+  names(y_cov_cond) <- c('C1', 'C1')
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
+
+               "'y_cov_cond' has duplicated names"
+
+
+  )
+
+
+  names(y_cov_cond) <- c('C1', 'C3')
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
+
+               "The names of the elements of 'y_cov_cond' must be in 'y_cov'"
+
+
+  )
+
+  y_cov_cond <- list(0.5,list(0.2, 0.5))
+  names(y_cov_cond) <- c('C1', 'C2')
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
+
+               "'y_cov_cond' has a invalid value in the "
+
+
+  )
+
+
+
+
+  y_cov_cond <- c(0.4,0.2)
+  names(y_cov_cond) <- c('C1', 'C2')
+
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
 
                " has two different values specified"
 
 
   )
 
-  Y_COV_cond <- 0.2
-  names(Y_COV_cond) <- 'C2'
+  y_cov_cond <- 0.2
+  names(y_cov_cond) <- 'C2'
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1', 'C2'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
-
-               " has two different values specified "
-
-
-  )
-
-  M_COV_cond <- 0.2
-  names(M_COV_cond) <- 'C2'
-
-  Y_COV_cond <- 0.3
-  names(Y_COV_cond) <- 'C1'
-
-
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-                        Y_COV=c('C1'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1', 'C2'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
 
                " has two different values specified "
 
 
   )
 
+  m_cov_cond <- 0.2
+  names(m_cov_cond) <- 'C2'
 
-  M_COV_cond <- 'a'
-  names(M_COV_cond) <- 'C2'
-
-  Y_COV_cond <- 0.3
-  names(Y_COV_cond) <- 'C1'
+  y_cov_cond <- 0.3
+  names(y_cov_cond) <- 'C1'
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C2'),
-                        Y_COV=c('C1'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+                        y_cov=c('C1'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
+
+               " has two different values specified "
+
+
+  )
+
+
+  m_cov_cond <- 'a'
+  names(m_cov_cond) <- 'C2'
+
+  y_cov_cond <- 0.3
+  names(y_cov_cond) <- 'C1'
+
+
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C2'),
+                        y_cov=c('C1'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
 
                "Invalid value for "
 
 
   )
 
-  M_COV_cond <- 0.3
-  names(M_COV_cond) <- 'C2'
+  m_cov_cond <- 0.3
+  names(m_cov_cond) <- 'C2'
 
-  Y_COV_cond <- 'a'
-  names(Y_COV_cond) <- 'C1'
+  y_cov_cond <- 'a'
+  names(y_cov_cond) <- 'C1'
 
 
-  expect_error(EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C2'),
-                        Y_COV=c('C1'),M_COV_cond =M_COV_cond, Y_COV_cond = Y_COV_cond),
+  expect_error(exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C2'),
+                        y_cov=c('C1'),m_cov_cond =m_cov_cond, y_cov_cond = y_cov_cond),
 
                "Invalid value for "
 
@@ -744,30 +744,30 @@ test_that("Getting an error due to incorrect value for the 'M_COV_cond' or 'Y_CO
   datamed4$C1 <- sample(c("a","b","c"), nrow(datamed4), replace =TRUE)
 
 
-  M_COV_cond <- 'd'
-  names(M_COV_cond) <- 'C1'
+  m_cov_cond <- 'd'
+  names(m_cov_cond) <- 'C1'
 
-  Y_COV_cond <- 2
-  names(Y_COV_cond) <- 'C2'
+  y_cov_cond <- 2
+  names(y_cov_cond) <- 'C2'
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0,
-                       M_COV = c('C1'), Y_COV = c('C2'),
-                       M_COV_cond=M_COV_cond, Y_COV_cond=Y_COV_cond),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0,
+                       m_cov = c('C1'), y_cov = c('C2'),
+                       m_cov_cond=m_cov_cond, y_cov_cond=y_cov_cond),
 
                "Invalid value for "
 
   )
 
 
-  M_COV_cond <- 2
-  names(M_COV_cond) <- 'C2'
+  m_cov_cond <- 2
+  names(m_cov_cond) <- 'C2'
 
-  Y_COV_cond <- 'd'
-  names(Y_COV_cond) <- 'C1'
+  y_cov_cond <- 'd'
+  names(y_cov_cond) <- 'C1'
 
-  expect_error(EXACTMED(DATA=datamed4, A='X', M='M', Y='Y', a1=1, a0=0,
-                        M_COV = c('C2'), Y_COV = c('C1'),
-                        M_COV_cond=M_COV_cond, Y_COV_cond=Y_COV_cond),
+  expect_error(exactmed(data=datamed4, a='X', m='M', y='Y', a1=1, a0=0,
+                        m_cov = c('C2'), y_cov = c('C1'),
+                        m_cov_cond=m_cov_cond, y_cov_cond=y_cov_cond),
 
                "Invalid value for "
 

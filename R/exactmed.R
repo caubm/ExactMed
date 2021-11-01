@@ -1,29 +1,29 @@
 #' @title  Exact Mediation Effects Computation
-#' @description The EXACTMED function calculates popular causal mediation effects when the outcome and
+#' @description The exactmed function calculates popular causal mediation effects when the outcome and
 #'     the mediator are binary. More precisely, it returns point and interval estimates for the conditional
 #'     natural direct and indirect effects without making any assumption regarding the rareness or commonness
-#'     of the outcome (hence the term exact). EXACTMED adopts a logistic regression specification for both
+#'     of the outcome (hence the term exact). exactmed adopts a logistic regression specification for both
 #'     the outcome and mediator in order to compute the exact closed-form effects estimators (see the details in Samoilenko and Lefebvre, 2021).
-#'     For completeness, the EXACTMED function also calculates the conditional controlled direct effects
+#'     For completeness, the exactmed function also calculates the conditional controlled direct effects
 #'     at both values of the mediator. Natural and controlled effects estimates are reported in three different
 #'     scales: odds ratio (OR), risk ratio (RR) and risk difference (RD). The interval estimates can be
 #'     obtained either by the delta method or the bootstrap.
-#' @param DATA a named data frame that includes the outcome, exposure and mediator variables as well as the covariates
+#' @param data a named data frame that includes the outcome, exposure and mediator variables as well as the covariates
 #'     to be adjusted for in the model. The exposure can be either binary or continuous. If a covariate is categorical,
 #'     it has to be included in the data frame as a factor, character or logical variable.
-#' @param A the name of the exposure variable.
-#' @param M the name of the mediator variable.
-#' @param Y the name of the outcome variable.
+#' @param a the name of the exposure variable.
+#' @param m the name of the mediator variable.
+#' @param y the name of the outcome variable.
 #' @param a1 a value corresponding to the high level of the exposure.
 #' @param a0 a value corresponding to the low level of the exposure.
-#' @param M_COV a vector containing the names of the adjustment variables (covariates) in the mediator model.
-#' @param Y_COV a vector containing the names of the adjustment variables (covariates) in the outcome model.
-#' @param M_COV_cond a named vector (atomic vector or list) containing specific values for some or all
-#'     of the adjustment covariates \code{M_COV} in the mediator model. Please consult the package vignette for details.
-#' @param Y_COV_cond a named vector (atomic vector or list) containing specific values for some or all
-#'     of the adjustment covariates \code{Y_COV} in the outcome model. Please consult the package vignette for details.
+#' @param m_cov a vector containing the names of the adjustment variables (covariates) in the mediator model.
+#' @param y_cov a vector containing the names of the adjustment variables (covariates) in the outcome model.
+#' @param m_cov_cond a named vector (atomic vector or list) containing specific values for some or all
+#'     of the adjustment covariates \code{m_cov} in the mediator model. Please consult the package vignette for details.
+#' @param y_cov_cond a named vector (atomic vector or list) containing specific values for some or all
+#'     of the adjustment covariates \code{y_cov} in the outcome model. Please consult the package vignette for details.
 #' @param adjusted  a logical variable specifying whether to obtain unadjusted or adjusted estimates.
-#'     If \code{adjusted == FALSE}, vectors \code{M_COV} and \code{Y_COV} are ignored by the procedure.
+#'     If \code{adjusted == FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.
 #' @param interaction a logical variable specifying whether there is exposure-mediator interaction in the outcome model.
 #' @param Firth a logical variable specifying whether to compute conventional maximum likelihood estimates
 #'     or Firth  penalized estimates in the logistic regression models.
@@ -32,196 +32,196 @@
 #' @param nboot  If \code{boot == TRUE}, the number of bootstrap replications to obtain the confidence intervals.
 #' @param bootseed If \code{boot == TRUE}, the value of the initial seed (positive integer) for random number generation.
 #' @param confcoef a number between 0 and 1 for the confidence coefficient (ex:0.95) for the interval estimates.
-#' @param hvalueM the value corresponding to the high level of the mediator. If the mediator is already coded
+#' @param hvalue_m the value corresponding to the high level of the mediator. If the mediator is already coded
 #'     as a numerical binary variable taking 0 or 1 values, then the value of this parameter will be ignored.
-#' @param hvalueY the value corresponding to the high level of the outcome. If the outcome is already coded
+#' @param hvalue_y the value corresponding to the high level of the outcome. If the outcome is already coded
 #'     as a numerical binary variable taking 0 or 1 values, then the value of this parameter will be ignored.
 #' @importFrom logistf logistf
 #' @importFrom stats as.formula binomial glm qnorm quantile terms vcov na.omit
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' @details By default, EXACTMED reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
+#' @details By default, exactmed reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
 #'     (including the dummy variables created internally by the function to represent the categorical covariates).
 #'     In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects)
-#'     the user needs to provide named vectors \code{M_COV_cond} and/or \code{Y_COV_cond} containing those values or levels. The adjustment
-#'     covariates appearing in both \code{M_COV} and \code{Y_COV} (common adjustment covariates) must have the same values; otherwise,
-#'     EXACTMED's execution is aborted and an error message is displayed in the R console.
+#'     the user needs to provide named vectors \code{m_cov_cond} and/or \code{y_cov_cond} containing those values or levels. The adjustment
+#'     covariates appearing in both \code{m_cov} and \code{y_cov} (common adjustment covariates) must have the same values; otherwise,
+#'     exactmed's execution is aborted and an error message is displayed in the R console.
 #' @return Returns natural direct, indirect and total effect estimates as well as controlled direct effects
 #'     estimates on the OR, RR and RD scales.
-#' @note EXACTMED only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
+#' @note exactmed only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
 #'  or remove observations with any missing values (NA) by specifying \code{data = na.omit(mydataset)}.
 #' @references
-#' Samoilenko M, Lefebvre G. (2021). Parametric Regression-Based Causal Mediation Analysis of Binary Outcomes
+#' Samoilenko m, Lefebvre G. (2021). Parametric Regression-Based Causal Mediation Analysis of Binary Outcomes
 #' and Binary Mediators: Moving Beyond the Rareness or Commonness of the Outcome. American journal of epidemiology, kwab055. Advance online publication. <doi:10.1093/aje/kwab055>
 #'
-#' Samoilenko M, Blais L, Lefebvre G. (2018). Comparing logistic and log-binomial models for causal mediation analyses of binary mediators and rare binary outcomes:
+#' Samoilenko m, Blais L, Lefebvre G. (2018). Comparing logistic and log-binomial models for causal mediation analyses of binary mediators and rare binary outcomes:
 #' evidence to support cross-checking of mediation results in practice. Observational Studies; 2018(4):193-216.
 #' @export
 #' @examples
-#' EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'), Y_COV=c('C1', 'C2'))
+#' exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), y_cov=c('C1', 'C2'))
 #'
-#' M_COV_cond <-c(C1 =0.1, C2 =0.4)
+#' m_cov_cond <-c(C1 =0.1, C2 =0.4)
 #'
-#' Y_COV_cond <-c(C1 =0.1, C2 =0.4)
+#' y_cov_cond <-c(C1 =0.1, C2 =0.4)
 #'
-#' EXACTMED(DATA=datamed, A='X', M='M', Y='Y', a1=1, a0=0, M_COV=c('C1', 'C2'),
-#'          Y_COV=c('C1', 'C2'), M_COV_cond=M_COV_cond, Y_COV_cond=Y_COV_cond)
+#' exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'),
+#'          y_cov=c('C1', 'C2'), m_cov_cond=m_cov_cond, y_cov_cond=y_cov_cond)
 #'
 #' C1b <- factor(sample(c("a","b","c"), nrow(datamed), replace =TRUE))
 #'
 #' datamed$C1 <- C1b
 #'
-#' M_COV_cond <-list(C1='c', C2=0.4)
+#' m_cov_cond <-list(C1='c', C2=0.4)
 #'
-#' Y_COV_cond <-list(C1='c', C2=0.4)
+#' y_cov_cond <-list(C1='c', C2=0.4)
 #'
-#' EXACTMED(DATA=datamed, A='X', M='M', Y='Y',  a1=1, a0=0, M_COV=c('C1', 'C2'),
-#' Y_COV=c('C1', 'C2'), M_COV_cond=M_COV_cond, Y_COV_cond=Y_COV_cond)
+#' exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
+#' y_cov=c('C1', 'C2'), m_cov_cond=m_cov_cond, y_cov_cond=y_cov_cond)
 
 
-EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=NULL,
-                     Y_COV_cond=NULL, adjusted=TRUE, interaction=TRUE, Firth = FALSE,
+exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=NULL,
+                     y_cov_cond=NULL, adjusted=TRUE, interaction=TRUE, Firth = FALSE,
                      boot = FALSE, nboot=500, bootseed =1991, confcoef = 0.95,
-                     hvalueM =NULL,hvalueY=NULL){
+                     hvalue_m =NULL,hvalue_y=NULL){
 
 
 
   # Input parameters checking
 
-  if( !(is.data.frame(DATA) && !is.null(colnames(DATA)))) stop("'DATA' must be a data frame with column names")
+  if( !(is.data.frame(data) && !is.null(colnames(data)))) stop("'data' must be a data frame with column names")
 
-  if(any(is.na(DATA))) stop("'DATA' contains missing values")
+  if(any(is.na(data))) stop("'data' contains missing values")
 
-  if(any(duplicated(colnames(DATA)))) stop("'DATA' has duplicated column names")
+  if(any(duplicated(colnames(data)))) stop("'data' has duplicated column names")
 
-  if(any(is.na(colnames(DATA))) || any(colnames(DATA) == "")) stop("'DATA' has some unnamed columns")
+  if(any(is.na(colnames(data))) || any(colnames(data) == "")) stop("'data' has some unnamed columns")
 
 
-  if(!(is.vector(A,mode="character") && length(A)==1L && A %in% colnames(DATA) )){
+  if(!(is.vector(a,mode="character") && length(a)==1L && a %in% colnames(data) )){
 
-    stop("'A' has to be a column name of 'DATA'")
+    stop("'a' has to be a column name of 'data'")
   }
 
 
 
-  if(!(is.vector(M,mode="character") && length(M)==1L && M %in% colnames(DATA) )){
+  if(!(is.vector(m,mode="character") && length(m)==1L && m %in% colnames(data) )){
 
-    stop("'M' has to be a column name of 'DATA'")
+    stop("'m' has to be a column name of 'data'")
   }
 
 
 
-  if(!(is.vector(Y,mode="character") && length(Y)==1L && Y %in% colnames(DATA) )){
+  if(!(is.vector(y,mode="character") && length(y)==1L && y %in% colnames(data) )){
 
-    stop("'Y' has to be a column name of 'DATA'")
+    stop("'y' has to be a column name of 'data'")
   }
 
 
 
-  if(!(is.null(hvalueM) || (is.atomic(hvalueM) && length(hvalueM)==1L && is.null(dim(hvalueM)) && !is.na(hvalueM)))){
+  if(!(is.null(hvalue_m) || (is.atomic(hvalue_m) && length(hvalue_m)==1L && is.null(dim(hvalue_m)) && !is.na(hvalue_m)))){
 
-    stop("Invalid type or length for input parameter 'hvalueM'")
+    stop("Invalid type or length for input parameter 'hvalue_m'")
   }
 
-  if(!(is.null(hvalueY) || (is.atomic(hvalueY) && length(hvalueY)==1L && is.null(dim(hvalueY)) && !is.na(hvalueY)))){
+  if(!(is.null(hvalue_y) || (is.atomic(hvalue_y) && length(hvalue_y)==1L && is.null(dim(hvalue_y)) && !is.na(hvalue_y)))){
 
-    stop("Invalid type or length for input parameter 'hvalueY'")
-  }
-
-
-  if(!is.numeric(DATA[[A]]))  stop("Exposure must be numerical variable")
-
-
-  if(length(unique(DATA[[M]])) > 2){
-
-    stop("Mediator takes more than two different values in 'DATA'")
-
+    stop("Invalid type or length for input parameter 'hvalue_y'")
   }
 
 
-  if(is.factor(DATA[[M]])){
+  if(!is.numeric(data[[a]]))  stop("Exposure must be numerical variable")
 
-    if(is.null(hvalueM)) stop("High level for the mediator must be specified")
 
-    if(! hvalueM %in% levels(DATA[[M]])) {
+  if(length(unique(data[[m]])) > 2){
+
+    stop("Mediator takes more than two different values in 'data'")
+
+  }
+
+
+  if(is.factor(data[[m]])){
+
+    if(is.null(hvalue_m)) stop("High level for the mediator must be specified")
+
+    if(! hvalue_m %in% levels(data[[m]])) {
 
       stop ("Invalid value for high level of mediator")
     }
 
 
     lv <- vector("integer", length=2L)
-    hl <- which(levels(DATA[[M]])==hvalueM)
+    hl <- which(levels(data[[m]])==hvalue_m)
     lv[hl] <- 1L
 
-    levels(DATA[[M]]) <- lv
-    DATA[[M]] <- as.integer(as.character(DATA[[M]]))
+    levels(data[[m]]) <- lv
+    data[[m]] <- as.integer(as.character(data[[m]]))
 
 
-  }else if (!(is.numeric(DATA[[M]]) &&  all(DATA[[M]] %in% c(1,0)))){
+  }else if (!(is.numeric(data[[m]]) &&  all(data[[m]] %in% c(1,0)))){
 
-    if(is.null(hvalueM)) stop("High level for the mediator must be specified")
+    if(is.null(hvalue_m)) stop("High level for the mediator must be specified")
 
-    if(! hvalueM %in% DATA[[M]]) {
+    if(! hvalue_m %in% data[[m]]) {
 
       stop ("Invalid value for high level of mediator")
     }
 
-    lv <- vector("integer", length=nrow(DATA))
-    hl <- which(DATA[[M]]==hvalueM)
+    lv <- vector("integer", length=nrow(data))
+    hl <- which(data[[m]]==hvalue_m)
     lv[hl] <- 1L
 
-    DATA[[M]] <- lv
+    data[[m]] <- lv
 
   }
 
 
-  if(length(unique(DATA[[Y]])) > 2){
+  if(length(unique(data[[y]])) > 2){
 
-    stop("Outcome takes more than two different values in 'DATA'")
+    stop("Outcome takes more than two different values in 'data'")
 
   }
 
 
-  if(is.factor(DATA[[Y]])){
+  if(is.factor(data[[y]])){
 
-    if(is.null(hvalueY)) stop("High level for the outcome must be specified")
+    if(is.null(hvalue_y)) stop("High level for the outcome must be specified")
 
-    if(! hvalueY %in% levels(DATA[[Y]])) {
+    if(! hvalue_y %in% levels(data[[y]])) {
 
       stop ("Invalid value for high level of outcome")
     }
 
 
     lv <- vector("integer", length=2L)
-    hl <- which(levels(DATA[[Y]])==hvalueY)
+    hl <- which(levels(data[[y]])==hvalue_y)
     lv[hl] <- 1L
 
-    levels(DATA[[Y]]) <- lv
-    DATA[[Y]] <- as.integer(as.character(DATA[[Y]]))
+    levels(data[[y]]) <- lv
+    data[[y]] <- as.integer(as.character(data[[y]]))
 
 
-  }else if (!(is.numeric(DATA[[Y]]) &&  all(DATA[[Y]] %in% c(1,0)))){
+  }else if (!(is.numeric(data[[y]]) &&  all(data[[y]] %in% c(1,0)))){
 
-    if(is.null(hvalueY)) stop("High level for the outcome must be specified")
+    if(is.null(hvalue_y)) stop("High level for the outcome must be specified")
 
-    if(! hvalueY %in% DATA[[Y]]) {
+    if(! hvalue_y %in% data[[y]]) {
 
       stop ("Invalid value for high level of outcome")
     }
 
-    lv <- vector("integer", length=nrow(DATA))
-    hl <- which(DATA[[Y]]==hvalueY)
+    lv <- vector("integer", length=nrow(data))
+    hl <- which(data[[y]]==hvalue_y)
     lv[hl] <- 1L
 
-    DATA[[Y]] <- lv
+    data[[y]] <- lv
 
   }
 
 
-  for(i in setdiff(colnames(DATA), c(A,M,Y))){
+  for(i in setdiff(colnames(data), c(a,m,y))){
 
-    if(!(is.numeric(DATA[[i]]) || is.factor(DATA[[i]]))){
+    if(!(is.numeric(data[[i]]) || is.factor(data[[i]]))){
 
-      DATA[[i]] <- as.factor(DATA[[i]])
+      data[[i]] <- as.factor(data[[i]])
 
 
     }
@@ -280,110 +280,110 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
   }
 
-  if(adjusted ==TRUE && is.null(M_COV) && is.null(Y_COV)){
+  if(adjusted ==TRUE && is.null(m_cov) && is.null(y_cov)){
 
-    message("'EXACTMED' will compute unadjusted natural effects")
-
-  }
-
-
-  if(adjusted ==FALSE && !(is.null(M_COV) && is.null(Y_COV))){
-
-    message("'EXACTMED' will compute unadjusted natural effects")
+    message("'exactmed' will compute unadjusted natural effects")
 
   }
 
 
-  if(!(is.null(M_COV) || is.vector(M_COV,mode="character"))){
+  if(adjusted ==FALSE && !(is.null(m_cov) && is.null(y_cov))){
 
-    stop("'M_COV' must be NULL or a vector of covariate names")
-
-  }
-
-  if(any(is.na(M_COV))) stop("'M_COV' has NAs")
-
-  if(any(duplicated(M_COV))) stop("'M_COV' has duplicated covariates names")
-
-
-  if(!all(M_COV %in% setdiff(colnames(DATA), c(A,M,Y)))){
-
-    stop("'M_COV' can only contain names of covariates included in the data frame")
-  }
-
-
-
-
-
-
-  if(!(is.null(Y_COV) || is.vector(Y_COV,mode="character"))){
-
-    stop("'Y_COV' must be NULL or a vector of covariate names")
+    message("'exactmed' will compute unadjusted natural effects")
 
   }
 
-  if(any(is.na(Y_COV))) stop("'Y_COV' has NAs")
 
-  if(any(duplicated(Y_COV))) stop("'Y_COV' has duplicated covariates names")
+  if(!(is.null(m_cov) || is.vector(m_cov,mode="character"))){
+
+    stop("'m_cov' must be NULL or a vector of covariate names")
+
+  }
+
+  if(any(is.na(m_cov))) stop("'m_cov' has NAs")
+
+  if(any(duplicated(m_cov))) stop("'m_cov' has duplicated covariates names")
 
 
-  if(!all(Y_COV %in% setdiff(colnames(DATA), c(A,M,Y)))){
+  if(!all(m_cov %in% setdiff(colnames(data), c(a,m,y)))){
 
-    stop("'Y_COV' can only contain names of covariates included in the data frame")
+    stop("'m_cov' can only contain names of covariates included in the data frame")
   }
 
 
 
-  if(!(is.null(M_COV_cond) || is.vector(M_COV_cond))){
 
 
-    stop("'M_COV_cond' must be NULL or a vector")
 
-  }
+  if(!(is.null(y_cov) || is.vector(y_cov,mode="character"))){
 
-  if(any(is.na(names(M_COV_cond))) || any(names(M_COV_cond) == "")){
-
-    stop("'M_COV_cond' has missing names")
-  }
-
-  if(any(duplicated(names(M_COV_cond)))) stop("'M_COV_cond' has duplicated names")
-
-
-  if(!all(names(M_COV_cond) %in% M_COV)) {
-
-    stop("The names of the elements of 'M_COV_cond' must be in 'M_COV'")
-  }
-
-
-  if(!(is.null(Y_COV_cond) || is.vector(Y_COV_cond))){
-
-
-    stop("'Y_COV_cond' must be NULL or a vector")
+    stop("'y_cov' must be NULL or a vector of covariate names")
 
   }
 
-  if(any(is.na(names(Y_COV_cond))) || any(names(Y_COV_cond) == "")){
+  if(any(is.na(y_cov))) stop("'y_cov' has NAs")
 
-    stop("'Y_COV_cond' has missing names")
-  }
-
-  if(any(duplicated(names(Y_COV_cond)))) stop("'Y_COV_cond' has duplicated names")
+  if(any(duplicated(y_cov))) stop("'y_cov' has duplicated covariates names")
 
 
-  if(!all(names(Y_COV_cond) %in% Y_COV)) {
+  if(!all(y_cov %in% setdiff(colnames(data), c(a,m,y)))){
 
-    stop("The names of the elements of 'Y_COV_cond' must be in 'Y_COV'")
+    stop("'y_cov' can only contain names of covariates included in the data frame")
   }
 
 
-  if(!is.null(M_COV_cond)){
 
-    if(is.null(names(M_COV_cond))) stop("'M_COV_cond' must be a named vector")
+  if(!(is.null(m_cov_cond) || is.vector(m_cov_cond))){
 
-    for(i in names(M_COV_cond)){
 
-      if(!(is.atomic(M_COV_cond[[i]]) && length(M_COV_cond[[i]]) ==1L && is.null(dim(M_COV_cond[[i]])) && !is.na(M_COV_cond[[i]]))){
+    stop("'m_cov_cond' must be NULL or a vector")
 
-        stop("'M_COV_cond' has a invalid value in the ", i," component")
+  }
+
+  if(any(is.na(names(m_cov_cond))) || any(names(m_cov_cond) == "")){
+
+    stop("'m_cov_cond' has missing names")
+  }
+
+  if(any(duplicated(names(m_cov_cond)))) stop("'m_cov_cond' has duplicated names")
+
+
+  if(!all(names(m_cov_cond) %in% m_cov)) {
+
+    stop("The names of the elements of 'm_cov_cond' must be in 'm_cov'")
+  }
+
+
+  if(!(is.null(y_cov_cond) || is.vector(y_cov_cond))){
+
+
+    stop("'y_cov_cond' must be NULL or a vector")
+
+  }
+
+  if(any(is.na(names(y_cov_cond))) || any(names(y_cov_cond) == "")){
+
+    stop("'y_cov_cond' has missing names")
+  }
+
+  if(any(duplicated(names(y_cov_cond)))) stop("'y_cov_cond' has duplicated names")
+
+
+  if(!all(names(y_cov_cond) %in% y_cov)) {
+
+    stop("The names of the elements of 'y_cov_cond' must be in 'y_cov'")
+  }
+
+
+  if(!is.null(m_cov_cond)){
+
+    if(is.null(names(m_cov_cond))) stop("'m_cov_cond' must be a named vector")
+
+    for(i in names(m_cov_cond)){
+
+      if(!(is.atomic(m_cov_cond[[i]]) && length(m_cov_cond[[i]]) ==1L && is.null(dim(m_cov_cond[[i]])) && !is.na(m_cov_cond[[i]]))){
+
+        stop("'m_cov_cond' has a invalid value in the ", i," component")
 
       }
 
@@ -392,15 +392,15 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
   }
 
-  if(!is.null(Y_COV_cond)){
+  if(!is.null(y_cov_cond)){
 
-    if(is.null(names(Y_COV_cond))) stop("'Y_COV_cond' must be a named vector")
+    if(is.null(names(y_cov_cond))) stop("'y_cov_cond' must be a named vector")
 
-    for(i in names(Y_COV_cond)){
+    for(i in names(y_cov_cond)){
 
-      if(!(is.atomic(Y_COV_cond[[i]]) && length(Y_COV_cond[[i]]) ==1L && is.null(dim(Y_COV_cond[[i]])) && !is.na(Y_COV_cond[[i]]))){
+      if(!(is.atomic(y_cov_cond[[i]]) && length(y_cov_cond[[i]]) ==1L && is.null(dim(y_cov_cond[[i]])) && !is.na(y_cov_cond[[i]]))){
 
-        stop("'Y_COV_cond' has a invalid value in the ", i," component")
+        stop("'y_cov_cond' has a invalid value in the ", i," component")
 
       }
 
@@ -409,15 +409,15 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
   }
 
 
-  if(!is.null(M_COV_cond)){
+  if(!is.null(m_cov_cond)){
 
-    for(i in names(M_COV_cond)){
+    for(i in names(m_cov_cond)){
 
-      if(i %in% Y_COV){
+      if(i %in% y_cov){
 
-        if(i %in% names(Y_COV_cond)){
+        if(i %in% names(y_cov_cond)){
 
-          if(M_COV_cond[[i]]!= Y_COV_cond[[i]]) {
+          if(m_cov_cond[[i]]!= y_cov_cond[[i]]) {
 
             stop("Covariate ",i," has two different values specified")
 
@@ -437,11 +437,11 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
   }
 
-  if(!is.null(Y_COV_cond)){
+  if(!is.null(y_cov_cond)){
 
-    for(i in names(Y_COV_cond)){
+    for(i in names(y_cov_cond)){
 
-      if(i %in% M_COV && !(i %in% names(M_COV_cond))){
+      if(i %in% m_cov && !(i %in% names(m_cov_cond))){
 
        stop("Covariate ",i," has two different values specified (one implicitly)")
 
@@ -461,33 +461,33 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
   if(!adjusted ==TRUE){
 
-    M_COV <- NULL
-    Y_COV <- NULL
+    m_cov <- NULL
+    y_cov <- NULL
 
   }
 
 
   mean_covmv <-numeric(0)
 
-  if(!is.null(M_COV)){
+  if(!is.null(m_cov)){
 
-    for( i in M_COV){
+    for( i in m_cov){
 
-      if(is.factor(DATA[[i]])){
-
-
-        if(i %in% names(M_COV_cond)){
+      if(is.factor(data[[i]])){
 
 
-          if(!(M_COV_cond[[i]] %in% levels(DATA[[i]]))){
+        if(i %in% names(m_cov_cond)){
+
+
+          if(!(m_cov_cond[[i]] %in% levels(data[[i]]))){
 
             stop("Invalid value for ",i," covariate" )
 
           }
 
-          auxv <- vector("numeric",nlevels(DATA[[i]])-1L)
+          auxv <- vector("numeric",nlevels(data[[i]])-1L)
 
-          auxl <- which(levels(DATA[[i]])== M_COV_cond[[i]])-1
+          auxl <- which(levels(data[[i]])== m_cov_cond[[i]])-1
 
           if(auxl!=0L) {auxv[auxl] <- 1}
 
@@ -495,7 +495,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
         }else{
 
-          freqcat <- summary(DATA[[i]])[-1]/nrow(DATA)
+          freqcat <- summary(data[[i]])[-1]/nrow(data)
 
           names(freqcat) <- NULL
 
@@ -506,20 +506,20 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
       }else{
 
-        if(i %in% names(M_COV_cond)){
+        if(i %in% names(m_cov_cond)){
 
-          if(!(is.vector(M_COV_cond[[i]],mode="numeric") && length(M_COV_cond[[i]])==1L)){
+          if(!(is.vector(m_cov_cond[[i]],mode="numeric") && length(m_cov_cond[[i]])==1L)){
 
             stop("Invalid value for ",i," covariate" )
 
           }
 
 
-          mean_covmv <- c(mean_covmv,M_COV_cond[[i]] )
+          mean_covmv <- c(mean_covmv,m_cov_cond[[i]] )
 
         }else{
 
-          mean_covmv <- c(mean_covmv, mean(DATA[[i]]))
+          mean_covmv <- c(mean_covmv, mean(data[[i]]))
         }
 
       }
@@ -530,25 +530,25 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
   mean_covyv <-numeric(0)
 
-  if(!is.null(Y_COV)){
+  if(!is.null(y_cov)){
 
-    for( i in Y_COV){
+    for( i in y_cov){
 
-      if(is.factor(DATA[[i]])){
+      if(is.factor(data[[i]])){
 
 
-        if(i %in% names(Y_COV_cond)){
+        if(i %in% names(y_cov_cond)){
 
-          if(!(Y_COV_cond[[i]] %in% levels(DATA[[i]]))){
+          if(!(y_cov_cond[[i]] %in% levels(data[[i]]))){
 
             stop("Invalid value for ",i," covariate" )
 
           }
 
 
-          auxv <- vector("numeric",nlevels(DATA[[i]])-1)
+          auxv <- vector("numeric",nlevels(data[[i]])-1)
 
-          auxl <- which(levels(DATA[[i]])== Y_COV_cond[[i]])-1
+          auxl <- which(levels(data[[i]])== y_cov_cond[[i]])-1
 
           if(auxl!=0L) {auxv[auxl] <- 1}
 
@@ -557,7 +557,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
         }else{
 
-          freqcat <- summary(DATA[[i]])[-1]/nrow(DATA)
+          freqcat <- summary(data[[i]])[-1]/nrow(data)
 
           names(freqcat) <- NULL
 
@@ -568,19 +568,19 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
       }else{
 
-        if(i %in% names(Y_COV_cond)){
+        if(i %in% names(y_cov_cond)){
 
-          if(!(is.vector(Y_COV_cond[[i]],mode="numeric") && length(Y_COV_cond[[i]])==1L)){
+          if(!(is.vector(y_cov_cond[[i]],mode="numeric") && length(y_cov_cond[[i]])==1L)){
 
             stop("Invalid value for ",i," covariate" )
 
           }
 
-          mean_covyv <- c(mean_covyv,Y_COV_cond[[i]] )
+          mean_covyv <- c(mean_covyv,y_cov_cond[[i]] )
 
         }else{
 
-          mean_covyv <- c(mean_covyv, mean(DATA[[i]]))
+          mean_covyv <- c(mean_covyv, mean(data[[i]]))
         }
 
       }
@@ -593,18 +593,18 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
   names(mean_covmv) <- NULL
   names(mean_covyv) <- NULL
 
-  # Beta coefficients estimation (logistic regression model for binary mediator M)
-  # and Theta coefficients estimation (logistic regression model for binary outcome Y)
+  # Beta coefficients estimation (logistic regression model for binary mediator m)
+  # and Theta coefficients estimation (logistic regression model for binary outcome y)
 
-  Mform  <- as.formula(paste(M,"~",paste(c(A,M_COV), collapse = " + ")))
+  Mform  <- as.formula(paste(m,"~",paste(c(a,m_cov), collapse = " + ")))
 
   if(interaction == TRUE){
 
-    Yform <- as.formula(paste(Y,"~",paste(c(paste(A,"*",M),Y_COV), collapse = " + ")))
+    Yform <- as.formula(paste(y,"~",paste(c(paste(a,"*",m),y_cov), collapse = " + ")))
 
   } else{
 
-    Yform <- as.formula(paste(Y,"~",paste(c(A, M, Y_COV), collapse = " + ")))
+    Yform <- as.formula(paste(y,"~",paste(c(a, m, y_cov), collapse = " + ")))
 
   }
 
@@ -612,13 +612,13 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
   if(Firth == TRUE){
 
-    Mreg <- logistf(Mform, data= DATA)
-    Yreg <- logistf(Yform, data= DATA)
+    Mreg <- logistf(Mform, data= data)
+    Yreg <- logistf(Yform, data= data)
 
   } else{
 
-    Mreg <- glm(Mform, data= DATA, family =binomial(link = "logit"))
-    Yreg <- glm(Yform, data= DATA, family =binomial(link = "logit"))
+    Mreg <- glm(Mform, data= data, family =binomial(link = "logit"))
+    Yreg <- glm(Yform, data= data, family =binomial(link = "logit"))
 
   }
 
@@ -629,7 +629,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
   names(betacoef) <- NULL
   names(thetacoef) <- NULL
 
-  # Function 'gg' for Nested probabilities P(Y(a,M(b)) =1|C=c) and gradient computation
+  # Function 'gg' for Nested probabilities P(y(a,m(b)) =1|C=c) and gradient computation
 
 
   if(boot == FALSE){
@@ -687,7 +687,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
     }
 
 
-    # Function 'gg_cde' for  probabilities P(Y(a,m) =1|C=c) and gradient computation
+    # Function 'gg_cde' for  probabilities P(y(a,m) =1|C=c) and gradient computation
 
 
     gg_cde <- function(a,m,thetav,covyv, interaction){
@@ -728,7 +728,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
     }
 
 
-    # Nested probabilities P(Y(a,M(b)) =1|C=c) and gradient computation
+    # Nested probabilities P(y(a,m(b)) =1|C=c) and gradient computation
 
     gg10 <- gg(a1, a0, betacoef, mean_covmv, thetacoef,mean_covyv,interaction)
     gg00 <- gg(a0, a0, betacoef, mean_covmv, thetacoef,mean_covyv,interaction)
@@ -811,7 +811,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
     CI_RDt <- RDt + seRDt*log(c(int0, int1))
 
 
-    # Probabilities P(Y(a,m) =1|C=c) and gradient computation (m=0)
+    # Probabilities P(y(a,m) =1|C=c) and gradient computation (m=0)
 
     gg_cde1m0 <- gg_cde(a1, m=0, thetacoef, mean_covyv, interaction)
     gg_cde0m0 <- gg_cde(a0, m=0, thetacoef, mean_covyv, interaction)
@@ -843,7 +843,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
     CI_RDm0 <- RDm0 + seRDm0*log(c(int0, int1))
 
 
-    # Probabilities P(Y(a,m) =1|C=c) and gradient computation (m=1)
+    # Probabilities P(y(a,m) =1|C=c) and gradient computation (m=1)
 
     gg_cde1m1 <- gg_cde(a1, m=1, thetacoef, mean_covyv, interaction)
     gg_cde0m1 <- gg_cde(a0, m=1, thetacoef, mean_covyv, interaction)
@@ -958,7 +958,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
     set.seed(bootseed)
 
-    n <- nrow(DATA)
+    n <- nrow(data)
 
     ORboot <- matrix(0,nboot,3)
     RRboot <- matrix(0,nboot,3)
@@ -979,7 +979,7 @@ EXACTMED <- function(DATA, A, M, Y, a1, a0, M_COV=NULL, Y_COV=NULL, M_COV_cond=N
 
       vboot<- sample(1:n, n, replace=TRUE)
 
-      DATAboot <- DATA[vboot,]
+      DATAboot <- data[vboot,]
 
       if(Firth == TRUE){
 
