@@ -79,26 +79,26 @@ Returns natural direct, indirect and total effect estimates as well as controlle
     estimates on the OR, RR and RD scales.
 }
 \description{
-The exactmed function calculates popular causal mediation effects when the outcome and
+The \code{exactmed()} function calculates popular causal mediation effects when the outcome and
     the mediator are binary. More precisely, it returns point and interval estimates for the conditional
     natural direct and indirect effects without making any assumption regarding the rareness or commonness
-    of the outcome (hence the term exact). exactmed adopts a logistic regression specification for both
+    of the outcome (hence the term exact). \code{exactmed()} adopts a logistic regression specification for both
     the outcome and mediator in order to compute the exact closed-form effects estimators (see the details in Samoilenko and Lefebvre, 2021).
-    For completeness, the exactmed function also calculates the conditional controlled direct effects
+    For completeness, the \code{exactmed()} function also calculates the conditional controlled direct effects
     at both values of the mediator. Natural and controlled effects estimates are reported in three different
     scales: odds ratio (OR), risk ratio (RR) and risk difference (RD). The interval estimates can be
     obtained either by the delta method or the bootstrap.
 }
 \details{
-By default, exactmed reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
+By default, \code{exactmed()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
     (including the dummy variables created internally by the function to represent the categorical covariates).
     In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects)
     the user needs to provide named vectors \code{m_cov_cond} and/or \code{y_cov_cond} containing those values or levels. The adjustment
     covariates appearing in both \code{m_cov} and \code{y_cov} (common adjustment covariates) must have the same values; otherwise,
-    exactmed's execution is aborted and an error message is displayed in the R console.
+    \code{exactmed()}'s execution is aborted and an error message is displayed in the R console.
 }
 \note{
-exactmed only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
+\code{exactmed()} only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
  or remove observations with any missing values (NA) by specifying \code{data = na.omit(mydataset)}.
 }
 \examples{
