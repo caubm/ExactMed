@@ -19,7 +19,7 @@ exactmed(
   interaction = TRUE,
   Firth = FALSE,
   boot = FALSE,
-  nboot = 500,
+  nboot = 1000,
   bootseed = 1991,
   confcoef = 0.95,
   hvalue_m = NULL,

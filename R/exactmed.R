@@ -80,12 +80,13 @@
 
 exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=NULL,
                      y_cov_cond=NULL, adjusted=TRUE, interaction=TRUE, Firth = FALSE,
-                     boot = FALSE, nboot=500, bootseed =1991, confcoef = 0.95,
+                     boot = FALSE, nboot=1000, bootseed =1991, confcoef = 0.95,
                      hvalue_m =NULL,hvalue_y=NULL){
 
 
-
   # Input parameters checking
+
+
 
   if( !(is.data.frame(data) && !is.null(colnames(data)))) stop("'data' must be a data frame with column names")
 
@@ -144,7 +145,7 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
 
     if(! hvalue_m %in% levels(data[[m]])) {
 
-      stop ("Invalid value for high level of mediator")
+      stop("Invalid value for high level of mediator")
     }
 
 
@@ -156,13 +157,13 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
     data[[m]] <- as.integer(as.character(data[[m]]))
 
 
-  }else if (!(is.numeric(data[[m]]) &&  all(data[[m]] %in% c(1,0)))){
+  }else if(!(is.numeric(data[[m]]) &&  all(data[[m]] %in% c(1,0)))){
 
     if(is.null(hvalue_m)) stop("High level for the mediator must be specified")
 
     if(! hvalue_m %in% data[[m]]) {
 
-      stop ("Invalid value for high level of mediator")
+      stop("Invalid value for high level of mediator")
     }
 
     lv <- vector("integer", length=nrow(data))
@@ -187,7 +188,7 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
 
     if(! hvalue_y %in% levels(data[[y]])) {
 
-      stop ("Invalid value for high level of outcome")
+      stop("Invalid value for high level of outcome")
     }
 
 
@@ -199,13 +200,13 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
     data[[y]] <- as.integer(as.character(data[[y]]))
 
 
-  }else if (!(is.numeric(data[[y]]) &&  all(data[[y]] %in% c(1,0)))){
+  }else if(!(is.numeric(data[[y]]) &&  all(data[[y]] %in% c(1,0)))){
 
     if(is.null(hvalue_y)) stop("High level for the outcome must be specified")
 
     if(! hvalue_y %in% data[[y]]) {
 
-      stop ("Invalid value for high level of outcome")
+      stop("Invalid value for high level of outcome")
     }
 
     lv <- vector("integer", length=nrow(data))
@@ -240,7 +241,7 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
 
   }
 
-  if (!(is.vector(boot, mode='logical') && length(boot)==1L) || is.na(boot)){
+  if(!(is.vector(boot, mode='logical') && length(boot)==1L) || is.na(boot)){
 
     stop("'boot' must specify a logical value")
 
@@ -262,19 +263,19 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
   }
 
 
-  if (!(is.vector(interaction, mode='logical') && length(interaction)==1L) || is.na(interaction)){
+  if(!(is.vector(interaction, mode='logical') && length(interaction)==1L) || is.na(interaction)){
 
     stop("'interaction' must specify a logical value")
 
   }
 
-  if (!(is.vector(Firth, mode='logical') && length(Firth)==1L) || is.na(Firth)){
+  if(!(is.vector(Firth, mode='logical') && length(Firth)==1L) || is.na(Firth)){
 
     stop("'Firth' must specify a logical value")
 
   }
 
-  if (!(is.vector(adjusted, mode='logical') && length(adjusted)==1L) || is.na(adjusted)){
+  if(!(is.vector(adjusted, mode='logical') && length(adjusted)==1L) || is.na(adjusted)){
 
     stop("'adjusted' must specify a logical value")
 
@@ -481,7 +482,7 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
 
           if(!(m_cov_cond[[i]] %in% levels(data[[i]]))){
 
-            stop("Invalid value for ",i," covariate" )
+            stop("Invalid value for ",i," covariate")
 
           }
 
@@ -510,7 +511,7 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
 
           if(!(is.vector(m_cov_cond[[i]],mode="numeric") && length(m_cov_cond[[i]])==1L)){
 
-            stop("Invalid value for ",i," covariate" )
+            stop("Invalid value for ",i," covariate")
 
           }
 
@@ -541,7 +542,7 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
 
           if(!(y_cov_cond[[i]] %in% levels(data[[i]]))){
 
-            stop("Invalid value for ",i," covariate" )
+            stop("Invalid value for ",i," covariate")
 
           }
 
@@ -572,7 +573,7 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
 
           if(!(is.vector(y_cov_cond[[i]],mode="numeric") && length(y_cov_cond[[i]])==1L)){
 
-            stop("Invalid value for ",i," covariate" )
+            stop("Invalid value for ",i," covariate")
 
           }
 
@@ -1067,8 +1068,8 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov=NULL, y_cov=NULL, m_cov_cond=N
 
   #  Results
 
-  CIsup <- paste(confcoefint*100, '%')
-  CIinf <- paste((1-confcoefint)*100, '%')
+  CIsup <- paste(confcoefint*100, '%', sep="")
+  CIinf <- paste((1-confcoefint)*100, '%', sep="")
 
   OR  <- matrix(0, nrow =3, ncol=3)
   RR  <- matrix(0, nrow =3, ncol=3)
