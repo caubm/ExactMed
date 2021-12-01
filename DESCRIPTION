@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: as.person(c(
     "Miguel Caubet Fernandez <caubet_fernandez.miguel@uqam.ca> [aut, cre]",
     "Mariia Samoilenko  [aut]",
-    "Genevieve Lefebvre [aut]"))
+    "Geneviève Lefebvre [aut]"))
 Maintainer: Miguel Caubet Fernandez <caubet_fernandez.miguel@uqam.ca> 
 Description: A tool for conducting exact parametric regression-based causal mediation analysis of binary outcomes 
     as described in Samoilenko, Blais and Lefebvre (2018) <\url{doi.org/10.1353/obs.2018.0013}>
@@ -20,7 +20,7 @@ URL: https://github.com/caubm/ExactMed
 BugReports: https://github.com/caubm/ExactMed/issues
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
     rmarkdown,
     knitr,

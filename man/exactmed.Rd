@@ -54,7 +54,7 @@ of the adjustment covariates \code{y_cov} in the outcome model. Please consult t
 \item{adjusted}{a logical variable specifying whether to obtain unadjusted or adjusted estimates.
 If \code{adjusted == FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.}
 
-\item{interaction}{a logical variable specifying whether there is exposure-mediator interaction in the outcome model.}
+\item{interaction}{a logical variable specifying whether there is an exposure-mediator interaction term in the outcome model.}
 
 \item{Firth}{a logical variable specifying whether to compute conventional maximum likelihood estimates
 or Firth  penalized estimates in the logistic regression models.}
@@ -62,11 +62,11 @@ or Firth  penalized estimates in the logistic regression models.}
 \item{boot}{a logical value specifying whether the confidence intervals are obtained
 by the delta method or by the bootstrap.}
 
-\item{nboot}{If \code{boot == TRUE}, the number of bootstrap replications to obtain the confidence intervals.}
+\item{nboot}{If \code{boot == TRUE}, the number of bootstrap replications used to obtain the confidence intervals.}
 
 \item{bootseed}{If \code{boot == TRUE}, the value of the initial seed (positive integer) for random number generation.}
 
-\item{confcoef}{a number between 0 and 1 for the confidence coefficient (ex:0.95) for the interval estimates.}
+\item{confcoef}{a number between 0 and 1 for the confidence coefficient (ex:0.95) of the interval estimates.}
 
 \item{hvalue_m}{the value corresponding to the high level of the mediator. If the mediator is already coded
 as a numerical binary variable taking 0 or 1 values, then the value of this parameter will be ignored.}
@@ -79,15 +79,15 @@ Returns natural direct, indirect and total effect estimates as well as controlle
     estimates on the OR, RR and RD scales.
 }
 \description{
-The \code{exactmed()} function calculates popular causal mediation effects when the outcome and
-    the mediator are binary. More precisely, it returns point and interval estimates for the conditional
-    natural direct and indirect effects without making any assumption regarding the rareness or commonness
-    of the outcome (hence the term exact). \code{exactmed()} adopts a logistic regression specification for both
-    the outcome and mediator in order to compute the exact closed-form effects estimators (see the details in Samoilenko and Lefebvre, 2021).
-    For completeness, the \code{exactmed()} function also calculates the conditional controlled direct effects
-    at both values of the mediator. Natural and controlled effects estimates are reported in three different
-    scales: odds ratio (OR), risk ratio (RR) and risk difference (RD). The interval estimates can be
-    obtained either by the delta method or the bootstrap.
+Relying on a regression-based approach, the \code{exactmed()} function calculates standard
+    causal mediation effects when the outcome and the mediator are binary. More precisely, \code{exactmed()}
+    uses a logistic regression specification for both the outcome and the mediator in order to compute \emph{exact}
+    conditional natural direct and indirect effects (see details in Samoilenko and Lefebvre, 2021).
+    The function returns point and interval estimates for the conditional natural effects without making any assumption
+    regarding the rareness or commonness of the outcome (hence the term exact). For completeness, \code{exactmed()} also
+    calculates the conditional controlled direct effects at both values of the mediator. Natural and controlled effects
+    estimates are reported in three different scales: odds ratio (OR), risk ratio (RR) and risk difference (RD).
+    The interval estimates can be obtained either by the delta method or the bootstrap.
 }
 \details{
 By default, \code{exactmed()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
@@ -102,30 +102,37 @@ By default, \code{exactmed()} reports mediation effects evaluated at the sample-
  or remove observations with any missing values (NA) by specifying \code{data = na.omit(mydataset)}.
 }
 \examples{
-exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'), y_cov=c('C1', 'C2'))
+exactmed(
+data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+m_cov = c("C1", "C2"), y_cov = c("C1", "C2")
+)
 
-m_cov_cond <-c(C1 =0.1, C2 =0.4)
+m_cov_cond <- c(C1 = 0.1, C2 = 0.4)
+y_cov_cond <- c(C1 = 0.1, C2 = 0.4)
 
-y_cov_cond <-c(C1 =0.1, C2 =0.4)
+exactmed(
+  data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+  m_cov = c("C1", "C2"), y_cov = c("C1", "C2"),
+  m_cov_cond = m_cov_cond, y_cov_cond = y_cov_cond
+)
 
-exactmed(data=datamed, a='X', m='M', y='Y', a1=1, a0=0, m_cov=c('C1', 'C2'),
-         y_cov=c('C1', 'C2'), m_cov_cond=m_cov_cond, y_cov_cond=y_cov_cond)
-
-C1b <- factor(sample(c("a","b","c"), nrow(datamed), replace =TRUE))
-
+C1b <- factor(sample(c("a", "b", "c"), nrow(datamed), replace = TRUE))
 datamed$C1 <- C1b
 
-m_cov_cond <-list(C1='c', C2=0.4)
+m_cov_cond <- list(C1 = "c", C2 = 0.4)
+y_cov_cond <- list(C1 = "c", C2 = 0.4)
 
-y_cov_cond <-list(C1='c', C2=0.4)
-
-exactmed(data=datamed, a='X', m='M', y='Y',  a1=1, a0=0, m_cov=c('C1', 'C2'),
-y_cov=c('C1', 'C2'), m_cov_cond=m_cov_cond, y_cov_cond=y_cov_cond)
+exactmed(
+  data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+  m_cov = c("C1", "C2"), y_cov = c("C1", "C2"),
+  m_cov_cond = m_cov_cond, y_cov_cond = y_cov_cond
+)
 }
 \references{
-Samoilenko m, Lefebvre G. (2021). Parametric Regression-Based Causal Mediation Analysis of Binary Outcomes
-and Binary Mediators: Moving Beyond the Rareness or Commonness of the Outcome. American journal of epidemiology, kwab055. Advance online publication. <doi:10.1093/aje/kwab055>
+Samoilenko M, Lefebvre G. Parametric-Regression-Based Causal Mediation Analysis of Binary Outcomes and Binary Mediators:
+Moving Beyond the Rareness or Commonness of the Outcome, \emph{American Journal of Epidemiology}.2021;190(9):1846-1858.
 
-Samoilenko m, Blais L, Lefebvre G. (2018). Comparing logistic and log-binomial models for causal mediation analyses of binary mediators and rare binary outcomes:
-evidence to support cross-checking of mediation results in practice. Observational Studies; 2018(4):193-216.
+Samoilenko M, Blais L, Lefebvre G. Comparing logistic and log-binomial models for causal mediation analyses of
+binary mediators and rare binary outcomes: evidence to support cross-checking of mediation results in practice.
+\emph{Observational Studies}.2018;4(1):193-216.
 }
