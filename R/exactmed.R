@@ -37,7 +37,7 @@
 #' @param hvalue_y the value corresponding to the high level of the outcome. If the outcome is already coded
 #'     as a numerical binary variable taking 0 or 1 values, then the value of this parameter will be ignored.
 #' @importFrom logistf logistf
-#' @importFrom stats as.formula binomial glm qnorm quantile terms vcov na.omit
+#' @importFrom stats as.formula binomial glm qnorm quantile terms vcov na.omit pnorm sd
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @details By default, \code{exactmed()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
 #'     (including the dummy variables created internally by the function to represent the categorical covariates).
@@ -298,6 +298,22 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     CI_ORi <- ORi * c(int0, int1)^selnORi
     CI_ORt <- ORt * c(int0, int1)^selnORt
 
+    lnORd <- log(ORd)
+    lnORi <- log(ORi)
+    lnORt <- log(ORt)
+
+    zORd <- lnORd / selnORd
+    zORi <- lnORi / selnORi
+    zORt <- lnORt / selnORt
+
+    pvalueORd <- 2 * (1 - pnorm(abs(zORd)))
+    pvalueORi <- 2 * (1 - pnorm(abs(zORi)))
+    pvalueORt <- 2 * (1 - pnorm(abs(zORt)))
+
+    seORd <- sqrt(exp(2 * lnORd + selnORd^2) * (exp(selnORd^2) - 1))
+    seORi <- sqrt(exp(2 * lnORi + selnORi^2) * (exp(selnORi^2) - 1))
+    seORt <- sqrt(exp(2 * lnORt + selnORt^2) * (exp(selnORt^2) - 1))
+
     gradlnRRd <- gg10[[2]] / gg10[[1]] - gg00[[2]] / gg00[[1]]
     gradlnRRi <- gg11[[2]] / gg11[[1]] - gg10[[2]] / gg10[[1]]
     gradlnRRt <- gradlnRRd + gradlnRRi
@@ -310,6 +326,22 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     CI_RRi <- RRi * c(int0, int1)^selnRRi
     CI_RRt <- RRt * c(int0, int1)^selnRRt
 
+    lnRRd <- log(RRd)
+    lnRRi <- log(RRi)
+    lnRRt <- log(RRt)
+
+    zRRd <- lnRRd / selnRRd
+    zRRi <- lnRRi / selnRRi
+    zRRt <- lnRRt / selnRRt
+
+    pvalueRRd <- 2 * (1 - pnorm(abs(zRRd)))
+    pvalueRRi <- 2 * (1 - pnorm(abs(zRRi)))
+    pvalueRRt <- 2 * (1 - pnorm(abs(zRRt)))
+
+    seRRd <- sqrt(exp(2 * lnRRd + selnRRd^2) * (exp(selnRRd^2) - 1))
+    seRRi <- sqrt(exp(2 * lnRRi + selnRRi^2) * (exp(selnRRi^2) - 1))
+    seRRt <- sqrt(exp(2 * lnRRt + selnRRt^2) * (exp(selnRRt^2) - 1))
+
     gradRDd <- gg10[[2]] - gg00[[2]]
     gradRDi <- gg11[[2]] - gg10[[2]]
     gradRDt <- gradRDd + gradRDi
@@ -321,6 +353,14 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     CI_RDd <- RDd + seRDd * log(c(int0, int1))
     CI_RDi <- RDi + seRDi * log(c(int0, int1))
     CI_RDt <- RDt + seRDt * log(c(int0, int1))
+
+    zRDd <- RDd / seRDd
+    zRDi <- RDi / seRDi
+    zRDt <- RDt / seRDt
+
+    pvalueRDd <- 2 * (1 - pnorm(abs(zRDd)))
+    pvalueRDi <- 2 * (1 - pnorm(abs(zRDi)))
+    pvalueRDt <- 2 * (1 - pnorm(abs(zRDt)))
 
     # Probabilities P(y(a,m) =1|C=c) and gradient computation (m=0)
 
@@ -352,12 +392,26 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     CI_RRm0 <- RRm0 * c(int0, int1)^selnRRm0
     CI_RDm0 <- RDm0 + seRDm0 * log(c(int0, int1))
 
+    lnORm0 <- log(ORm0)
+    lnRRm0 <- log(RRm0)
+
+    zORm0 <- lnORm0 / selnORm0
+    zRRm0 <- lnRRm0 / selnRRm0
+    zRDm0 <- RDm0 / seRDm0
+
+    pvalueORm0 <- 2 * (1 - pnorm(abs(zORm0)))
+    pvalueRRm0 <- 2 * (1 - pnorm(abs(zRRm0)))
+    pvalueRDm0 <- 2 * (1 - pnorm(abs(zRDm0)))
+
+    seORm0 <- sqrt(exp(2 * lnORm0 + selnORm0^2) * (exp(selnORm0^2) - 1))
+    seRRm0 <- sqrt(exp(2 * lnRRm0 + selnRRm0^2) * (exp(selnRRm0^2) - 1))
+
     # Probabilities P(y(a,m) =1|C=c) and gradient computation (m=1)
 
     gg_cde1m1 <- gg_cde(a1, m = 1, thetacoef, mean_covyv, interaction)
     gg_cde0m1 <- gg_cde(a0, m = 1, thetacoef, mean_covyv, interaction)
 
-    # Controled effects computation (m=1)
+    # Controlled effects computation (m=1)
 
     P1m1 <- gg_cde1m1[[1]]
     P0m1 <- gg_cde0m1[[1]]
@@ -381,6 +435,20 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     CI_ORm1 <- ORm1 * c(int0, int1)^selnORm1
     CI_RRm1 <- RRm1 * c(int0, int1)^selnRRm1
     CI_RDm1 <- RDm1 + seRDm1 * log(c(int0, int1))
+
+    lnORm1 <- log(ORm1)
+    lnRRm1 <- log(RRm1)
+
+    zORm1 <- lnORm1 / selnORm1
+    zRRm1 <- lnRRm1 / selnRRm1
+    zRDm1 <- RDm1 / seRDm1
+
+    pvalueORm1 <- 2 * (1 - pnorm(abs(zORm1)))
+    pvalueRRm1 <- 2 * (1 - pnorm(abs(zRRm1)))
+    pvalueRDm1 <- 2 * (1 - pnorm(abs(zRDm1)))
+
+    seORm1 <- sqrt(exp(2 * lnORm1 + selnORm1^2) * (exp(selnORm1^2) - 1))
+    seRRm1 <- sqrt(exp(2 * lnRRm1 + selnRRm1^2) * (exp(selnRRm1^2) - 1))
   } else {
     gg <- function(a, b, betav, covmv, thetav, covyv, interaction) {
       if (interaction == TRUE) {
@@ -538,6 +606,46 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     CI_RRm1 <- quantile(RRm1boot, c(ciinf, cisup))
     CI_RDm1 <- quantile(RDm1boot, c(ciinf, cisup))
 
+    seORd <- sd(ORboot[, 1])
+    seORi <- sd(ORboot[, 2])
+    seORt <- sd(ORboot[, 3])
+
+    seRRd <- sd(RRboot[, 1])
+    seRRi <- sd(RRboot[, 2])
+    seRRt <- sd(RRboot[, 3])
+
+    seRDd <- sd(RDboot[, 1])
+    seRDi <- sd(RDboot[, 2])
+    seRDt <- sd(RDboot[, 3])
+
+    seORm0 <- sd(ORm0boot)
+    seRRm0 <- sd(RRm0boot)
+    seRDm0 <- sd(RDm0boot)
+
+    seORm1 <- sd(ORm1boot)
+    seRRm1 <- sd(RRm1boot)
+    seRDm1 <- sd(RDm1boot)
+
+    pvalueORd <- 2 * min(sum(ORboot[, 1] > 1), sum(ORboot[, 1] < 1)) / nboot
+    pvalueORi <- 2 * min(sum(ORboot[, 2] > 1), sum(ORboot[, 2] < 1)) / nboot
+    pvalueORt <- 2 * min(sum(ORboot[, 3] > 1), sum(ORboot[, 3] < 1)) / nboot
+
+    pvalueRRd <- 2 * min(sum(RRboot[, 1] > 1), sum(RRboot[, 1] < 1)) / nboot
+    pvalueRRi <- 2 * min(sum(RRboot[, 2] > 1), sum(RRboot[, 2] < 1)) / nboot
+    pvalueRRt <- 2 * min(sum(RRboot[, 3] > 1), sum(RRboot[, 3] < 1)) / nboot
+
+    pvalueRDd <- 2 * min(sum(RDboot[, 1] > 0), sum(RDboot[, 1] < 0)) / nboot
+    pvalueRDi <- 2 * min(sum(RDboot[, 2] > 0), sum(RDboot[, 2] < 0)) / nboot
+    pvalueRDt <- 2 * min(sum(RDboot[, 3] > 0), sum(RDboot[, 3] < 0)) / nboot
+
+    pvalueORm0 <- 2 * min(sum(ORm0boot > 1), sum(ORm0boot < 1)) / nboot
+    pvalueRRm0 <- 2 * min(sum(RRm0boot > 1), sum(RRm0boot < 1)) / nboot
+    pvalueRDm0 <- 2 * min(sum(RDm0boot > 0), sum(RDm0boot < 0)) / nboot
+
+    pvalueORm1 <- 2 * min(sum(ORm1boot > 1), sum(ORm1boot < 1)) / nboot
+    pvalueRRm1 <- 2 * min(sum(RRm1boot > 1), sum(RRm1boot < 1)) / nboot
+    pvalueRDm1 <- 2 * min(sum(RDm1boot > 0), sum(RDm1boot < 0)) / nboot
+
     close(progress_bar)
   }
 
@@ -546,47 +654,47 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
   CIsup <- paste(confcoefint * 100, "%", sep = "")
   CIinf <- paste((1 - confcoefint) * 100, "%", sep = "")
 
-  OR <- matrix(0, nrow = 3, ncol = 3)
-  RR <- matrix(0, nrow = 3, ncol = 3)
-  RD <- matrix(0, nrow = 3, ncol = 3)
+  OR <- matrix(0, nrow = 3, ncol = 5)
+  RR <- matrix(0, nrow = 3, ncol = 5)
+  RD <- matrix(0, nrow = 3, ncol = 5)
 
   rownames(OR) <- c("Direct effect", "Indirect effect", "Total effect")
-  colnames(OR) <- c("Estimate", CIinf, CIsup)
+  colnames(OR) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
 
-  OR[1, ] <- c(ORd, CI_ORd)
-  OR[2, ] <- c(ORi, CI_ORi)
-  OR[3, ] <- c(ORt, CI_ORt)
+  OR[1, ] <- c(ORd, seORd, CI_ORd, pvalueORd)
+  OR[2, ] <- c(ORi, seORi, CI_ORi, pvalueORi)
+  OR[3, ] <- c(ORt, seORt, CI_ORt, pvalueORt)
 
   rownames(RR) <- c("Direct effect", "Indirect effect", "Total effect")
-  colnames(RR) <- c("Estimate", CIinf, CIsup)
+  colnames(RR) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
 
-  RR[1, ] <- c(RRd, CI_RRd)
-  RR[2, ] <- c(RRi, CI_RRi)
-  RR[3, ] <- c(RRt, CI_RRt)
+  RR[1, ] <- c(RRd, seRRd, CI_RRd, pvalueRRd)
+  RR[2, ] <- c(RRi, seRRi, CI_RRi, pvalueRRi)
+  RR[3, ] <- c(RRt, seRRt, CI_RRt, pvalueRRt)
 
   rownames(RD) <- c("Direct effect", "Indirect effect", "Total effect")
-  colnames(RD) <- c("Estimate", CIinf, CIsup)
+  colnames(RD) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
 
-  RD[1, ] <- c(RDd, CI_RDd)
-  RD[2, ] <- c(RDi, CI_RDi)
-  RD[3, ] <- c(RDt, CI_RDt)
+  RD[1, ] <- c(RDd, seRDd, CI_RDd, pvalueRDd)
+  RD[2, ] <- c(RDi, seRDi, CI_RDi, pvalueRDi)
+  RD[3, ] <- c(RDt, seRDt, CI_RDt, pvalueRDt)
 
-  ContEffm0 <- matrix(0, nrow = 3, ncol = 3)
-  ContEffm1 <- matrix(0, nrow = 3, ncol = 3)
+  ContEffm0 <- matrix(0, nrow = 3, ncol = 5)
+  ContEffm1 <- matrix(0, nrow = 3, ncol = 5)
 
   rownames(ContEffm0) <- c("OR scale", "RR scale", "RD scale")
-  colnames(ContEffm0) <- c("Estimate", CIinf, CIsup)
+  colnames(ContEffm0) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
 
-  ContEffm0[1, ] <- c(ORm0, CI_ORm0)
-  ContEffm0[2, ] <- c(RRm0, CI_RRm0)
-  ContEffm0[3, ] <- c(RDm0, CI_RDm0)
+  ContEffm0[1, ] <- c(ORm0, seORm0, CI_ORm0, pvalueORm0)
+  ContEffm0[2, ] <- c(RRm0, seRRm0, CI_RRm0, pvalueRRm0)
+  ContEffm0[3, ] <- c(RDm0, seRDm0, CI_RDm0, pvalueRDm0)
 
   rownames(ContEffm1) <- c("OR scale", "RR scale", "RD scale")
-  colnames(ContEffm1) <- c("Estimate", CIinf, CIsup)
+  colnames(ContEffm1) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
 
-  ContEffm1[1, ] <- c(ORm1, CI_ORm1)
-  ContEffm1[2, ] <- c(RRm1, CI_RRm1)
-  ContEffm1[3, ] <- c(RDm1, CI_RDm1)
+  ContEffm1[1, ] <- c(ORm1, seORm1, CI_ORm1, pvalueORm1)
+  ContEffm1[2, ] <- c(RRm1, seRRm1, CI_RRm1, pvalueRRm1)
+  ContEffm1[3, ] <- c(RDm1, seRDm1, CI_RDm1, pvalueRDm1)
 
   results <- vector("list", 5)
   names(results) <- c(
