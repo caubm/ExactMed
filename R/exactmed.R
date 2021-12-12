@@ -705,11 +705,26 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     "Controlled direct effects (m=1)"
   )
 
-  results[[1]] <- round(OR, digits = 5)
-  results[[2]] <- round(RR, digits = 5)
-  results[[3]] <- round(RD, digits = 5)
-  results[[4]] <- round(ContEffm0, digits = 5)
-  results[[5]] <- round(ContEffm1, digits = 5)
+
+  OR <- as.data.frame(OR)
+  RR <- as.data.frame(RR)
+  RD <- as.data.frame(RD)
+  ContEffm0 <- as.data.frame(ContEffm0)
+  ContEffm1 <- as.data.frame(ContEffm1)
+
+  OR[[5]] <- format.pval(OR[[5]], digits = 5)
+  RR[[5]] <- format.pval(RR[[5]], digits = 5)
+  RD[[5]] <- format.pval(RD[[5]], digits = 5)
+  ContEffm0[[5]] <- format.pval(ContEffm0[[5]], digits = 5)
+  ContEffm1[[5]] <- format.pval(ContEffm1[[5]], digits = 5)
+
+
+  results[[1]] <- cbind(round(OR[1:4], digits = 5), OR[5])
+  results[[2]] <- cbind(round(RR[1:4], digits = 5), RR[5])
+  results[[3]] <- cbind(round(RD[1:4], digits = 5), RD[5])
+  results[[4]] <- cbind(round(ContEffm0[1:4], digits = 5), ContEffm0[5])
+  results[[5]] <- cbind(round(ContEffm1[1:4], digits = 5), ContEffm1[5])
+
 
   return(results)
 }
