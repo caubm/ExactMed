@@ -78,7 +78,9 @@ results2
 ```
 
 
-`exactmed()` also allows for the specification of two different sets of covariates in the mediator and outcome models. For example, the following specification of `m_cov` and `y_cov` means that the mediator model is adjusted for `C1` and `C2`, while the outcome model is adjusted for `C1` only:
+`exactmed()` also allows for the specification of two different sets of covariates in the mediator and outcome models. For example, the following specification of `m_cov` and `y_cov` means that the mediator model is adjusted for `C1` and `C2`, while the outcome model is adjusted for `C1` only.
+
+However, we advise against this practice unless it is known that excluded covariates are independent of the dependent variable (mediator or outcome) being modeled given the rest of covariates.  
 
 
 ```{r}
@@ -92,9 +94,6 @@ results3 <- exactmed(
 results3
 
 ```
-
-
-However, we advise against this practice unless it is known that excluded covariates are independent of the dependent variable (mediator or outcome) being modeled given the rest of covariates.  
 
 
 By default, the `adjusted` parameter is `TRUE`. If the `adjusted` parameter is set to `FALSE`, `exactmed()` ignores the values of the vectors `m_cov` and `y_cov`, and computes unadjusted (crude) effect estimates as in the first example above: 
