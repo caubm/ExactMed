@@ -310,9 +310,9 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     pvalueORi <- 2 * (1 - pnorm(abs(zORi)))
     pvalueORt <- 2 * (1 - pnorm(abs(zORt)))
 
-    seORd <- sqrt(exp(2 * lnORd + selnORd^2) * (exp(selnORd^2) - 1))
-    seORi <- sqrt(exp(2 * lnORi + selnORi^2) * (exp(selnORi^2) - 1))
-    seORt <- sqrt(exp(2 * lnORt + selnORt^2) * (exp(selnORt^2) - 1))
+    seORd <- ORd * selnORd
+    seORi <- ORi * selnORi
+    seORt <- ORt * selnORt
 
     gradlnRRd <- gg10[[2]] / gg10[[1]] - gg00[[2]] / gg00[[1]]
     gradlnRRi <- gg11[[2]] / gg11[[1]] - gg10[[2]] / gg10[[1]]
@@ -338,9 +338,9 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     pvalueRRi <- 2 * (1 - pnorm(abs(zRRi)))
     pvalueRRt <- 2 * (1 - pnorm(abs(zRRt)))
 
-    seRRd <- sqrt(exp(2 * lnRRd + selnRRd^2) * (exp(selnRRd^2) - 1))
-    seRRi <- sqrt(exp(2 * lnRRi + selnRRi^2) * (exp(selnRRi^2) - 1))
-    seRRt <- sqrt(exp(2 * lnRRt + selnRRt^2) * (exp(selnRRt^2) - 1))
+    seRRd <- RRd * selnRRd
+    seRRi <- RRi * selnRRi
+    seRRt <- RRt * selnRRt
 
     gradRDd <- gg10[[2]] - gg00[[2]]
     gradRDi <- gg11[[2]] - gg10[[2]]
@@ -403,8 +403,8 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     pvalueRRm0 <- 2 * (1 - pnorm(abs(zRRm0)))
     pvalueRDm0 <- 2 * (1 - pnorm(abs(zRDm0)))
 
-    seORm0 <- sqrt(exp(2 * lnORm0 + selnORm0^2) * (exp(selnORm0^2) - 1))
-    seRRm0 <- sqrt(exp(2 * lnRRm0 + selnRRm0^2) * (exp(selnRRm0^2) - 1))
+    seORm0 <- ORm0 * selnORm0
+    seRRm0 <- RRm0 * selnRRm0
 
     # Probabilities P(y(a,m) =1|C=c) and gradient computation (m=1)
 
@@ -447,8 +447,81 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     pvalueRRm1 <- 2 * (1 - pnorm(abs(zRRm1)))
     pvalueRDm1 <- 2 * (1 - pnorm(abs(zRDm1)))
 
-    seORm1 <- sqrt(exp(2 * lnORm1 + selnORm1^2) * (exp(selnORm1^2) - 1))
-    seRRm1 <- sqrt(exp(2 * lnRRm1 + selnRRm1^2) * (exp(selnRRm1^2) - 1))
+    seORm1 <- ORm1 * selnORm1
+    seRRm1 <- RRm1 * selnRRm1
+
+    CIsup <- paste(confcoefint * 100, "%", sep = "")
+    CIinf <- paste((1 - confcoefint) * 100, "%", sep = "")
+
+    OR <- matrix(0, nrow = 3, ncol = 5)
+    RR <- matrix(0, nrow = 3, ncol = 5)
+    RD <- matrix(0, nrow = 3, ncol = 5)
+
+    rownames(OR) <- c("Direct effect", "Indirect effect", "Total effect")
+    colnames(OR) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
+
+    OR[1, ] <- c(ORd, seORd, CI_ORd, pvalueORd)
+    OR[2, ] <- c(ORi, seORi, CI_ORi, pvalueORi)
+    OR[3, ] <- c(ORt, seORt, CI_ORt, pvalueORt)
+
+    rownames(RR) <- c("Direct effect", "Indirect effect", "Total effect")
+    colnames(RR) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
+
+    RR[1, ] <- c(RRd, seRRd, CI_RRd, pvalueRRd)
+    RR[2, ] <- c(RRi, seRRi, CI_RRi, pvalueRRi)
+    RR[3, ] <- c(RRt, seRRt, CI_RRt, pvalueRRt)
+
+    rownames(RD) <- c("Direct effect", "Indirect effect", "Total effect")
+    colnames(RD) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
+
+    RD[1, ] <- c(RDd, seRDd, CI_RDd, pvalueRDd)
+    RD[2, ] <- c(RDi, seRDi, CI_RDi, pvalueRDi)
+    RD[3, ] <- c(RDt, seRDt, CI_RDt, pvalueRDt)
+
+    ContEffm0 <- matrix(0, nrow = 3, ncol = 5)
+    ContEffm1 <- matrix(0, nrow = 3, ncol = 5)
+
+    rownames(ContEffm0) <- c("OR scale", "RR scale", "RD scale")
+    colnames(ContEffm0) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
+
+    ContEffm0[1, ] <- c(ORm0, seORm0, CI_ORm0, pvalueORm0)
+    ContEffm0[2, ] <- c(RRm0, seRRm0, CI_RRm0, pvalueRRm0)
+    ContEffm0[3, ] <- c(RDm0, seRDm0, CI_RDm0, pvalueRDm0)
+
+    rownames(ContEffm1) <- c("OR scale", "RR scale", "RD scale")
+    colnames(ContEffm1) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
+
+    ContEffm1[1, ] <- c(ORm1, seORm1, CI_ORm1, pvalueORm1)
+    ContEffm1[2, ] <- c(RRm1, seRRm1, CI_RRm1, pvalueRRm1)
+    ContEffm1[3, ] <- c(RDm1, seRDm1, CI_RDm1, pvalueRDm1)
+
+    results <- vector("list", 5)
+    names(results) <- c(
+      "Natural effects in OR scale",
+      "Natural effects in RR scale",
+      "Natural effects in RD scale",
+      "Controlled direct effects (m=0)",
+      "Controlled direct effects (m=1)"
+    )
+
+    OR <- as.data.frame(OR)
+    RR <- as.data.frame(RR)
+    RD <- as.data.frame(RD)
+    ContEffm0 <- as.data.frame(ContEffm0)
+    ContEffm1 <- as.data.frame(ContEffm1)
+
+    OR[[5]] <- format.pval(OR[[5]], digits = 5)
+    RR[[5]] <- format.pval(RR[[5]], digits = 5)
+    RD[[5]] <- format.pval(RD[[5]], digits = 5)
+    ContEffm0[[5]] <- format.pval(ContEffm0[[5]], digits = 5)
+    ContEffm1[[5]] <- format.pval(ContEffm1[[5]], digits = 5)
+
+    results[[1]] <- cbind(round(OR[1:4], digits = 5), OR[5])
+    results[[2]] <- cbind(round(RR[1:4], digits = 5), RR[5])
+    results[[3]] <- cbind(round(RD[1:4], digits = 5), RD[5])
+    results[[4]] <- cbind(round(ContEffm0[1:4], digits = 5), ContEffm0[5])
+    results[[5]] <- cbind(round(ContEffm1[1:4], digits = 5), ContEffm1[5])
+
   } else {
     gg <- function(a, b, betav, covmv, thetav, covyv, interaction) {
       if (interaction == TRUE) {
@@ -626,104 +699,71 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     seRRm1 <- sd(RRm1boot)
     seRDm1 <- sd(RDm1boot)
 
-    pvalueORd <- 2 * min(sum(ORboot[, 1] > 1), sum(ORboot[, 1] < 1)) / nboot
-    pvalueORi <- 2 * min(sum(ORboot[, 2] > 1), sum(ORboot[, 2] < 1)) / nboot
-    pvalueORt <- 2 * min(sum(ORboot[, 3] > 1), sum(ORboot[, 3] < 1)) / nboot
+    #  Results
 
-    pvalueRRd <- 2 * min(sum(RRboot[, 1] > 1), sum(RRboot[, 1] < 1)) / nboot
-    pvalueRRi <- 2 * min(sum(RRboot[, 2] > 1), sum(RRboot[, 2] < 1)) / nboot
-    pvalueRRt <- 2 * min(sum(RRboot[, 3] > 1), sum(RRboot[, 3] < 1)) / nboot
+    CIsup <- paste(confcoefint * 100, "%", sep = "")
+    CIinf <- paste((1 - confcoefint) * 100, "%", sep = "")
 
-    pvalueRDd <- 2 * min(sum(RDboot[, 1] > 0), sum(RDboot[, 1] < 0)) / nboot
-    pvalueRDi <- 2 * min(sum(RDboot[, 2] > 0), sum(RDboot[, 2] < 0)) / nboot
-    pvalueRDt <- 2 * min(sum(RDboot[, 3] > 0), sum(RDboot[, 3] < 0)) / nboot
+    OR <- matrix(0, nrow = 3, ncol = 4)
+    RR <- matrix(0, nrow = 3, ncol = 4)
+    RD <- matrix(0, nrow = 3, ncol = 4)
 
-    pvalueORm0 <- 2 * min(sum(ORm0boot > 1), sum(ORm0boot < 1)) / nboot
-    pvalueRRm0 <- 2 * min(sum(RRm0boot > 1), sum(RRm0boot < 1)) / nboot
-    pvalueRDm0 <- 2 * min(sum(RDm0boot > 0), sum(RDm0boot < 0)) / nboot
+    rownames(OR) <- c("Direct effect", "Indirect effect", "Total effect")
+    colnames(OR) <- c("Estimate", "Std.error", CIinf, CIsup)
 
-    pvalueORm1 <- 2 * min(sum(ORm1boot > 1), sum(ORm1boot < 1)) / nboot
-    pvalueRRm1 <- 2 * min(sum(RRm1boot > 1), sum(RRm1boot < 1)) / nboot
-    pvalueRDm1 <- 2 * min(sum(RDm1boot > 0), sum(RDm1boot < 0)) / nboot
+    OR[1, ] <- c(ORd, seORd, CI_ORd)
+    OR[2, ] <- c(ORi, seORi, CI_ORi)
+    OR[3, ] <- c(ORt, seORt, CI_ORt)
+
+    rownames(RR) <- c("Direct effect", "Indirect effect", "Total effect")
+    colnames(RR) <- c("Estimate", "Std.error", CIinf, CIsup)
+
+    RR[1, ] <- c(RRd, seRRd, CI_RRd)
+    RR[2, ] <- c(RRi, seRRi, CI_RRi)
+    RR[3, ] <- c(RRt, seRRt, CI_RRt)
+
+    rownames(RD) <- c("Direct effect", "Indirect effect", "Total effect")
+    colnames(RD) <- c("Estimate", "Std.error", CIinf, CIsup)
+
+    RD[1, ] <- c(RDd, seRDd, CI_RDd)
+    RD[2, ] <- c(RDi, seRDi, CI_RDi)
+    RD[3, ] <- c(RDt, seRDt, CI_RDt)
+
+    ContEffm0 <- matrix(0, nrow = 3, ncol = 4)
+    ContEffm1 <- matrix(0, nrow = 3, ncol = 4)
+
+    rownames(ContEffm0) <- c("OR scale", "RR scale", "RD scale")
+    colnames(ContEffm0) <- c("Estimate", "Std.error", CIinf, CIsup)
+
+    ContEffm0[1, ] <- c(ORm0, seORm0, CI_ORm0)
+    ContEffm0[2, ] <- c(RRm0, seRRm0, CI_RRm0)
+    ContEffm0[3, ] <- c(RDm0, seRDm0, CI_RDm0)
+
+    rownames(ContEffm1) <- c("OR scale", "RR scale", "RD scale")
+    colnames(ContEffm1) <- c("Estimate", "Std.error", CIinf, CIsup)
+
+    ContEffm1[1, ] <- c(ORm1, seORm1, CI_ORm1)
+    ContEffm1[2, ] <- c(RRm1, seRRm1, CI_RRm1)
+    ContEffm1[3, ] <- c(RDm1, seRDm1, CI_RDm1)
+
+    results <- vector("list", 5)
+    names(results) <- c(
+      "Natural effects in OR scale",
+      "Natural effects in RR scale",
+      "Natural effects in RD scale",
+      "Controlled direct effects (m=0)",
+      "Controlled direct effects (m=1)"
+    )
+
+    results[[1]] <- round(OR, digits = 5)
+    results[[2]] <- round(RR, digits = 5)
+    results[[3]] <- round(RD, digits = 5)
+    results[[4]] <- round(ContEffm0, digits = 5)
+    results[[5]] <- round(ContEffm1, digits = 5)
 
     close(progress_bar)
   }
 
-  #  Results
-
-  CIsup <- paste(confcoefint * 100, "%", sep = "")
-  CIinf <- paste((1 - confcoefint) * 100, "%", sep = "")
-
-  OR <- matrix(0, nrow = 3, ncol = 5)
-  RR <- matrix(0, nrow = 3, ncol = 5)
-  RD <- matrix(0, nrow = 3, ncol = 5)
-
-  rownames(OR) <- c("Direct effect", "Indirect effect", "Total effect")
-  colnames(OR) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
-
-  OR[1, ] <- c(ORd, seORd, CI_ORd, pvalueORd)
-  OR[2, ] <- c(ORi, seORi, CI_ORi, pvalueORi)
-  OR[3, ] <- c(ORt, seORt, CI_ORt, pvalueORt)
-
-  rownames(RR) <- c("Direct effect", "Indirect effect", "Total effect")
-  colnames(RR) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
-
-  RR[1, ] <- c(RRd, seRRd, CI_RRd, pvalueRRd)
-  RR[2, ] <- c(RRi, seRRi, CI_RRi, pvalueRRi)
-  RR[3, ] <- c(RRt, seRRt, CI_RRt, pvalueRRt)
-
-  rownames(RD) <- c("Direct effect", "Indirect effect", "Total effect")
-  colnames(RD) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
-
-  RD[1, ] <- c(RDd, seRDd, CI_RDd, pvalueRDd)
-  RD[2, ] <- c(RDi, seRDi, CI_RDi, pvalueRDi)
-  RD[3, ] <- c(RDt, seRDt, CI_RDt, pvalueRDt)
-
-  ContEffm0 <- matrix(0, nrow = 3, ncol = 5)
-  ContEffm1 <- matrix(0, nrow = 3, ncol = 5)
-
-  rownames(ContEffm0) <- c("OR scale", "RR scale", "RD scale")
-  colnames(ContEffm0) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
-
-  ContEffm0[1, ] <- c(ORm0, seORm0, CI_ORm0, pvalueORm0)
-  ContEffm0[2, ] <- c(RRm0, seRRm0, CI_RRm0, pvalueRRm0)
-  ContEffm0[3, ] <- c(RDm0, seRDm0, CI_RDm0, pvalueRDm0)
-
-  rownames(ContEffm1) <- c("OR scale", "RR scale", "RD scale")
-  colnames(ContEffm1) <- c("Estimate", "Std.error", CIinf, CIsup, "P.val")
-
-  ContEffm1[1, ] <- c(ORm1, seORm1, CI_ORm1, pvalueORm1)
-  ContEffm1[2, ] <- c(RRm1, seRRm1, CI_RRm1, pvalueRRm1)
-  ContEffm1[3, ] <- c(RDm1, seRDm1, CI_RDm1, pvalueRDm1)
-
-  results <- vector("list", 5)
-  names(results) <- c(
-    "Natural effects in OR scale",
-    "Natural effects in RR scale",
-    "Natural effects in RD scale",
-    "Controlled direct effects (m=0)",
-    "Controlled direct effects (m=1)"
-  )
-
-
-  OR <- as.data.frame(OR)
-  RR <- as.data.frame(RR)
-  RD <- as.data.frame(RD)
-  ContEffm0 <- as.data.frame(ContEffm0)
-  ContEffm1 <- as.data.frame(ContEffm1)
-
-  OR[[5]] <- format.pval(OR[[5]], digits = 5)
-  RR[[5]] <- format.pval(RR[[5]], digits = 5)
-  RD[[5]] <- format.pval(RD[[5]], digits = 5)
-  ContEffm0[[5]] <- format.pval(ContEffm0[[5]], digits = 5)
-  ContEffm1[[5]] <- format.pval(ContEffm1[[5]], digits = 5)
-
-
-  results[[1]] <- cbind(round(OR[1:4], digits = 5), OR[5])
-  results[[2]] <- cbind(round(RR[1:4], digits = 5), RR[5])
-  results[[3]] <- cbind(round(RD[1:4], digits = 5), RD[5])
-  results[[4]] <- cbind(round(ContEffm0[1:4], digits = 5), ContEffm0[5])
-  results[[5]] <- cbind(round(ContEffm1[1:4], digits = 5), ContEffm1[5])
 
 
   return(results)
