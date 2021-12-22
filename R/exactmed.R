@@ -8,7 +8,7 @@
 #'     calculates the conditional controlled direct effects at both values of the mediator. Natural and controlled effects
 #'     estimates are reported in three different scales: odds ratio (OR), risk ratio (RR) and risk difference (RD).
 #'     The interval estimates can be obtained either by the delta method or the bootstrap.
-#' @param data a named data frame that includes the outcome, exposure and mediator variables as well as the covariates
+#' @param data a named data frame that includes the exposure, mediator and outcome variables as well as the covariates
 #'     to be adjusted for in the model. The exposure can be either binary or continuous. If a covariate is categorical,
 #'     it has to be included in the data frame as a factor, character or logical variable.
 #' @param a the name of the exposure variable.
@@ -59,8 +59,8 @@
 #' @export
 #' @examples
 #' exactmed(
-#' data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
-#' m_cov = c("C1", "C2"), y_cov = c("C1", "C2")
+#'   data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+#'   m_cov = c("C1", "C2"), y_cov = c("C1", "C2")
 #' )
 #'
 #' m_cov_cond <- c(C1 = 0.1, C2 = 0.4)

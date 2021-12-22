@@ -27,7 +27,7 @@ exactmed(
 )
 }
 \arguments{
-\item{data}{a named data frame that includes the outcome, exposure and mediator variables as well as the covariates
+\item{data}{a named data frame that includes the exposure, mediator and outcome variables as well as the covariates
 to be adjusted for in the model. The exposure can be either binary or continuous. If a covariate is categorical,
 it has to be included in the data frame as a factor, character or logical variable.}
 
@@ -103,8 +103,8 @@ By default, \code{exactmed()} reports mediation effects evaluated at the sample-
 }
 \examples{
 exactmed(
-data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
-m_cov = c("C1", "C2"), y_cov = c("C1", "C2")
+  data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+  m_cov = c("C1", "C2"), y_cov = c("C1", "C2")
 )
 
 m_cov_cond <- c(C1 = 0.1, C2 = 0.4)
