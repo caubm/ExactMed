@@ -28,7 +28,7 @@ exactmed(
 }
 \arguments{
 \item{data}{a named data frame that includes the exposure, mediator and outcome variables as well as the covariates
-to be adjusted for in the model. The exposure can be either binary or continuous. If a covariate is categorical,
+to be adjusted for in the models. The exposure can be either binary or continuous. If a covariate is categorical,
 it has to be included in the data frame as a factor, character or logical variable.}
 
 \item{a}{the name of the exposure variable.}
@@ -60,19 +60,19 @@ If \code{adjusted == FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored b
 or Firth  penalized estimates in the logistic regression models.}
 
 \item{boot}{a logical value specifying whether the confidence intervals are obtained
-by the delta method or by the bootstrap.}
+by the delta method or by percentile bootstrap.}
 
-\item{nboot}{If \code{boot == TRUE}, the number of bootstrap replications used to obtain the confidence intervals.}
+\item{nboot}{The number of bootstrap replications used to obtain the confidence intervals if \code{boot == TRUE}.}
 
-\item{bootseed}{If \code{boot == TRUE}, the value of the initial seed (positive integer) for random number generation.}
+\item{bootseed}{The value of the initial seed (positive integer) for random number generation if \code{boot == TRUE}.}
 
 \item{confcoef}{a number between 0 and 1 for the confidence coefficient (ex:0.95) of the interval estimates.}
 
 \item{hvalue_m}{the value corresponding to the high level of the mediator. If the mediator is already coded
-as a numerical binary variable taking 0 or 1 values, then the value of this parameter will be ignored.}
+as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_m == 1}.}
 
 \item{hvalue_y}{the value corresponding to the high level of the outcome. If the outcome is already coded
-as a numerical binary variable taking 0 or 1 values, then the value of this parameter will be ignored.}
+as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y == 1}.}
 }
 \value{
 Returns natural direct, indirect and total effect estimates as well as controlled direct effects
@@ -86,20 +86,20 @@ Relying on a regression-based approach, the \code{exactmed()} function calculate
     The function returns point and interval estimates for the conditional natural effects without making any assumption
     regarding the rareness or commonness of the outcome (hence the term exact). For completeness, \code{exactmed()} also
     calculates the conditional controlled direct effects at both values of the mediator. Natural and controlled effects
-    estimates are reported in three different scales: odds ratio (OR), risk ratio (RR) and risk difference (RD).
+    estimates are reported using three different scales: odds ratio (OR), risk ratio (RR) and risk difference (RD).
     The interval estimates can be obtained either by the delta method or the bootstrap.
 }
 \details{
 By default, \code{exactmed()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
     (including the dummy variables created internally by the function to represent the categorical covariates).
-    In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects)
+    In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects),
     the user needs to provide named vectors \code{m_cov_cond} and/or \code{y_cov_cond} containing those values or levels. The adjustment
     covariates appearing in both \code{m_cov} and \code{y_cov} (common adjustment covariates) must have the same values; otherwise,
     \code{exactmed()}'s execution is aborted and an error message is displayed in the R console.
 }
 \note{
 \code{exactmed()} only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
- or remove observations with any missing values (NA) by specifying \code{data = na.omit(mydataset)}.
+ or remove observations of variables used in mediation analysis that have missing values (NA).
 }
 \examples{
 exactmed(

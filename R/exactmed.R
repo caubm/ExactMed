@@ -6,10 +6,10 @@
 #'     The function returns point and interval estimates for the conditional natural effects without making any assumption
 #'     regarding the rareness or commonness of the outcome (hence the term exact). For completeness, \code{exactmed()} also
 #'     calculates the conditional controlled direct effects at both values of the mediator. Natural and controlled effects
-#'     estimates are reported in three different scales: odds ratio (OR), risk ratio (RR) and risk difference (RD).
+#'     estimates are reported using three different scales: odds ratio (OR), risk ratio (RR) and risk difference (RD).
 #'     The interval estimates can be obtained either by the delta method or the bootstrap.
 #' @param data a named data frame that includes the exposure, mediator and outcome variables as well as the covariates
-#'     to be adjusted for in the model. The exposure can be either binary or continuous. If a covariate is categorical,
+#'     to be adjusted for in the models. The exposure can be either binary or continuous. If a covariate is categorical,
 #'     it has to be included in the data frame as a factor, character or logical variable.
 #' @param a the name of the exposure variable.
 #' @param m the name of the mediator variable.
@@ -28,27 +28,27 @@
 #' @param Firth a logical variable specifying whether to compute conventional maximum likelihood estimates
 #'     or Firth  penalized estimates in the logistic regression models.
 #' @param boot a logical value specifying whether the confidence intervals are obtained
-#'     by the delta method or by the bootstrap.
-#' @param nboot  If \code{boot == TRUE}, the number of bootstrap replications used to obtain the confidence intervals.
-#' @param bootseed If \code{boot == TRUE}, the value of the initial seed (positive integer) for random number generation.
+#'     by the delta method or by percentile bootstrap.
+#' @param nboot   The number of bootstrap replications used to obtain the confidence intervals if \code{boot == TRUE}.
+#' @param bootseed The value of the initial seed (positive integer) for random number generation if \code{boot == TRUE}.
 #' @param confcoef a number between 0 and 1 for the confidence coefficient (ex:0.95) of the interval estimates.
 #' @param hvalue_m the value corresponding to the high level of the mediator. If the mediator is already coded
-#'     as a numerical binary variable taking 0 or 1 values, then the value of this parameter will be ignored.
+#'     as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_m == 1}.
 #' @param hvalue_y the value corresponding to the high level of the outcome. If the outcome is already coded
-#'     as a numerical binary variable taking 0 or 1 values, then the value of this parameter will be ignored.
+#'     as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y == 1}.
 #' @importFrom logistf logistf
 #' @importFrom stats as.formula binomial glm qnorm quantile terms vcov na.omit pnorm sd
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @details By default, \code{exactmed()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
 #'     (including the dummy variables created internally by the function to represent the categorical covariates).
-#'     In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects)
+#'     In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects),
 #'     the user needs to provide named vectors \code{m_cov_cond} and/or \code{y_cov_cond} containing those values or levels. The adjustment
 #'     covariates appearing in both \code{m_cov} and \code{y_cov} (common adjustment covariates) must have the same values; otherwise,
 #'     \code{exactmed()}'s execution is aborted and an error message is displayed in the R console.
 #' @return Returns natural direct, indirect and total effect estimates as well as controlled direct effects
 #'     estimates on the OR, RR and RD scales.
 #' @note \code{exactmed()} only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
-#'  or remove observations with any missing values (NA) by specifying \code{data = na.omit(mydataset)}.
+#'  or remove observations of variables used in mediation analysis that have missing values (NA).
 #' @references
 #' Samoilenko M, Lefebvre G. Parametric-Regression-Based Causal Mediation Analysis of Binary Outcomes and Binary Mediators:
 #' Moving Beyond the Rareness or Commonness of the Outcome, \emph{American Journal of Epidemiology}.2021;190(9):1846-1858.
@@ -497,9 +497,9 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
 
     results <- vector("list", 5)
     names(results) <- c(
-      "Natural effects in OR scale",
-      "Natural effects in RR scale",
-      "Natural effects in RD scale",
+      "Natural effects on OR scale",
+      "Natural effects on RR scale",
+      "Natural effects on RD scale",
       "Controlled direct effects (m=0)",
       "Controlled direct effects (m=1)"
     )
@@ -748,9 +748,9 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
 
     results <- vector("list", 5)
     names(results) <- c(
-      "Natural effects in OR scale",
-      "Natural effects in RR scale",
-      "Natural effects in RD scale",
+      "Natural effects on OR scale",
+      "Natural effects on RR scale",
+      "Natural effects on RD scale",
       "Controlled direct effects (m=0)",
       "Controlled direct effects (m=1)"
     )

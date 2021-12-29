@@ -6,8 +6,6 @@
                                confcoef, hvalue_m, hvalue_y) {
   if (!(is.data.frame(data) && !is.null(colnames(data)))) stop("'data' must be a data frame with column names")
 
-  if (any(is.na(data))) stop("'data' contains missing values")
-
   if (any(duplicated(colnames(data)))) stop("'data' has duplicated column names")
 
   if (any(is.na(colnames(data))) || any(colnames(data) == "")) stop("'data' has some unnamed columns")
@@ -22,52 +20,6 @@
 
   if (!(is.vector(y, mode = "character") && length(y) == 1L && y %in% colnames(data))) {
     stop("'y' has to be a column name of 'data'")
-  }
-
-  if (!(is.null(hvalue_m) || (is.atomic(hvalue_m) && length(hvalue_m) == 1L && is.null(dim(hvalue_m)) && !is.na(hvalue_m)))) {
-    stop("Invalid type or length for input parameter 'hvalue_m'")
-  }
-
-  if (!(is.null(hvalue_y) || (is.atomic(hvalue_y) && length(hvalue_y) == 1L && is.null(dim(hvalue_y)) && !is.na(hvalue_y)))) {
-    stop("Invalid type or length for input parameter 'hvalue_y'")
-  }
-
-  if (!is.numeric(data[[a]])) stop("Exposure must be numerical variable")
-
-  if (length(unique(data[[m]])) > 2) {
-    stop("Mediator takes more than two different values in 'data'")
-  }
-
-  if (is.factor(data[[m]])) {
-    if (is.null(hvalue_m)) stop("High level for the mediator must be specified")
-
-    if (!hvalue_m %in% levels(data[[m]])) {
-      stop("Invalid value for high level of mediator")
-    }
-  } else if (!(is.numeric(data[[m]]) && all(data[[m]] %in% c(1, 0)))) {
-    if (is.null(hvalue_m)) stop("High level for the mediator must be specified")
-
-    if (!hvalue_m %in% data[[m]]) {
-      stop("Invalid value for high level of mediator")
-    }
-  }
-
-  if (length(unique(data[[y]])) > 2) {
-    stop("Outcome takes more than two different values in 'data'")
-  }
-
-  if (is.factor(data[[y]])) {
-    if (is.null(hvalue_y)) stop("High level for the outcome must be specified")
-
-    if (!hvalue_y %in% levels(data[[y]])) {
-      stop("Invalid value for high level of outcome")
-    }
-  } else if (!(is.numeric(data[[y]]) && all(data[[y]] %in% c(1, 0)))) {
-    if (is.null(hvalue_y)) stop("High level for the outcome must be specified")
-
-    if (!hvalue_y %in% data[[y]]) {
-      stop("Invalid value for high level of outcome")
-    }
   }
 
   if (!(is.vector(a1, mode = "numeric") && length(a1) == 1L)) stop("'a1' has to be a real number")
@@ -203,6 +155,67 @@
       if (i %in% m_cov && !(i %in% names(m_cov_cond))) {
         stop("Covariate ", i, " has two different values specified (one implicitly)")
       }
+    }
+  }
+
+
+  if (any(is.na(data[c(a, m, y, union(m_cov, y_cov))]))) {
+    stop("'data' contains missing values")
+  }
+
+  if (!is.numeric(data[[a]])) stop("Exposure must be numerical variable")
+
+  if (!(is.null(hvalue_m) || (is.atomic(hvalue_m) && length(hvalue_m) == 1L && is.null(dim(hvalue_m)) && !is.na(hvalue_m)))) {
+    stop("Invalid type or length for input parameter 'hvalue_m'")
+  }
+
+  if (!(is.null(hvalue_y) || (is.atomic(hvalue_y) && length(hvalue_y) == 1L && is.null(dim(hvalue_y)) && !is.na(hvalue_y)))) {
+    stop("Invalid type or length for input parameter 'hvalue_y'")
+  }
+
+
+  if (length(unique(data[[m]])) > 2) {
+    stop("Mediator takes more than two different values in 'data'")
+  }
+
+  if (is.factor(data[[m]])) {
+    if (is.null(hvalue_m)) stop("High level for the mediator must be specified")
+
+    if (!hvalue_m %in% levels(data[[m]])) {
+      stop("Invalid value for high level of mediator")
+    }
+  } else if (is.numeric(data[[m]]) && all(data[[m]] %in% c(1, 0))) {
+    if (!(is.null(hvalue_m) || hvalue_m %in% data[[m]])) {
+      stop("Invalid value for high level of mediator")
+    }
+  } else {
+    if (is.null(hvalue_m)) stop("High level for the mediator must be specified")
+
+    if (!hvalue_m %in% data[[m]]) {
+      stop("Invalid value for high level of mediator")
+    }
+  }
+
+
+  if (length(unique(data[[y]])) > 2) {
+    stop("Outcome takes more than two different values in 'data'")
+  }
+
+  if (is.factor(data[[y]])) {
+    if (is.null(hvalue_y)) stop("High level for the outcome must be specified")
+
+    if (!hvalue_y %in% levels(data[[y]])) {
+      stop("Invalid value for high level of outcome")
+    }
+  } else if (is.numeric(data[[y]]) && all(data[[y]] %in% c(1, 0))) {
+    if (!(is.null(hvalue_y) || hvalue_y %in% data[[y]])) {
+      stop("Invalid value for high level of outcome")
+    }
+  } else {
+    if (is.null(hvalue_y)) stop("High level for the outcome must be specified")
+
+    if (!hvalue_y %in% data[[y]]) {
+      stop("Invalid value for high level of outcome")
     }
   }
 }

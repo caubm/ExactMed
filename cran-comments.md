@@ -1,27 +1,38 @@
+
+
 ## Test environments
-* local R installation, R 4.1.1
-* ubuntu 16.04 (on travis-ci), R 4.1.1
+
+* local Debian 10 (buster) install, R 4.1.2
+* win-builder (oldrelease)
+* win-builder (release)
 * win-builder (devel)
+* R-hub ubuntu-gcc-release (r-release)
+* R-hub ubuntu-gcc-devel (r-devel)
+* R-hub fedora-clang-devel (r-devel)
+* R-hub macOS 10.13.6 High Sierra, R-release, CRAN's setup
 
-## R CMD check results
+## R CMD check  results
 
-0 errors | 0 warnings | 1 note
+There were no ERRORs or WARNINGs.
 
-* This is a new release.
+There was one NOTE:
 
-## Test environments
-- R-hub windows-x86_64-devel (r-devel)
-- R-hub ubuntu-gcc-release (r-release)
-- R-hub fedora-clang-devel (r-devel)
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Miguel Caubet Fernandez <caubet_fernandez.miguel@uqam.ca>’
 
-## R CMD check results
-> On windows-x86_64-devel (r-devel), ubuntu-gcc-release (r-release), fedora-clang-devel (r-devel)
-  checking CRAN incoming feasibility ... NOTE
-  
-  
-  Possibly misspelled words in DESCRIPTION:
-    Blais (11:33)
-    Lefebvre (11:43, 12:21)
-  New submission
-    Samoilenko (11:21, 12:9)
-  Maintainer: 'Miguel Caubet Fernandez <caubet_fernandez.miguel@uqam.ca>'
+New submission
+
+Possibly misspelled words in DESCRIPTION:
+  Blais (11:33)
+  Lefebvre (11:43, 12:21)
+  Samoilenko (11:21, 12:9)
+
+
+This is a new submission.
+
+Mispelled words are all proper names.
+
+## Downstream dependencies
+
+There are currently no downstream dependencies for this package.
+

@@ -444,6 +444,13 @@ test_that("Error messages: mediator, exposure or response", {
     "Invalid value for high level of mediator"
   )
 
+  expect_error(
+    exactmed(
+      data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+      hvalue_m = "2"
+    ),
+    "Invalid value for high level of mediator"
+  )
 
   datamed4 <- datamed
   Mb <- sample(c(1, 2), n, replace = TRUE)
@@ -509,6 +516,14 @@ test_that("Error messages: mediator, exposure or response", {
   expect_error(
     exactmed(
       data = datamed4, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+      hvalue_y = 3
+    ),
+    "Invalid value for high level of outcome"
+  )
+
+  expect_error(
+    exactmed(
+      data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
       hvalue_y = 3
     ),
     "Invalid value for high level of outcome"
