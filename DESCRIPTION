@@ -2,14 +2,13 @@ Package: ExactMed
 Type: Package
 Title: Exact Mediation Analysis for Binary Outcomes
 Version: 0.1.0
-Author: as.person(c(
-    "Miguel Caubet Fernandez <caubet_fernandez.miguel@uqam.ca> [aut, cre]",
-    "Mariia Samoilenko  [aut]",
-    "Geneviève Lefebvre [aut]"))
-Maintainer: Miguel Caubet Fernandez <caubet_fernandez.miguel@uqam.ca> 
+Authors@R: c(
+    person("Miguel", "Caubet", email = "caubet_fernandez.miguel@uqam.ca", role = c("aut", "cre")),
+    person("Mariia", "Samoilenko", role = "aut"),
+    person("Geneviève", "Lefebvre", role = "aut"))
 Description: A tool for conducting exact parametric regression-based causal mediation analysis of binary outcomes 
-    as described in Samoilenko, Blais and Lefebvre (2018) <\url{doi.org/10.1353/obs.2018.0013}>
-    and Samoilenko, Lefebvre (2021) <\url{doi.org/10.1093/aje/kwab055}>.
+    as described in Samoilenko, Blais and Lefebvre (2018) <doi:10.1353/obs.2018.0013>
+    and Samoilenko, Lefebvre (2021) <doi:10.1093/aje/kwab055>.
 Depends: R (>= 3.5.0)
 Imports: 
     logistf,

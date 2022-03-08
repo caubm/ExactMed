@@ -1,6 +1,15 @@
+## Resubmission
+
+This is a  resubmission.
+
+Corrections applied:
+
+* 'Maintainer' and 'Author' fields in DESCRIPTION have been replaced by  the 'Authors@R' field.
+   
+* DOI specifications rewritten in the format recommended by CRAN.
 
 
-## Test environments
+## Test environments  
 
 * local Debian 10 (buster) install, R 4.1.2
 * win-builder (oldrelease)
@@ -27,10 +36,20 @@ Possibly misspelled words in DESCRIPTION:
   Lefebvre (11:43, 12:21)
   Samoilenko (11:21, 12:9)
 
-
+Found the following (possibly) invalid DOIs:
+    DOI: 10.1093/aje/kwab055
+      From: DESCRIPTION
+      Status: Forbidden
+      Message: 403
+      
+      
 This is a new submission.
 
-Mispelled words are all proper names.
+Misspelled words are all proper names.
+
+The 'invalid DOIs' message appears only with the R-hub verification service, 
+and after typing the DOI specifications in the format suggested by CRAN.
+All DOIs were manually checked and are valid.
 
 ## Downstream dependencies
 
