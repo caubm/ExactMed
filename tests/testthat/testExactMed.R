@@ -1224,11 +1224,16 @@ test_that("Getting a message", {
     data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0
   ))
 
-
   expect_message(exactmed_c(
     data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
     m_cov = c("C1", "C2"), y_cov = c("C1", "C2"), adjusted = FALSE
   ))
+
+  expect_warning(exactmed_c(
+    data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+    mf = 12
+  ))
+
 })
 
 test_that("Getting an error due to incorrect type of 'data' parameter", {
@@ -1293,7 +1298,7 @@ test_that("Error messages: mediator, exposure or response", {
       data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
       mf = "a"
     ),
-    "'mf' has to be a real number"
+    "'mf' must be NULL or a valid real number"
   )
 
   expect_error(

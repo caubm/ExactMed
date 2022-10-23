@@ -3,7 +3,7 @@
 \docType{data}
 \name{datamed}
 \alias{datamed}
-\title{Data for Examples}
+\title{Data for Examples (Binary Mediator)}
 \format{
 A data frame with 1000 rows and 5 variables:
 \describe{

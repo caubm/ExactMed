@@ -1,4 +1,4 @@
-#' @title Data for Examples
+#' @title Data for Examples (Binary Mediator)
 #'
 #' @description Simulated data set containing 1000 observations on 5 measured variables with no missing values.
 #'     The first three variables are the binary exposure, mediator and outcome, respectively, while the last

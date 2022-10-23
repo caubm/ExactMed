@@ -196,7 +196,14 @@
     stop("'yprevalence' must be NULL or a valid real number")
   }
 
-  if (!(is.vector(mf, mode = "numeric") && length(mf) == 1L)) stop("'mf' has to be a real number")
+  if (!(is.null(mf) || (is.vector(mf, mode = "numeric") && length(mf) == 1L))) {
+    stop("'mf' must be NULL or a valid real number")
+  }
+
+  if (!(is.null(mf) || (min(data[[m]]) <= mf && mf <= max(data[[m]])))) {
+    warning("'mf' value is out of range")
+  }
+
 
 }
 

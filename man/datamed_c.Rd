@@ -3,7 +3,7 @@
 \docType{data}
 \name{datamed_c}
 \alias{datamed_c}
-\title{Data for Examples}
+\title{Data for Examples (Continuous Mediator)}
 \format{
 A data frame with 1000 rows and 5 variables:
 \describe{
@@ -19,7 +19,7 @@ data(datamed_c)
 }
 \description{
 Simulated data set containing 1000 observations on 5 measured variables with no missing values.
-    The first three variables are the binary exposure, mediator and outcome, respectively, while the last
-    two variables are the potential adjustment covariates (one binary and one continuous).
+    The first three variables are the binary exposure, the continuous mediator and the binary outcome,
+    respectively, while the last two variables are the potential adjustment covariates (one binary and one continuous).
 }
 \keyword{datasets}

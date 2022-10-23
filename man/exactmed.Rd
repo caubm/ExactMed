@@ -2,7 +2,7 @@
 % Please edit documentation in R/exactmed.R
 \name{exactmed}
 \alias{exactmed}
-\title{Exact Mediation Effects Computation}
+\title{Exact Mediation Effects Computation (Binary Mediator)}
 \usage{
 exactmed(
   data,
@@ -28,55 +28,55 @@ exactmed(
 )
 }
 \arguments{
-\item{data}{a named data frame that includes the exposure, mediator and outcome variables as well as the covariates
+\item{data}{A named data frame that includes the exposure, mediator and outcome variables as well as the covariates
 to be adjusted for in the models. The exposure can be either binary or continuous. If a covariate is categorical,
 it has to be included in the data frame as a factor, character or logical variable.}
 
-\item{a}{the name of the exposure variable.}
+\item{a}{The name of the binary or continuous exposure variable.}
 
-\item{m}{the name of the mediator variable.}
+\item{m}{The name of the binary mediator variable.}
 
-\item{y}{the name of the outcome variable.}
+\item{y}{The name of the binary outcome variable.}
 
-\item{a1}{a value corresponding to the high level of the exposure.}
+\item{a1}{A value corresponding to the high level of the exposure.}
 
-\item{a0}{a value corresponding to the low level of the exposure.}
+\item{a0}{A value corresponding to the low level of the exposure.}
 
-\item{m_cov}{a vector containing the names of the adjustment variables (covariates) in the mediator model.}
+\item{m_cov}{A vector containing the names of the adjustment variables (covariates) in the mediator model.}
 
-\item{y_cov}{a vector containing the names of the adjustment variables (covariates) in the outcome model.}
+\item{y_cov}{A vector containing the names of the adjustment variables (covariates) in the outcome model.}
 
-\item{m_cov_cond}{a named vector (atomic vector or list) containing specific values for some or all
+\item{m_cov_cond}{A named vector (atomic vector or list) containing specific values for some or all
 of the adjustment covariates \code{m_cov} in the mediator model. Please consult the package vignette for details.}
 
-\item{y_cov_cond}{a named vector (atomic vector or list) containing specific values for some or all
+\item{y_cov_cond}{A named vector (atomic vector or list) containing specific values for some or all
 of the adjustment covariates \code{y_cov} in the outcome model. Please consult the package vignette for details.}
 
-\item{adjusted}{a logical variable specifying whether to obtain unadjusted or adjusted estimates.
+\item{adjusted}{A logical variable specifying whether to obtain unadjusted or adjusted estimates.
 If \code{adjusted == FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.}
 
-\item{interaction}{a logical variable specifying whether there is an exposure-mediator interaction term in the outcome model.}
+\item{interaction}{A logical variable specifying whether there is an exposure-mediator interaction term in the outcome model.}
 
-\item{Firth}{a logical variable specifying whether to compute conventional maximum likelihood estimates
+\item{Firth}{A logical variable specifying whether to compute conventional maximum likelihood estimates
 or Firth  penalized estimates in the logistic regression models.}
 
-\item{boot}{a logical value specifying whether the confidence intervals are obtained
+\item{boot}{A logical value specifying whether the confidence intervals are obtained
 by the delta method or by percentile bootstrap.}
 
 \item{nboot}{The number of bootstrap replications used to obtain the confidence intervals if \code{boot == TRUE}.}
 
 \item{bootseed}{The value of the initial seed (positive integer) for random number generation if \code{boot == TRUE}.}
 
-\item{confcoef}{a number between 0 and 1 for the confidence coefficient (ex:0.95) of the interval estimates.}
+\item{confcoef}{A number between 0 and 1 for the confidence coefficient (ex.: 0.95) of the interval estimates.}
 
-\item{hvalue_m}{the value corresponding to the high level of the mediator. If the mediator is already coded
+\item{hvalue_m}{The value corresponding to the high level of the mediator. If the mediator is already coded
 as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_m == 1}.}
 
-\item{hvalue_y}{the value corresponding to the high level of the outcome. If the outcome is already coded
+\item{hvalue_y}{The value corresponding to the high level of the outcome. If the outcome is already coded
 as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y == 1}.}
 
-\item{yprevalence}{the prevalence of the case in a case control study. The low level of the outcome is
-treated as the control.}
+\item{yprevalence}{The prevalence of the outcome in the population. Option used when case-control data are used.
+The low level of the outcome is treated as the control level.}
 }
 \value{
 Returns natural direct, indirect and total effect estimates as well as controlled direct effects
