@@ -1,9 +1,8 @@
 #' @noRd
 
-
-.check_input_param <- function(data, a, m, y, a1, a0, m_cov, y_cov, m_cov_cond,
-                               y_cov_cond, adjusted, interaction, Firth, boot, nboot, bootseed,
-                               confcoef, hvalue_m, hvalue_y, yprevalence) {
+.check_input_param_c <- function(data, a, m, y, a1, a0, m_cov, y_cov, m_cov_cond,
+                                y_cov_cond, adjusted, interaction, Firth, boot, nboot, bootseed,
+                                confcoef, hvalue_y, yprevalence, mf) {
   if (!(is.data.frame(data) && !is.null(colnames(data)))) stop("'data' must be a data frame with column names")
 
   if (any(duplicated(colnames(data)))) stop("'data' has duplicated column names")
@@ -165,37 +164,11 @@
 
   if (!is.numeric(data[[a]])) stop("Exposure must be numerical variable")
 
-  if (!(is.null(hvalue_m) || (is.atomic(hvalue_m) && length(hvalue_m) == 1L && is.null(dim(hvalue_m)) && !is.na(hvalue_m)))) {
-    stop("Invalid type or length for input parameter 'hvalue_m'")
-  }
-
   if (!(is.null(hvalue_y) || (is.atomic(hvalue_y) && length(hvalue_y) == 1L && is.null(dim(hvalue_y)) && !is.na(hvalue_y)))) {
     stop("Invalid type or length for input parameter 'hvalue_y'")
   }
 
-
-  if (length(unique(data[[m]])) > 2) {
-    stop("Mediator takes more than two different values in 'data'")
-  }
-
-  if (is.factor(data[[m]])) {
-    if (is.null(hvalue_m)) stop("High level for the mediator must be specified")
-
-    if (!hvalue_m %in% levels(data[[m]])) {
-      stop("Invalid value for high level of mediator")
-    }
-  } else if (is.numeric(data[[m]]) && all(data[[m]] %in% c(1, 0))) {
-    if (!(is.null(hvalue_m) || hvalue_m %in% data[[m]])) {
-      stop("Invalid value for high level of mediator")
-    }
-  } else {
-    if (is.null(hvalue_m)) stop("High level for the mediator must be specified")
-
-    if (!hvalue_m %in% data[[m]]) {
-      stop("Invalid value for high level of mediator")
-    }
-  }
-
+  if (!is.numeric(data[[m]])) stop("Mediator must be numerical variable")
 
   if (length(unique(data[[y]])) > 2) {
     stop("Outcome takes more than two different values in 'data'")
@@ -223,5 +196,17 @@
     stop("'yprevalence' must be NULL or a valid real number")
   }
 
+  if (!(is.null(mf) || (is.vector(mf, mode = "numeric") && length(mf) == 1L))) {
+    stop("'mf' must be NULL or a valid real number")
+  }
+
+  if (!(is.null(mf) || (min(data[[m]]) <= mf && mf <= max(data[[m]])))) {
+    warning("'mf' value is out of range")
+  }
+
+
 }
+
+
+
 
