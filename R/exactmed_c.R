@@ -43,6 +43,7 @@
 #' @importFrom stats as.formula binomial glm qnorm quantile terms vcov na.omit pnorm sd integrate lm
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom sandwich vcovHC
+#' @importFrom lmtest coeftest
 #' @importFrom pkgcond suppress_warnings
 #' @details By default, \code{exactmed_c()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
 #'     (including the dummy variables created internally by the function to represent the categorical covariates).
@@ -229,8 +230,8 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
           result[[4]] <- Mreg$df.residual
           result[[5]] <- vcovHC(Mreg)
           result[[6]] <- vcovHC(Yreg)
-          result[[7]] <- summary(Mreg)
-          result[[8]] <- summary(Yreg)
+          result[[7]] <- coeftest(Mreg, vcov. = vcovHC(Mreg))
+          result[[8]] <- coeftest(Yreg, vcov. = vcovHC(Yreg))
           names(result[[1]]) <- NULL
           names(result[[2]]) <- NULL
 
@@ -680,6 +681,8 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     results[[5]] <- beta_theta_coef[[7]]
     results[[6]] <- beta_theta_coef[[8]]
 
+    class(results) <- c("results", "list")
+
   } else {
 
     if(is.null(yprevalence)) {
@@ -727,7 +730,8 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       w_case <- yprevalence / prob1
       w_control <- (1 - yprevalence) / (1 - prob1)
       cc_weights <- ifelse(data[[y]] == 1, w_case, w_control)
-      cc_weights_boot <- c(rep(w_case, sum(data[[y]] == 1)), rep(w_control, sum(data[[y]] == 0)))
+      data <- cbind(data, cc_weights)
+      #cc_weights_boot <- c(rep(w_case, sum(data[[y]] == 1)), rep(w_control, sum(data[[y]] == 0)))
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform, cc_weights){
           Mreg <- lm(Mform, data = data, weights = cc_weights)
@@ -840,9 +844,9 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       return(result)
     }
 
-    P10 <- gg(a1, a0, betacoef,varcoef, mean_covmv, thetacoef,mean_covyv,interaction)
-    P00 <- gg(a0, a0, betacoef,varcoef, mean_covmv, thetacoef,mean_covyv,interaction)
-    P11 <- gg(a1, a1, betacoef,varcoef, mean_covmv, thetacoef,mean_covyv,interaction)
+    P10 <- gg(a1, a0, betacoef,varcoef, mean_covmv, thetacoef, mean_covyv, interaction)
+    P00 <- gg(a0, a0, betacoef,varcoef, mean_covmv, thetacoef, mean_covyv, interaction)
+    P11 <- gg(a1, a1, betacoef,varcoef, mean_covmv, thetacoef, mean_covyv, interaction)
 
     ORd <- (P10 / (1 - P10)) / (P00 / (1 - P00))
     ORi <- (P11 / (1 - P11)) / (P10 / (1 - P10))
@@ -884,7 +888,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     for (i in 1:nboot) {
       DATAboot <- repli_data(data, n, y)
 
-      beta_theta_coef <- coef_estimate(DATAboot, Mform, Yform, cc_weights_boot)
+      beta_theta_coef <- coef_estimate(DATAboot, Mform, Yform, DATAboot$cc_weights)
 
       betacoef <- beta_theta_coef$Mreg$coefficients
       thetacoef <- beta_theta_coef$Yreg$coefficients
@@ -943,7 +947,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
 
     seRRd <- sd(RRboot[, 1], na.rm = TRUE)
     seRRi <- sd(RRboot[, 2], na.rm = TRUE)
-    seRRt <- sd(RRboot[, 3])
+    seRRt <- sd(RRboot[, 3], na.rm = TRUE)
 
     seRDd <- sd(RDboot[, 1], na.rm = TRUE)
     seRDi <- sd(RDboot[, 2], na.rm = TRUE)
@@ -998,12 +1002,12 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       "Natural effects on RR scale",
       "Natural effects on RD scale",
       paste("Controlled direct effect(m=", round(mf, digits = 2), ")", sep = ""),
-      "Boot. replications: Natural effects on OR scale",
-      "Boot. replications: Natural effects on RR scale",
-      "Boot. replications: Natural effects on RD scale",
-      paste("Boot. replications: Controlled direct effect(m=", round(mf, digits = 2), ") on OR scale", sep = ""),
-      paste("Boot. replications: Controlled direct effect(m=", round(mf, digits = 2), ") on RR scale", sep = ""),
-      paste("Boot. replications: Controlled direct effect(m=", round(mf, digits = 2), ") on RD scale", sep = ""),
+      "First bootstrap replications for natural effects on OR scale",
+      "First bootstrap replications for natural effects on RR scale",
+      "First bootstrap replications for natural effects on RD scale",
+      paste("First bootstrap replications for controlled direct effect(m=", round(mf, digits = 2), ") on OR scale", sep = ""),
+      paste("First bootstrap replications for controlled direct effect(m=", round(mf, digits = 2), ") on RR scale", sep = ""),
+      paste("First bootstrap replications for controlled direct effect(m=", round(mf, digits = 2), ") on RD scale", sep = ""),
       "Mediator model",
       "Outcome model"
     )
@@ -1021,6 +1025,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     results[[11]] <- summary(beta_theta_coef_ini$Mreg)
     results[[12]] <- summary(beta_theta_coef_ini$Yreg)
 
+    class(results) <- c("results", "list")
 
     close(progress_bar)
   }

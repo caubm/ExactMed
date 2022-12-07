@@ -42,6 +42,7 @@
 #' @importFrom stats as.formula binomial glm qnorm quantile terms vcov na.omit pnorm sd
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom sandwich vcovHC
+#' @importFrom lmtest coeftest
 #' @importFrom pkgcond suppress_warnings
 #' @details By default, \code{exactmed()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
 #'     (including the dummy variables created internally by the function to represent the categorical covariates).
@@ -243,8 +244,8 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
           result[[2]] <- Yreg$coefficients
           result[[3]] <- vcovHC(Mreg)
           result[[4]] <- vcovHC(Yreg)
-          result[[5]] <- summary(Mreg)
-          result[[6]] <- summary(Yreg)
+          result[[5]] <- coeftest(Mreg, vcov. = vcovHC(Mreg))
+          result[[6]] <- coeftest(Yreg, vcov. = vcovHC(Yreg))
           names(result[[1]]) <- NULL
           names(result[[2]]) <- NULL
 
@@ -638,6 +639,8 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     results[[6]] <- beta_theta_coef[[5]]
     results[[7]] <- beta_theta_coef[[6]]
 
+    class(results) <- c("results", "list")
+
   } else {
 
     if(is.null(yprevalence)) {
@@ -685,7 +688,8 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
       w_case <- yprevalence / prob1
       w_control <- (1 - yprevalence) / (1 - prob1)
       cc_weights <- ifelse(data[[y]] == 1, w_case, w_control)
-      cc_weights_boot <- c(rep(w_case, sum(data[[y]] == 1)), rep(w_control, sum(data[[y]] == 0)))
+      data <- cbind(data, cc_weights)
+      #cc_weights_boot <- c(rep(w_case, sum(data[[y]] == 1)), rep(w_control, sum(data[[y]] == 0)))
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform, cc_weights){
           Mreg <- logistf(Mform, data = data, weights = cc_weights)
@@ -837,7 +841,7 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     for (i in 1:nboot) {
       DATAboot <- repli_data(data, n, y)
 
-      beta_theta_coef <- coef_estimate(DATAboot, Mform, Yform, cc_weights_boot)
+      beta_theta_coef <- coef_estimate(DATAboot, Mform, Yform, DATAboot$cc_weights)
 
       betacoef <- beta_theta_coef$Mreg$coefficients
       thetacoef <- beta_theta_coef$Yreg$coefficients
@@ -974,15 +978,15 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
       "Natural effects on RD scale",
       "Controlled direct effect (m=0)",
       "Controlled direct effect (m=1)",
-      "Boot. replications: Natural effects on OR scale",
-      "Boot. replications: Natural effects on RR scale",
-      "Boot. replications: Natural effects on RD scale",
-      "Boot. replications: Controlled direct effect (m=0) on OR scale",
-      "Boot. replications: Controlled direct effect (m=0) on RR scale",
-      "Boot. replications: Controlled direct effect (m=0) on RD scale",
-      "Boot. replications: Controlled direct effect (m=1) on OR scale",
-      "Boot. replications: Controlled direct effect (m=1) on RR scale",
-      "Boot. replications: Controlled direct effect (m=1) on RD scale",
+      "First bootstrap replications for natural effects on OR scale",
+      "First bootstrap replications for natural effects on RR scale",
+      "First bootstrap replications for natural effects on RD scale",
+      "First bootstrap replications for controlled direct effect (m=0) on OR scale",
+      "First bootstrap replications for controlled direct effect (m=0) on RR scale",
+      "First bootstrap replications for controlled direct effect (m=0) on RD scale",
+      "First bootstrap replications for controlled direct effect (m=1) on OR scale",
+      "First bootstrap replications for controlled direct effect (m=1) on RR scale",
+      "First bootstrap replications for controlled direct effect (m=1) on RD scale",
       "Mediator model",
       "Outcome model"
     )
@@ -1003,6 +1007,9 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
       results[[14]] <- RDm1boot
       results[[15]] <- summary(beta_theta_coef_ini$Mreg)
       results[[16]] <- summary(beta_theta_coef_ini$Yreg)
+
+      class(results) <- c("results", "list")
+
 
     close(progress_bar)
   }
