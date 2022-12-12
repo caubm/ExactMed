@@ -155,9 +155,8 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
   if (boot == FALSE) {
 
     if(is.null(yprevalence)) {
-      cc_weights <- NULL
       if (Firth == TRUE) {
-        coef_estimate <- function(data, Mform, Yform, cc_weights){
+        coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data)
           Yreg <- logistf(Yform, data = data)
 
@@ -176,7 +175,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
           return(result)
         }
       } else {
-        coef_estimate <- function(data, Mform, Yform, cc_weights){
+        coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data)
           Yreg <- glm(Yform, data = data, family = binomial(link = "logit"))
 
@@ -200,7 +199,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       cc_weights <- ifelse(data[[y]] == 1, yprevalence / prob1,
                            (1 - yprevalence) / (1 - prob1))
       if (Firth == TRUE) {
-        coef_estimate <- function(data, Mform, Yform, cc_weights){
+        coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data, weights = cc_weights)
           Yreg <- logistf(Yform, data = data, weights = cc_weights)
 
@@ -219,7 +218,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
           return(result)
         }
       } else {
-        coef_estimate <- function(data, Mform, Yform, cc_weights){
+        coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data, weights = cc_weights)
           Yreg <- suppress_warnings(glm(Yform, data = data, family = binomial(link = "logit"),
                                         weights = cc_weights))
@@ -240,7 +239,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       }
     }
 
-    beta_theta_coef <- coef_estimate(data, Mform, Yform, cc_weights)
+    beta_theta_coef <- coef_estimate(data, Mform, Yform)
 
     betacoef <- beta_theta_coef[[1]]
     thetacoef <- beta_theta_coef[[2]]
@@ -692,9 +691,8 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
         return(DATAboot)
       }
 
-      cc_weights <- NULL
       if (Firth == TRUE) {
-        coef_estimate <- function(data, Mform, Yform, cc_weights){
+        coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data)
           Yreg <- logistf(Yform, data = data)
 
@@ -706,7 +704,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
           return(result)
         }
       } else {
-        coef_estimate <- function(data, Mform, Yform, cc_weights){
+        coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data)
           Yreg <- glm(Yform, data = data, family = binomial(link = "logit"))
 
@@ -729,11 +727,11 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       prob1 <- mean(data[[y]] == 1)
       w_case <- yprevalence / prob1
       w_control <- (1 - yprevalence) / (1 - prob1)
-      cc_weights <- ifelse(data[[y]] == 1, w_case, w_control)
-      data <- cbind(data, cc_weights)
-      #cc_weights_boot <- c(rep(w_case, sum(data[[y]] == 1)), rep(w_control, sum(data[[y]] == 0)))
+      cc_weights <- c(rep(w_case, sum(data[[y]] == 1)), rep(w_control, sum(data[[y]] == 0)))
+      v_data <- c(which(data[[y]] == 1), which(data[[y]] == 0))
+      data <- data[v_data, ]
       if (Firth == TRUE) {
-        coef_estimate <- function(data, Mform, Yform, cc_weights){
+        coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data, weights = cc_weights)
           Yreg <- logistf(Yform, data = data, weights = cc_weights)
 
@@ -745,7 +743,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
           return(result)
         }
       } else {
-        coef_estimate <- function(data, Mform, Yform, cc_weights){
+        coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data, weights = cc_weights)
           Yreg <- suppress_warnings(glm(Yform, data = data, family = binomial(link = "logit"),
                                         weights = cc_weights))
@@ -760,7 +758,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       }
     }
 
-    beta_theta_coef_ini <- coef_estimate(data, Mform, Yform, cc_weights)
+    beta_theta_coef_ini <- coef_estimate(data, Mform, Yform)
 
     betacoef <- beta_theta_coef_ini$Mreg$coefficients
     thetacoef <- beta_theta_coef_ini$Yreg$coefficients
@@ -888,7 +886,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     for (i in 1:nboot) {
       DATAboot <- repli_data(data, n, y)
 
-      beta_theta_coef <- coef_estimate(DATAboot, Mform, Yform, DATAboot$cc_weights)
+      beta_theta_coef <- coef_estimate(DATAboot, Mform, Yform)
 
       betacoef <- beta_theta_coef$Mreg$coefficients
       thetacoef <- beta_theta_coef$Yreg$coefficients
