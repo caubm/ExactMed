@@ -688,7 +688,10 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       repli_data <- function(data, n, y) {
         vboot <- sample(1:n, n, replace = TRUE)
         DATAboot <- data[vboot, ]
-        return(DATAboot)
+        result <- vector("list", length = 2)
+        result[[1]] <- DATAboot
+        result[[2]] <- vboot
+        return(result)
       }
 
       if (Firth == TRUE) {
@@ -717,19 +720,23 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
         }
       }
     } else {
-      repli_data <- function(data, n, y) {
-        case_indice <- sample(which(data[[y]] == 1), sum(data[[y]] == 1), replace = TRUE)
-        control_indice <- sample(which(data[[y]] == 0), sum(data[[y]] == 0), replace = TRUE)
-        DATAboot <- data[c(case_indice, control_indice), ]
-        return(DATAboot)
-      }
-
       prob1 <- mean(data[[y]] == 1)
       w_case <- yprevalence / prob1
       w_control <- (1 - yprevalence) / (1 - prob1)
       cc_weights <- c(rep(w_case, sum(data[[y]] == 1)), rep(w_control, sum(data[[y]] == 0)))
       v_data <- c(which(data[[y]] == 1), which(data[[y]] == 0))
       data <- data[v_data, ]
+
+      repli_data <- function(data, n, y) {
+        case_indice <- sample(which(data[[y]] == 1), sum(data[[y]] == 1), replace = TRUE)
+        control_indice <- sample(which(data[[y]] == 0), sum(data[[y]] == 0), replace = TRUE)
+        DATAboot <- data[c(case_indice, control_indice), ]
+        result <- vector("list", length = 2)
+        result[[1]] <- DATAboot
+        result[[2]] <- v_data[c(case_indice, control_indice)]
+        return(result)
+      }
+
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform){
           Mreg <- lm(Mform, data = data, weights = cc_weights)
@@ -881,10 +888,14 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     RRmboot <- vector("numeric", length = nboot)
     RDmboot <- vector("numeric", length = nboot)
 
+    indiceboot <- matrix(0, n, nboot)
+
     progress_bar <- txtProgressBar(min = 0, max = nboot, style = 3, char = "=")
 
     for (i in 1:nboot) {
-      DATAboot <- repli_data(data, n, y)
+      repli_list <- repli_data(data, n, y)
+      DATAboot <- repli_list[[1]]
+      indiceboot[, i] <- repli_list[[2]]
 
       beta_theta_coef <- coef_estimate(DATAboot, Mform, Yform)
 
@@ -994,7 +1005,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     ContEffm[2, ] <- c(RRm, seRRm, CI_RRm)
     ContEffm[3, ] <- c(RDm, seRDm, CI_RDm)
 
-    results <- vector("list", 12)
+    results <- vector("list", 13)
     names(results) <- c(
       "Natural effects on OR scale",
       "Natural effects on RR scale",
@@ -1006,6 +1017,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       paste("First bootstrap replications for controlled direct effect(m=", round(mf, digits = 2), ") on OR scale", sep = ""),
       paste("First bootstrap replications for controlled direct effect(m=", round(mf, digits = 2), ") on RR scale", sep = ""),
       paste("First bootstrap replications for controlled direct effect(m=", round(mf, digits = 2), ") on RD scale", sep = ""),
+      "First indices of each bootstrap replication",
       "Mediator model",
       "Outcome model"
     )
@@ -1020,8 +1032,9 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     results[[8]] <- ORmboot
     results[[9]] <- RRmboot
     results[[10]] <- RDmboot
-    results[[11]] <- summary(beta_theta_coef_ini$Mreg)
-    results[[12]] <- summary(beta_theta_coef_ini$Yreg)
+    results[[11]] <- indiceboot
+    results[[12]] <- summary(beta_theta_coef_ini$Mreg)
+    results[[13]] <- summary(beta_theta_coef_ini$Yreg)
 
     class(results) <- c("results", "list")
 
