@@ -22,45 +22,79 @@
 #'     of the adjustment covariates \code{m_cov} in the mediator model. Please consult the package vignette for details.
 #' @param y_cov_cond A named vector (atomic vector or list) containing specific values for some or all
 #'     of the adjustment covariates \code{y_cov} in the outcome model. Please consult the package vignette for details.
-#' @param adjusted  A logical variable specifying whether to obtain unadjusted or adjusted estimates.
-#'     If \code{adjusted == FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.
+#' @param adjusted  A logical variable specifying whether to obtain adjusted or unadjusted estimates.
+#'     If \code{adjusted = FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.
 #' @param interaction A logical variable specifying whether there is an exposure-mediator interaction term in the outcome model.
-#' @param Firth A logical variable specifying whether to compute conventional maximum likelihood estimates
-#'     or Firth  penalized estimates in the logistic regression models.
+#' @param Firth A logical variable specifying whether to compute conventional or penalized maximum likelihood estimates
+#'     for the logistic regression models (see details).
 #' @param boot A logical value specifying whether the confidence intervals are obtained
 #'     by the delta method or by percentile bootstrap.
-#' @param nboot   The number of bootstrap replications used to obtain the confidence intervals if \code{boot == TRUE}.
-#' @param bootseed The value of the initial seed (positive integer) for random number generation if \code{boot == TRUE}.
+#' @param nboot The number of bootstrap replications used to obtain the confidence intervals if \code{boot = TRUE}.
+#' @param bootseed The value of the initial seed (positive integer) for random number generation if \code{boot = TRUE}.
 #' @param confcoef A number between 0 and 1 for the confidence coefficient (ex.: 0.95) of the interval estimates.
 #' @param hvalue_m The value corresponding to the high level of the mediator. If the mediator is already coded
-#'     as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_m == 1}.
+#'     as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_m = 1}.
 #' @param hvalue_y The value corresponding to the high level of the outcome. If the outcome is already coded
-#'     as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y == 1}.
+#'     as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y = 1}.
 #' @param yprevalence The prevalence of the outcome in the population. Option used when case-control data are used.
 #'     The low level of the outcome is treated as the control level.
-#' @importFrom logistf logistf
 #' @importFrom stats as.formula binomial glm qnorm quantile terms vcov na.omit pnorm sd
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom sandwich vcovHC
 #' @importFrom lmtest coeftest
 #' @importFrom pkgcond suppress_warnings
+#' @importFrom brglm2 brglmFit
 #' @details By default, \code{exactmed()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
-#'     (including the dummy variables created internally by the function to represent the categorical covariates).
+#'     (including the dummy variables created internally by the function to represent the non-reference levels of the categorical covariates).
 #'     In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects),
 #'     the user needs to provide named vectors \code{m_cov_cond} and/or \code{y_cov_cond} containing those values or levels. The adjustment
 #'     covariates appearing in both \code{m_cov} and \code{y_cov} (common adjustment covariates) must have the same values; otherwise,
 #'     \code{exactmed()}'s execution is aborted and an error message is displayed in the R console.
-#' @return Returns natural direct, indirect and total effect estimates as well as controlled direct effects
-#'     estimates on the OR, RR and RD scales.
-#' @note \code{exactmed()} only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
-#'  or remove observations of variables used in mediation analysis that have missing values (NA).
-#' @references
-#' Samoilenko M, Lefebvre G. Parametric-Regression-Based Causal Mediation Analysis of Binary Outcomes and Binary Mediators:
-#' Moving Beyond the Rareness or Commonness of the Outcome, \emph{American Journal of Epidemiology}.2021;190(9):1846-1858.
 #'
+#'     The Firth parameter allows to reduce the bias of the regression coefficients estimators when facing a problem of
+#'     separation or quasi-separation. The bias reduction is achieved by the \code{\link[brglm2]{brglmFit}} fitting method of the \emph{brglm2} package.
+#'     More precisely, estimates are obtained using a penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
+#'     bias-reducing adjusted score equation approach in Firth (1993).
+#'
+#'     When the data come from a case-control study, the \code{yprevalence} parameter should be used and its value ideally correspond to the true outcome prevalence.
+#'     \code{exactmed()} accounts for the ascertainment in the sample by employing weighted regression techniques that use inverse probability weighting (IPW)
+#'     with robust standard errors. These errors are obtained via the \code{\link[sandwich]{vcovHC}} function of the R package \emph{sandwich}.
+#'     Specifically, we use the HC3 type covariance matrix estimator (default type of the \code{\link[sandwich]{vcovHC}} function).
+#'
+#' @return An object of class \code{results} is returned:
+#' \item{ne.or}{Natural effects estimates on OR scale.}
+#' \item{ne.rr}{Natural effects estimates on RR scale.}
+#' \item{ne.rd}{Natural effects estimates on RD scale.}
+#' \item{cdem0}{Controlled direct effect (m=0) estimates.}
+#' \item{cdem1}{Controlled direct effect (m=1) estimates.}
+#' \item{med.reg}{Summary of the mediator regression.}
+#' \item{out.reg}{Summary of the outcome regression.}
+#'
+#' If \code{boot==TRUE}, the returned object also contains:
+#'
+#' \item{boot.ne.or}{Bootstrap replications of natural effects on OR scale.}
+#' \item{boot.ne.rr}{Bootstrap replications of natural effects on RR scale.}
+#' \item{boot.ne.rd}{Bootstrap replications of natural effects on RD scale.}
+#' \item{boot.cdem0.or}{Bootstrap replications of controlled direct effect (m=0) on OR scale.}
+#' \item{boot.cdem0.rr}{Bootstrap replications of controlled direct effect (m=0) on RR scale.}
+#' \item{boot.cdem0.rd}{Bootstrap replications of controlled direct effect (m=0) on RD scale.}
+#' \item{boot.cdem1.or}{Bootstrap replications of controlled direct effect (m=1) on OR scale.}
+#' \item{boot.cdem1.rr}{Bootstrap replications of controlled direct effect (m=1) on RR scale.}
+#' \item{boot.cdem1.rd}{Bootstrap replications of controlled direct effect (m=1) on RD scale.}
+#' \item{boot.ind}{Indices of the observations sampled in each bootstrap replication (one replication per column).}
+#'
+#' @note The \code{exactmed()} function only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
+#'     or remove observations of variables used in mediation analysis that have missing values (NA).
+#' @references
 #' Samoilenko M, Blais L, Lefebvre G. Comparing logistic and log-binomial models for causal mediation analyses of
 #' binary mediators and rare binary outcomes: evidence to support cross-checking of mediation results in practice.
-#' \emph{Observational Studies}.2018;4(1):193-216.
+#' \emph{Observational Studies}.2018;4(1):193-216. \doi{10.1353/obs.2018.0013}.
+#'
+#' Samoilenko M, Lefebvre G. Parametric-regression-based causal mediation analysis of binary outcomes and binary mediators:
+#' moving beyond the rareness or commonness of the outcome, \emph{American Journal of Epidemiology}.2021;190(9):1846-1858. \doi{10.1093/aje/kwab055}.
+#'
+#' Firth D. Bias reduction of maximum likelihood estimates.
+#' \emph{Biometrika}.1993;80:27-38. \doi{10.2307/2336755}.
 #' @export
 #' @examples
 #' exactmed(
@@ -177,16 +211,18 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
     if(is.null(yprevalence)) {
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform){
-          Mreg <- logistf(Mform, data = data)
-          Yreg <- logistf(Yform, data = data)
+          Mreg <- glm(Mform, data = data, family = binomial(link = "logit"),
+                      method = brglmFit, type = "MPL_Jeffreys")
+          Yreg <- glm(Yform, data = data, family = binomial(link = "logit"),
+                      method = brglmFit, type = "MPL_Jeffreys")
 
           result <- vector("list", length = 6)
           result[[1]] <- Mreg$coefficients
           result[[2]] <- Yreg$coefficients
           result[[3]] <- vcov(Mreg)
           result[[4]] <- vcov(Yreg)
-          result[[5]] <- summary(Mreg)
-          result[[6]] <- summary(Yreg)
+          result[[5]] <- Mreg
+          result[[6]] <- Yreg
           names(result[[1]]) <- NULL
           names(result[[2]]) <- NULL
 
@@ -202,8 +238,8 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
           result[[2]] <- Yreg$coefficients
           result[[3]] <- vcov(Mreg)
           result[[4]] <- vcov(Yreg)
-          result[[5]] <- summary(Mreg)
-          result[[6]] <- summary(Yreg)
+          result[[5]] <- Mreg
+          result[[6]] <- Yreg
           names(result[[1]]) <- NULL
           names(result[[2]]) <- NULL
 
@@ -216,16 +252,18 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
                            (1 - yprevalence) / (1 - prob1))
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform){
-          Mreg <- logistf(Mform, data = data, weights = cc_weights)
-          Yreg <- logistf(Yform, data = data, weights = cc_weights)
+          Mreg <- suppress_warnings(glm(Mform, data = data, family = binomial(link = "logit"),
+                      method = brglmFit, type = "MPL_Jeffreys", weights = cc_weights))
+          Yreg <- suppress_warnings(glm(Yform, data = data, family = binomial(link = "logit"),
+                                        method = brglmFit, type = "MPL_Jeffreys", weights = cc_weights))
 
           result <- vector("list", length = 6)
           result[[1]] <- Mreg$coefficients
           result[[2]] <- Yreg$coefficients
-          result[[3]] <- vcov(Mreg)
-          result[[4]] <- vcov(Yreg)
-          result[[5]] <- summary(Mreg)
-          result[[6]] <- summary(Yreg)
+          result[[3]] <- vcovHC(Mreg)
+          result[[4]] <- vcovHC(Yreg)
+          result[[5]] <- coeftest(Mreg, vcov. = vcovHC(Mreg))
+          result[[6]] <- coeftest(Yreg, vcov. = vcovHC(Yreg))
           names(result[[1]]) <- NULL
           names(result[[2]]) <- NULL
 
@@ -609,13 +647,13 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
 
     results <- vector("list", 7)
     names(results) <- c(
-      "Natural effects on OR scale",
-      "Natural effects on RR scale",
-      "Natural effects on RD scale",
-      "Controlled direct effect (m=0)",
-      "Controlled direct effect (m=1)",
-      "Mediator model",
-      "Outcome model"
+      "ne.or",
+      "ne.rr",
+      "ne.rd",
+      "cdem0",
+      "cdem1",
+      "med.reg",
+      "out.reg"
     )
 
     OR <- as.data.frame(OR)
@@ -654,8 +692,10 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
 
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform){
-          Mreg <- logistf(Mform, data = data)
-          Yreg <- logistf(Yform, data = data)
+          Mreg <- glm(Mform, data = data, family = binomial(link = "logit"),
+                      method = brglmFit, type = "MPL_Jeffreys")
+          Yreg <- glm(Yform, data = data, family = binomial(link = "logit"),
+                      method = brglmFit, type = "MPL_Jeffreys")
 
           result <- vector("list", length = 2)
           names(result) <- c('Mreg', 'Yreg')
@@ -697,8 +737,10 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
 
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform){
-          Mreg <- logistf(Mform, data = data, weights = cc_weights)
-          Yreg <- logistf(Yform, data = data, weights = cc_weights)
+          Mreg <- suppress_warnings(glm(Mform, data = data, family = binomial(link = "logit"),
+                                        method = brglmFit, type = "MPL_Jeffreys", weights = cc_weights))
+          Yreg <- suppress_warnings(glm(Yform, data = data, family = binomial(link = "logit"),
+                                        method = brglmFit, type = "MPL_Jeffreys", weights = cc_weights))
 
           result <- vector("list", length = 2)
           names(result) <- c('Mreg', 'Yreg')
@@ -982,23 +1024,23 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
 
     results <- vector("list", 17)
     names(results) <- c(
-      "Natural effects on OR scale",
-      "Natural effects on RR scale",
-      "Natural effects on RD scale",
-      "Controlled direct effect (m=0)",
-      "Controlled direct effect (m=1)",
-      "First bootstrap replications for natural effects on OR scale",
-      "First bootstrap replications for natural effects on RR scale",
-      "First bootstrap replications for natural effects on RD scale",
-      "First bootstrap replications for controlled direct effect (m=0) on OR scale",
-      "First bootstrap replications for controlled direct effect (m=0) on RR scale",
-      "First bootstrap replications for controlled direct effect (m=0) on RD scale",
-      "First bootstrap replications for controlled direct effect (m=1) on OR scale",
-      "First bootstrap replications for controlled direct effect (m=1) on RR scale",
-      "First bootstrap replications for controlled direct effect (m=1) on RD scale",
-      "First indices of each bootstrap replication",
-      "Mediator model",
-      "Outcome model"
+      "ne.or",
+      "ne.rr",
+      "ne.rd",
+      "cdem0",
+      "cdem1",
+      "boot.ne.or",
+      "boot.ne.rr",
+      "boot.ne.rd",
+      "boot.cdem0.or",
+      "boot.cdem0.rr",
+      "boot.cdem0.rd",
+      "boot.cdem1.or",
+      "boot.cdem1.rr",
+      "boot.cdem1.rd",
+      "boot.ind",
+      "med.reg",
+      "out.reg"
     )
 
       results[[1]] <- round(OR, digits = 5)
@@ -1016,8 +1058,8 @@ exactmed <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_co
       results[[13]] <- RRm1boot
       results[[14]] <- RDm1boot
       results[[15]] <- indiceboot
-      results[[16]] <- summary(beta_theta_coef_ini$Mreg)
-      results[[17]] <- summary(beta_theta_coef_ini$Yreg)
+      results[[16]] <- beta_theta_coef_ini$Mreg
+      results[[17]] <- beta_theta_coef_ini$Yreg
 
       class(results) <- c("results", "list")
 

@@ -1,8 +1,6 @@
 library(testthat)
 library(ExactMed)
 
-
-
 test_that("exactmed() with 'datamed' returns a list", {
   result1 <- exactmed(
     data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
@@ -327,6 +325,34 @@ test_that("exactmed() with 'datamed2' returns a list", {
   expect_type(result10, "list")
 })
 
+test_that("exactmed() prints output to the console", {
+
+  result1 <- exactmed(
+    data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0
+  )
+
+  result2 <-exactmed(
+    data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+    yprevalence = 0.1
+  )
+
+  result3 <-exactmed(
+    data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+    boot = TRUE, nboot = 100
+  )
+
+  result4 <- exactmed(
+    data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+    boot = TRUE, nboot = 100, yprevalence = 0.1
+  )
+
+  expect_output(print(result1))
+  expect_output(print(result2))
+  expect_output(print(result3))
+  expect_output(print(result4))
+
+})
+
 test_that("Getting a message", {
   expect_message(exactmed(
     data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0
@@ -537,7 +563,7 @@ test_that("Error messages: mediator, exposure or response", {
   )
 })
 
-test_that("Error messages: numeric parameters", {
+test_that("Error and warning messages: numeric parameters", {
   expect_error(
     exactmed(data = datamed, a = "X", m = "M", y = "Y", a1 = 2 + 3i, a0 = 0),
     "'a1' has to be a real number"
@@ -546,6 +572,11 @@ test_that("Error messages: numeric parameters", {
   expect_error(
     exactmed(data = datamed, a = "X", m = "M", y = "Y", a1 = 1, a0 = "hjk"),
     "'a0' has to be a real number"
+  )
+
+  expect_warning(
+    exactmed(data = datamed, a = "X", m = "M", y = "Y", a1 = 0, a0 = 1),
+    "The value of the low level of exposure is not smaller than that of the high level"
   )
 
   expect_error(
@@ -1219,6 +1250,34 @@ test_that("exactmed_c() with 'datamed_c2' returns a list", {
   expect_type(result10, "list")
 })
 
+test_that("exactmed_c() prints output to the console", {
+
+  result1 <- exactmed_c(
+    data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0
+  )
+
+  result2 <-exactmed_c(
+    data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+    yprevalence = 0.1
+  )
+
+  result3 <-exactmed_c(
+    data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+    boot = TRUE, nboot = 100
+  )
+
+  result4 <- exactmed_c(
+    data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0,
+    boot = TRUE, nboot = 100, yprevalence = 0.1
+  )
+
+  expect_output(print(result1))
+  expect_output(print(result2))
+  expect_output(print(result3))
+  expect_output(print(result4))
+
+})
+
 test_that("Getting a message", {
   expect_message(exactmed_c(
     data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = 0
@@ -1387,7 +1446,7 @@ test_that("Error messages: mediator, exposure or response", {
   )
 })
 
-test_that("Error messages: numeric parameters", {
+test_that("Error and warning messages: numeric parameters", {
   expect_error(
     exactmed_c(data = datamed_c, a = "X", m = "M", y = "Y", a1 = 2 + 3i, a0 = 0),
     "'a1' has to be a real number"
@@ -1396,6 +1455,11 @@ test_that("Error messages: numeric parameters", {
   expect_error(
     exactmed_c(data = datamed_c, a = "X", m = "M", y = "Y", a1 = 1, a0 = "hjk"),
     "'a0' has to be a real number"
+  )
+
+  expect_warning(
+    exactmed_c(data = datamed_c, a = "X", m = "M", y = "Y", a1 = 0, a0 = 1),
+    "The value of the low level of exposure is not smaller than that of the high level"
   )
 
   expect_error(

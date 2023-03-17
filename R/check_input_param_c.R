@@ -25,6 +25,10 @@
 
   if (!(is.vector(a0, mode = "numeric") && length(a0) == 1L)) stop("'a0' has to be a real number")
 
+  if( a0 >=  a1) {
+    warning("The value of the low level of exposure is not smaller than that of the high level")
+  }
+
   if (!(is.vector(confcoef, mode = "numeric") && length(confcoef) == 1L && 0 < confcoef && confcoef < 1)) {
     stop("'confcoef' has to be a valid real number")
   }
@@ -175,20 +179,20 @@
   }
 
   if (is.factor(data[[y]])) {
-    if (is.null(hvalue_y)) stop("High level for the outcome must be specified")
+    if (is.null(hvalue_y)) stop("High level for the outcome must be specified. \n Please, select a value among the outcome levels")
 
     if (!hvalue_y %in% levels(data[[y]])) {
-      stop("Invalid value for high level of outcome")
+      stop("Invalid value for high level of outcome. \n Please, select a value among the outcome levels")
     }
   } else if (is.numeric(data[[y]]) && all(data[[y]] %in% c(1, 0))) {
     if (!(is.null(hvalue_y) || hvalue_y %in% data[[y]])) {
-      stop("Invalid value for high level of outcome")
+      stop("Invalid value for high level of outcome. \n Please, select a value among the outcome levels")
     }
   } else {
-    if (is.null(hvalue_y)) stop("High level for the outcome must be specified")
+    if (is.null(hvalue_y)) stop("High level for the outcome must be specified. \n Please, select a value among the outcome levels")
 
     if (!hvalue_y %in% data[[y]]) {
-      stop("Invalid value for high level of outcome")
+      stop("Invalid value for high level of outcome. \n Please, select a value among the outcome levels")
     }
   }
 

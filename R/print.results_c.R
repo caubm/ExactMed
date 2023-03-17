@@ -3,8 +3,8 @@
 #' @export
 
 
-print.results <- function(x, ...) {
-  if(length(x) == 7) {
+print.results_c <- function(x, ...) {
+  if(length(x) == 6) {
     cat("\n")
     cat("Natural effects on OR scale", ":", "\n", sep = "")
     cat("\n")
@@ -21,37 +21,32 @@ print.results <- function(x, ...) {
     print(x[[3]])
 
     cat("\n")
-    cat("Controlled direct effect (m=0)", ":", "\n", sep = "")
+    cat("Controlled direct effect", ":", "\n", sep = "")
     cat("\n")
     print(x[[4]])
 
-    cat("\n")
-    cat("Controlled direct effect (m=1)", ":", "\n", sep = "")
-    cat("\n")
-    print(x[[5]])
-
-    if(!("coeftest" %in% class(x[[6]]))) {
+    if(!("coeftest" %in% class(x[[5]]))) {
       cat("\n")
       cat("\n")
       cat("Mediator model", ":", "\n", sep = "")
       cat("\n")
-      print(summary(x[[6]]))
+      print(summary(x[[5]]))
 
       cat("\n")
       cat("Outcome model", ":", "\n", sep = "")
       cat("\n")
-      print(summary(x[[7]]))
+      print(summary(x[[6]]))
     } else {
       cat("\n")
       cat("\n")
       cat("Mediator model", ":", "\n", sep = "")
       cat("\n")
-      print(x[[6]])
+      print(x[[5]])
 
       cat("\n")
       cat("Outcome model", ":", "\n", sep = "")
       cat("\n")
-      print(x[[7]])
+      print(x[[6]])
     }
   } else {
     cat("\n")
@@ -70,84 +65,60 @@ print.results <- function(x, ...) {
     print(x[[3]])
 
     cat("\n")
-    cat("Controlled direct effect (m=0)", ":", "\n", sep = "")
+    cat("Controlled direct effect", ":", "\n", sep = "")
     cat("\n")
     print(x[[4]])
-
-    cat("\n")
-    cat("Controlled direct effect (m=1)", ":", "\n", sep = "")
-    cat("\n")
-    print(x[[5]])
 
     cat("\n")
     cat("First bootstrap replications of natural effects on OR scale",
         ":", "\n", sep = "")
     cat("\n")
-    print(head(x[[6]], n = 3L))
+    print(head(x[[5]], n = 3L))
 
     cat("\n")
     cat("First bootstrap replications of natural effects on RR scale",
         ":", "\n", sep = "")
     cat("\n")
-    print(head(x[[7]], n = 3L))
+    print(head(x[[6]], n = 3L))
 
     cat("\n")
     cat("First bootstrap replications of natural effects on RD scale",
         ":", "\n", sep = "")
     cat("\n")
+    print(head(x[[7]], n = 3L))
+
+    cat("\n")
+    cat("First bootstrap replications of controlled direct effect on OR scale",
+        ":", "\n", sep = "")
+    cat("\n")
     print(head(x[[8]], n = 3L))
 
     cat("\n")
-    cat("First bootstrap replications of controlled direct effect (m=0) on OR scale",
+    cat("First bootstrap replications of controlled direct effect on RR scale",
         ":", "\n", sep = "")
     cat("\n")
     print(head(x[[9]], n = 3L))
 
     cat("\n")
-    cat("First bootstrap replications of controlled direct effect (m=0) on RR scale",
+    cat("First bootstrap replications of controlled direct effect on RD scale",
         ":", "\n", sep = "")
     cat("\n")
     print(head(x[[10]], n = 3L))
 
     cat("\n")
-    cat("First bootstrap replications of controlled direct effect (m=0) on RD scale",
-        ":", "\n", sep = "")
-    cat("\n")
-    print(head(x[[11]], n = 3L))
-
-    cat("\n")
-    cat("First bootstrap replications of controlled direct effect (m=1) on OR scale",
-        ":", "\n", sep = "")
-    cat("\n")
-    print(head(x[[12]], n = 3L))
-
-    cat("\n")
-    cat("First bootstrap replications of controlled direct effect (m=1) on RR scale",
-        ":", "\n", sep = "")
-    cat("\n")
-    print(head(x[[13]], n = 3L))
-
-    cat("\n")
-    cat("First bootstrap replications of controlled direct effect (m=1) on RD scale",
-        ":", "\n", sep = "")
-    cat("\n")
-    print(head(x[[14]], n = 3L))
-
-    cat("\n")
     cat("\n")
     cat("Mediator model", ":", "\n", sep = "")
     cat("\n")
-    print(summary(x[[16]]))
+    print(summary(x[[12]]))
 
     cat("\n")
     cat("Outcome model", ":", "\n", sep = "")
     cat("\n")
-    print(summary(x[[17]]))
+    print(summary(x[[13]]))
 
   }
   invisible(x)
 }
-
 
 
 

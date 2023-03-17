@@ -52,25 +52,25 @@ of the adjustment covariates \code{m_cov} in the mediator model. Please consult 
 \item{y_cov_cond}{A named vector (atomic vector or list) containing specific values for some or all
 of the adjustment covariates \code{y_cov} in the outcome model. Please consult the package vignette for details.}
 
-\item{adjusted}{A logical variable specifying whether to obtain unadjusted or adjusted estimates.
-If \code{adjusted == FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.}
+\item{adjusted}{A logical variable specifying whether to obtain adjusted or unadjusted estimates.
+If \code{adjusted = FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.}
 
 \item{interaction}{A logical variable specifying whether there is an exposure-mediator interaction term in the outcome model.}
 
-\item{Firth}{A logical variable specifying whether to compute conventional maximum likelihood estimates
-or Firth  penalized estimates in the outcome logistic regression model.}
+\item{Firth}{A logical variable specifying whether to compute conventional or penalized maximum likelihood estimates
+for the outcome logistic regression model.}
 
 \item{boot}{A logical value specifying whether the confidence intervals are obtained
 by the delta method or by percentile bootstrap.}
 
-\item{nboot}{The number of bootstrap replications used to obtain the confidence intervals if \code{boot == TRUE}.}
+\item{nboot}{The number of bootstrap replications used to obtain the confidence intervals if \code{boot = TRUE}.}
 
-\item{bootseed}{The value of the initial seed (positive integer) for random number generation if \code{boot == TRUE}.}
+\item{bootseed}{The value of the initial seed (positive integer) for random number generation if \code{boot = TRUE}.}
 
 \item{confcoef}{A number between 0 and 1 for the confidence coefficient (ex.: 0.95) of the interval estimates.}
 
 \item{hvalue_y}{The value corresponding to the high level of the outcome. If the outcome is already coded
-as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y == 1}.}
+as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y = 1}.}
 
 \item{yprevalence}{The prevalence of the outcome in the population. Option used when case-control data are used.
 The low level of the outcome is treated as the control level.}
@@ -79,8 +79,22 @@ The low level of the outcome is treated as the control level.}
 \code{mf} is fixed at the sample-specific mean of the mediator (default).}
 }
 \value{
-Returns natural direct, indirect and total effect estimates as well as controlled direct effect
-    estimate on the OR, RR and RD scales.
+An object of class \code{results_c} is returned:
+\item{ne.or}{Natural effects estimates on OR scale.}
+\item{ne.rr}{Natural effects estimates on RR scale.}
+\item{ne.rd}{Natural effects estimates on RD scale.}
+\item{cde}{Controlled direct effect estimates.}
+\item{med.reg}{Summary of the mediator regression.}
+\item{out.reg}{Summary of the outcome regression.}
+
+If \code{boot==TRUE}, the returned object also contains:
+\item{boot.ne.or}{Bootstrap replications of natural effects on OR scale.}
+\item{boot.ne.rr}{Bootstrap replications of natural effects on RR scale.}
+\item{boot.ne.rd}{Bootstrap replications of natural effects on RD scale.}
+\item{boot.cde.or}{Bootstrap replications of controlled direct effect on OR scale.}
+\item{boot.cde.rr}{Bootstrap replications of controlled direct effect on RR scale.}
+\item{boot.cde.rd}{Bootstrap replications of controlled direct effect on RD scale.}
+\item{boot.ind}{Indices of the observations sampled in each bootstrap replication (one replication per column).}
 }
 \description{
 Relying on a regression-based approach, the \code{exactmed_c()} function calculates standard
@@ -96,14 +110,24 @@ Relying on a regression-based approach, the \code{exactmed_c()} function calcula
 }
 \details{
 By default, \code{exactmed_c()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
-    (including the dummy variables created internally by the function to represent the categorical covariates).
+    (including the dummy variables created internally by the function to represent the non-reference levels of the categorical covariates).
     In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects),
     the user needs to provide named vectors \code{m_cov_cond} and/or \code{y_cov_cond} containing those values or levels. The adjustment
     covariates appearing in both \code{m_cov} and \code{y_cov} (common adjustment covariates) must have the same values; otherwise,
     \code{exactmed_c()}'s execution is aborted and an error message is displayed in the R console.
+
+    The Firth parameter allows to reduce the bias of the outcome logistic regression coefficients estimators when facing a problem of
+    separation or quasi-separation. The bias reduction is achieved by the \code{\link[brglm2]{brglmFit}} fitting method of the \emph{brglm2} package.
+    More precisely, estimates are obtained using a penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
+    bias-reducing adjusted score equation approach in Firth (1993).
+
+    When the data come from a case-control study, the \code{yprevalence} parameter should be used and its value ideally correspond to the true outcome prevalence.
+    \code{exactmed()} accounts for the ascertainment in the sample by employing weighted regression techniques that use inverse probability weighting (IPW)
+    with robust standard errors. These errors are obtained via the \code{\link[sandwich]{vcovHC}} function of the R package \emph{sandwich}.
+    Specifically, we use the HC3 type covariance matrix estimator (default type of the \code{\link[sandwich]{vcovHC}} function).
 }
 \note{
-\code{exactmed_c()} only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
+The \code{exactmed_c()} function only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
  or remove observations of variables used in mediation analysis that have missing values (NA).
 }
 \examples{
@@ -137,4 +161,18 @@ exactmed_c(
   m_cov = c("C1", "C2"), y_cov = c("C1", "C2"),
   m_cov_cond = m_cov_cond, y_cov_cond = y_cov_cond
 )
+}
+\references{
+Samoilenko M, Blais L, Lefebvre G. Comparing logistic and log-binomial models for causal mediation analyses of
+binary mediators and rare binary outcomes: evidence to support cross-checking of mediation results in practice.
+\emph{Observational Studies}.2018;4(1):193-216.
+
+Samoilenko M, Lefebvre G. Parametric-regression-based causal mediation analysis of binary outcomes and binary mediators:
+moving beyond the rareness or commonness of the outcome, \emph{American Journal of Epidemiology}.2021;190(9):1846-1858. \doi{10.1093/aje/kwab055}.
+
+Samoilenko M, Lefebvre G. An exact regression-based approach for the estimation of the natural direct and indirect effects
+with a binary outcome and a continuous mediator. \emph{Statistics in Medicine}.2022;1-35. \doi{10.1002/sim.9621}.
+
+Firth D. Bias reduction of maximum likelihood estimates.
+\emph{Biometrika}.1993;80:27-38. \doi{10.2307/2336755}.
 }
