@@ -1,3 +1,5 @@
+# ExactMed (development version)
+
 # ExactMed 0.2.0
 
 * Added the new function `exactmed_c()`, which computes mediation effects when the mediator is continuous.
