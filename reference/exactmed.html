@@ -187,7 +187,8 @@ as a numerical binary variable taking 0 or 1 values, then by default <code>hvalu
 
 
 <dt>yprevalence</dt>
-<dd><p>The prevalence of the outcome in the population. Option used when case-control data are used.
+<dd><p>The prevalence of the outcome in the population (a number between 0 and 1).
+Option used when case-control data are used.
 The low level of the outcome is treated as the control level.</p></dd>
 
 </dl></div>
@@ -293,35 +294,35 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-in"><span>  m_cov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C1"</span>, <span class="st">"C2"</span><span class="op">)</span>, y_cov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C1"</span>, <span class="st">"C2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.24870   0.36201 1.64021 3.08293 4.8115e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.88856   0.06794 0.76489 1.03222    0.12229</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.99810   0.28495 1.51086 2.64246 1.2120e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.33700   0.07526 1.19734 1.49296 2.4771e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.96726   0.02012 0.92862 1.00751     0.1095</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.29323   0.06981 1.16339 1.43756 1.9047e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error     2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.18403   0.03498  0.11547 0.25259 1.4320e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.02390   0.01511 -0.05353 0.00572    0.11371</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.16013   0.03246  0.09651 0.22375 8.0912e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.61843   0.52125 1.77253 3.86803 1.3290e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.41151   0.09648 1.23453 1.61386 4.5960e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.21741   0.04207 0.13495 0.29987 2.3731e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error     2.5%   97.5%   P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  1.30748   0.28346  0.85486 1.99974 0.21622</span>
@@ -329,15 +330,11 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.06150   0.05030 -0.03707 0.16008 0.22140</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = Mform, family = binomial(link = "logit"), data = data)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deviance Residuals: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min       1Q   Median       3Q      Max  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -2.4782  -0.7113  -0.2821   0.7703   2.6191  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
@@ -357,15 +354,11 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = Yform, family = binomial(link = "logit"), data = data)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deviance Residuals: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min       1Q   Median       3Q      Max  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -2.2347  -1.0763   0.6167   0.9108   1.7014  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
@@ -392,35 +385,35 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-in"><span>  m_cov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C1"</span>, <span class="st">"C2"</span><span class="op">)</span>, y_cov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C1"</span>, <span class="st">"C2"</span><span class="op">)</span>, yprevalence <span class="op">=</span> <span class="fl">0.1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.21897   0.39369 1.56722 3.14175 7.0439e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.89402   0.07287 0.76203 1.04887    0.16927</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.98379   0.30587 1.46640 2.68373 8.8801e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.02762   0.31328 1.49785 2.74476 4.7641e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.90914   0.06236 0.79478 1.03997    0.16493</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.84339   0.25235 1.40959 2.41070 7.9050e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error     2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.07956   0.02041  0.03955 0.11956 9.7183e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.01426   0.01093 -0.03569 0.00717    0.19209</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.06529   0.01569  0.03454 0.09604 3.1567e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.49079   0.52916 1.64249 3.77722 1.7418e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  2.24332   0.41272 1.56419 3.21731 1.1250e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.09200   0.02546 0.04209 0.14191 0.00030254</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error     2.5%   97.5%    P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  1.45445   0.33649  0.92422 2.28889 0.105377</span>
@@ -428,7 +421,7 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.03559   0.02154 -0.00663 0.07781 0.098497</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> z test of coefficients:</span>
@@ -442,7 +435,7 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> z test of coefficients:</span>
@@ -467,35 +460,35 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-in"><span>  m_cov_cond <span class="op">=</span> <span class="va">m_cov_cond</span>, y_cov_cond <span class="op">=</span> <span class="va">y_cov_cond</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.86610   0.27725 1.39466 2.49690 2.6816e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.89347   0.06371 0.77694 1.02747 0.11413480</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.66730   0.25143 1.24065 2.24066 0.00069917</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.37432   0.10503 1.18315 1.59639 3.1743e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.95099   0.03022 0.89357 1.01210 0.11377623</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.30697   0.10409 1.11809 1.52777 0.00077525</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error     2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.15465   0.03625  0.08360 0.22571 1.9913e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.02783   0.01759 -0.06230 0.00664 0.11360218</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.12683   0.03702  0.05427 0.19938 0.00061244</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error    2.5%   97.5%      P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.61843   0.52125 1.77253 3.86803 1.3290e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.63173   0.16066 1.34536 1.97906 6.5954e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.23603   0.04712 0.14369 0.32838 5.4583e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error     2.5%   97.5%   P.val</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  1.30748   0.28346  0.85486 1.99974 0.21622</span>
@@ -503,15 +496,11 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.06689   0.05389 -0.03873 0.17251 0.21448</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = Mform, family = binomial(link = "logit"), data = data)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deviance Residuals: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min       1Q   Median       3Q      Max  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -2.4782  -0.7113  -0.2821   0.7703   2.6191  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
@@ -531,15 +520,11 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = Yform, family = binomial(link = "logit"), data = data)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deviance Residuals: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min       1Q   Median       3Q      Max  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -2.2347  -1.0763   0.6167   0.9108   1.7014  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
@@ -573,98 +558,90 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-in"><span>  m_cov_cond <span class="op">=</span> <span class="va">m_cov_cond</span>, y_cov_cond <span class="op">=</span> <span class="va">y_cov_cond</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.05770   0.28951 1.56178 2.71108 2.9175e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.79688   0.05766 0.69152 0.91830 0.00170097</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.63975   0.22460 1.25368 2.14471 0.00030559</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.07246   0.29269 1.57135 2.73339 2.4702e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.79785   0.05800 0.69190 0.92003 0.00189337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.65352   0.22541 1.26583 2.15996 0.00022497</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.31039   0.07204 1.17654 1.45947 8.7771e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.93041   0.02159 0.88903 0.97371 0.00188398</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.21920   0.06871 1.09169 1.36159 0.00043728</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.33074   0.07627 1.18934 1.48894  6.185e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.92753   0.02268 0.88412 0.97307 0.00209515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.23429   0.07198 1.10098 1.38375 0.00030654</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error     2.5%    97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.16736   0.03198  0.10468  0.23003 1.6632e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.04917   0.01555 -0.07966 -0.01869 0.00157090</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.11819   0.03248  0.05453  0.18184 0.00027374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.17189   0.03252  0.10816  0.23562 1.2479e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.05012   0.01602 -0.08152 -0.01872 0.00175702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.12177   0.03267  0.05774  0.18580 0.00019355</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.64175   0.50548 1.81560 3.84383 3.8358e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.39748   0.09291 1.22674 1.59199 4.8117e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.21557   0.03997 0.13723 0.29390 6.9221e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.62520   0.50220 1.80437 3.81943 4.5299e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.41816   0.09895 1.23690 1.62599 5.5279e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.21899   0.04093 0.13877 0.29922 8.7791e-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error     2.5%   97.5%   P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  1.37033   0.28523  0.91128 2.06062 0.13012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.14433   0.10553  0.95511 1.37104 0.14377</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.07697   0.05103 -0.02305 0.17699 0.13149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  1.38118   0.28776  0.91814 2.07773 0.12113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.15567   0.11124  0.95697 1.39562 0.13282</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.07969   0.05144 -0.02113 0.18051 0.12134</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = Mform, family = binomial(link = "logit"), data = data)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deviance Residuals: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min       1Q   Median       3Q      Max  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -2.2375  -0.7839  -0.3351   0.8583   2.5726  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.11126    0.16313  -6.812 9.62e-12 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X            1.38656    0.16478   8.415  &lt; 2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b          0.02528    0.19125   0.132    0.895    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.13748    0.19139  -0.718    0.473    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2           1.55042    0.10999  14.096  &lt; 2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -1.1418     0.1660  -6.879 6.03e-12 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X             1.3792     0.1647   8.372  &lt; 2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b           0.1437     0.1922   0.748    0.455    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c          -0.1543     0.1925  -0.802    0.423    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2            1.5613     0.1105  14.127  &lt; 2e-16 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 1359.28  on 999  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance:  989.73  on 995  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 999.73</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance:  988.12  on 995  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 998.12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = Yform, family = binomial(link = "logit"), data = data)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deviance Residuals: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min       1Q   Median       3Q      Max  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -1.9251  -1.2614   0.7096   1.0371   1.3704  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.21391    0.14850   1.441   0.1497    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X            0.97144    0.19134   5.077 3.84e-07 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> M           -0.03633    0.21727  -0.167   0.8672    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:M         -0.65639    0.28140  -2.333   0.0197 *  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b         -0.08409    0.16471  -0.511   0.6097    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c          0.03733    0.16414   0.227   0.8201    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2          -0.20383    0.07927  -2.571   0.0101 *  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.26794    0.14974   1.789   0.0735 .  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X            0.96516    0.19130   5.045 4.53e-07 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M           -0.04720    0.21721  -0.217   0.8280    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:M         -0.64222    0.28166  -2.280   0.0226 *  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b         -0.10248    0.16398  -0.625   0.5320    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.09286    0.16423  -0.565   0.5718    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2          -0.20046    0.07914  -2.533   0.0113 *  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 1330.1  on 999  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 1279.9  on 993  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1293.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 1280.0  on 993  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1294</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -675,7 +652,7 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Miguel Caubet, Mariia Samoilenko, Geneviève Lefebvre.</p>
+  <p></p><p>Developed by Miguel Caubet, Mariia Samoilenko, Jesse Gervais, Geneviève Lefebvre.</p>
 </div>
 
 <div class="pkgdown-footer-right">
