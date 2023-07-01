@@ -35,7 +35,8 @@
 #' @param confcoef A number between 0 and 1 for the confidence coefficient (ex.: 0.95) of the interval estimates.
 #' @param hvalue_y The value corresponding to the high level of the outcome. If the outcome is already coded
 #'     as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y = 1}.
-#' @param yprevalence The prevalence of the outcome in the population. Option used when case-control data are used.
+#' @param yprevalence The prevalence of the outcome in the population (a number between 0 and 1).
+#'     Option used when case-control data are used.
 #'     The low level of the outcome is treated as the control level.
 #' @param mf The value of the mediator at which the conditional controlled direct effect is computed. If it is not specified,
 #'      \code{mf} is fixed at the sample-specific mean of the mediator (default).
@@ -695,14 +696,15 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     ContEffm[3, ] <- c(RDm, seRDm, CI_RDm, pvalueRDm)
 
 
-    results <- vector("list", 6)
+    results <- vector("list", 7)
     names(results) <- c(
       "ne.or",
       "ne.rr",
       "ne.rd",
       "cde",
       "med.reg",
-      "out.reg"
+      "out.reg",
+      "m.value"
     )
 
     OR <- as.data.frame(OR)
@@ -721,6 +723,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     results[[4]] <- cbind(round(ContEffm[1:4], digits = 5), ContEffm[5])
     results[[5]] <- beta_theta_coef[[7]]
     results[[6]] <- beta_theta_coef[[8]]
+    results[[7]] <- mf
 
     class(results) <- c("results_c", "list")
 
@@ -1049,7 +1052,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     ContEffm[2, ] <- c(RRm, seRRm, CI_RRm)
     ContEffm[3, ] <- c(RDm, seRDm, CI_RDm)
 
-    results <- vector("list", 13)
+    results <- vector("list", 14)
     names(results) <- c(
       "ne.or",
       "ne.rr",
@@ -1063,7 +1066,8 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
       "boot.cde.rd",
       "boot.ind",
       "med.reg",
-      "out.reg"
+      "out.reg",
+      "m.level"
     )
 
     results[[1]] <- round(OR, digits = 5)
@@ -1079,6 +1083,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
     results[[11]] <- indiceboot
     results[[12]] <- beta_theta_coef_ini$Mreg
     results[[13]] <- beta_theta_coef_ini$Yreg
+    results[[14]] <- mf
 
     class(results) <- c("results_c", "list")
 

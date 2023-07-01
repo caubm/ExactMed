@@ -56,7 +56,7 @@ of the adjustment covariates \code{y_cov} in the outcome model. Please consult t
 \item{adjusted}{A logical variable specifying whether to obtain adjusted or unadjusted estimates.
 If \code{adjusted = FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.}
 
-\item{interaction}{A logical variable specifying whether there is an exposure-mediator interaction term in the outcome model.}
+\item{interaction}{A logical variable specifying whether there are exposure-mediator interaction terms in the outcome model.}
 
 \item{Firth}{A logical variable specifying whether to compute conventional or penalized maximum likelihood estimates
 for the outcome logistic regression model.}
@@ -76,7 +76,8 @@ of the mediator (default).}
 \item{hvalue_y}{The value corresponding to the high level of the outcome. If the outcome is already coded
 as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y = 1}.}
 
-\item{yprevalence}{The prevalence of the outcome in the population. Option used when case-control data are used.
+\item{yprevalence}{The prevalence of the outcome in the population (a number between 0 and 1).
+Option used when case-control data are used.
 The low level of the outcome is treated as the control level.}
 
 \item{mf}{The level of the mediator at which the conditional controlled direct effect is computed. If it is not specified,
@@ -103,7 +104,7 @@ If \code{boot==TRUE}, the returned object also contains:
 \description{
 Relying on a regression-based approach, the \code{exactmed_cat()} function calculates standard
     causal mediation effects when the outcome is binary and the mediator is categorical. More precisely, \code{exactmed_cat()}
-    relies on logistic and multinomial models for the outcome and mediator, respectively, in order to compute \emph{exact}
+    relies on binary and multinomial logistic regression models for the outcome and mediator, respectively, in order to compute \emph{exact}
     conditional natural direct and indirect effects.
     The function returns point and interval estimates for the conditional natural effects without making any assumption
     regarding the rareness or commonness of the outcome (hence the term exact). For completeness, \code{exactmed_cat()} also

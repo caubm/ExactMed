@@ -75,7 +75,8 @@ as a numerical binary variable taking 0 or 1 values, then by default \code{hvalu
 \item{hvalue_y}{The value corresponding to the high level of the outcome. If the outcome is already coded
 as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y = 1}.}
 
-\item{yprevalence}{The prevalence of the outcome in the population. Option used when case-control data are used.
+\item{yprevalence}{The prevalence of the outcome in the population (a number between 0 and 1).
+Option used when case-control data are used.
 The low level of the outcome is treated as the control level.}
 }
 \value{

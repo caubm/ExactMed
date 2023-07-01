@@ -6,7 +6,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(datamed_c)
+#' @usage data(datamed_cat)
 #'
 #' @format A data frame with 1000 rows and 5 variables:
 #' \describe{

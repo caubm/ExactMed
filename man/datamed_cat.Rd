@@ -15,7 +15,7 @@ A data frame with 1000 rows and 5 variables:
 }
 }
 \usage{
-data(datamed_c)
+data(datamed_cat)
 }
 \description{
 Simulated data set containing 1000 observations on 5 measured variables with no missing values.

@@ -1,7 +1,7 @@
 #' @title  Exact Mediation Effects Computation (Categorical Mediator)
 #' @description Relying on a regression-based approach, the \code{exactmed_cat()} function calculates standard
 #'     causal mediation effects when the outcome is binary and the mediator is categorical. More precisely, \code{exactmed_cat()}
-#'     relies on logistic and multinomial models for the outcome and mediator, respectively, in order to compute \emph{exact}
+#'     relies on binary and multinomial logistic regression models for the outcome and mediator, respectively, in order to compute \emph{exact}
 #'     conditional natural direct and indirect effects.
 #'     The function returns point and interval estimates for the conditional natural effects without making any assumption
 #'     regarding the rareness or commonness of the outcome (hence the term exact). For completeness, \code{exactmed_cat()} also
@@ -24,7 +24,7 @@
 #'     of the adjustment covariates \code{y_cov} in the outcome model. Please consult the package vignette for details.
 #' @param adjusted  A logical variable specifying whether to obtain adjusted or unadjusted estimates.
 #'     If \code{adjusted = FALSE}, vectors \code{m_cov} and \code{y_cov} are ignored by the procedure.
-#' @param interaction A logical variable specifying whether there is an exposure-mediator interaction term in the outcome model.
+#' @param interaction A logical variable specifying whether there are exposure-mediator interaction terms in the outcome model.
 #' @param Firth A logical variable specifying whether to compute conventional or penalized maximum likelihood estimates
 #'     for the outcome logistic regression model.
 #' @param boot A logical value specifying whether the confidence intervals are obtained
@@ -36,7 +36,8 @@
 #'     of the mediator (default).
 #' @param hvalue_y The value corresponding to the high level of the outcome. If the outcome is already coded
 #'     as a numerical binary variable taking 0 or 1 values, then by default \code{hvalue_y = 1}.
-#' @param yprevalence The prevalence of the outcome in the population. Option used when case-control data are used.
+#' @param yprevalence The prevalence of the outcome in the population (a number between 0 and 1).
+#'     Option used when case-control data are used.
 #'     The low level of the outcome is treated as the control level.
 #' @param mf The level of the mediator at which the conditional controlled direct effect is computed. If it is not specified,
 #'      \code{mf} is fixed at the reference level of the mediator (default).
@@ -48,6 +49,7 @@
 #' @importFrom brglm2 brglmFit
 #' @importFrom mlogit mlogit
 #' @importFrom dfidx dfidx
+#' @importFrom nnet multinom
 #' @details By default, \code{exactmed_cat()} reports mediation effects evaluated at the sample-specific mean values of the numerical covariates
 #'     (including the dummy variables created internally by the function to represent the non-reference levels of the categorical covariates).
 #'     In order to estimate mediation effects at specific values of some covariates (that is, stratum-specific effects),
@@ -132,9 +134,9 @@
 
 
 exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_cond = NULL,
-                     y_cov_cond = NULL, adjusted = TRUE, interaction = TRUE, Firth = FALSE,
-                     boot = FALSE, nboot = 1000, bootseed = 1991, confcoef = 0.95,
-                     blevel_m = NULL, hvalue_y = NULL, yprevalence = NULL, mf = NULL) {
+                         y_cov_cond = NULL, adjusted = TRUE, interaction = TRUE, Firth = FALSE,
+                         boot = FALSE, nboot = 1000, bootseed = 1991, confcoef = 0.95,
+                         blevel_m = NULL, hvalue_y = NULL, yprevalence = NULL, mf = NULL) {
   .check_input_param_cat(
     data = data, a = a, m = m, y = y, a1 = a1, a0 = a0, m_cov = m_cov, y_cov = y_cov,
     m_cov_cond = m_cov_cond, y_cov_cond = y_cov_cond, adjusted = adjusted,
@@ -187,11 +189,12 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
 
 
   if(!is.null(blevel_m)) {
+    blevel_m <- as.character(blevel_m)
     data[[m]] <- relevel(data[[m]], ref = blevel_m)
   }
   ref_level <- levels(data[[m]])[1]
 
-  levels(data[[m]]) <- sort(levels(data[[m]]))
+  data[[m]] <- factor(data[[m]], sort(levels(data[[m]])))
   data[[m]] <- relevel(data[[m]], ref = ref_level)
 
   if(is.null(mf)) {
@@ -200,17 +203,15 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
   mf_ind <- which(levels(data[[m]]) == mf)
   n_levels <- nlevels(data[[m]])
 
-  Mform <- as.formula(paste(m, "~ 1 | ", paste(c(a, m_cov), collapse = " + ")))
-  if (interaction == TRUE) {
-    Yform <- as.formula(paste(y, "~", paste(c(paste(a, "*", m), y_cov), collapse = " + ")))
-  } else {
-    Yform <- as.formula(paste(y, "~", paste(c(a, m, y_cov), collapse = " + ")))
-  }
-  Yform <- terms(Yform, keep.order = TRUE)
-
-  # Function 'gg' for Nested probabilities P(y(a,m(b)) =1|C=c) and gradient computation
-
   if (boot == FALSE) {
+
+    Mform <- as.formula(paste(m, "~ 1 | ", paste(c(a, m_cov), collapse = " + ")))
+    if (interaction == TRUE) {
+      Yform <- as.formula(paste(y, "~", paste(c(paste(a, "*", m), y_cov), collapse = " + ")))
+    } else {
+      Yform <- as.formula(paste(y, "~", paste(c(a, m, y_cov), collapse = " + ")))
+    }
+    Yform <- terms(Yform, keep.order = TRUE)
 
     if(is.null(yprevalence)) {
       if (Firth == TRUE) {
@@ -285,7 +286,7 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
           data_long <- dfidx(data, shape="wide", choice = m)
           Mreg <- mlogit(Mform, data = data_long, reflevel = ref_level, weights = cc_weights_long)
           Yreg <- suppress_warnings(glm(Yform, data = data, family = binomial(link = "logit"),
-                      weights = cc_weights))
+                                        weights = cc_weights))
 
           ef <- estfun(Mreg)
           n_ef <- nrow(ef)
@@ -427,9 +428,9 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
         thetav4i <- sum(thetav[(3 + k):l] * d)
 
         terms_a <- thetav[1]  + thetav3i  + (thetav[2] +
-          thetav4i) * a + as.numeric(thetav[-(1:l)] %*% covyv)
+                                               thetav4i) * a + as.numeric(thetav[-(1:l)] %*% covyv)
         terms_astar <- thetav[1]  + thetav3i  + (thetav[2] +
-          thetav4i) * astar + as.numeric(thetav[-(1:l)] %*% covyv)
+                                                   thetav4i) * astar + as.numeric(thetav[-(1:l)] %*% covyv)
 
         exp_a <- exp(terms_a)
         exp_astar <- exp(terms_astar)
@@ -696,14 +697,15 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
     ContEffm[3, ] <- c(RDm, seRDm, CI_RDm, pvalueRDm)
 
 
-    results <- vector("list", 6)
+    results <- vector("list", 7)
     names(results) <- c(
       "ne.or",
       "ne.rr",
       "ne.rd",
       "cde",
       "med.reg",
-      "out.reg"
+      "out.reg",
+      "m.level"
     )
 
     OR <- as.data.frame(OR)
@@ -722,10 +724,21 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
     results[[4]] <- cbind(round(ContEffm[1:4], digits = 5), ContEffm[5])
     results[[5]] <- beta_theta_coef[[5]]
     results[[6]] <- beta_theta_coef[[6]]
+    results[[7]] <- mf
 
     class(results) <- c("results_cat", "list")
 
   } else {
+
+    Mform <- as.formula(paste(m, "~", paste(c(a, m_cov), collapse = " + ")))
+
+    if (interaction == TRUE) {
+      Yform <- as.formula(paste(y, "~", paste(c(paste(a, "*", m), y_cov), collapse = " + ")))
+    } else {
+      Yform <- as.formula(paste(y, "~", paste(c(a, m, y_cov), collapse = " + ")))
+    }
+
+    Yform <- terms(Yform, keep.order = TRUE)
 
     if(is.null(yprevalence)) {
       repli_data <- function(data, n, y) {
@@ -740,8 +753,7 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
 
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform){
-          data_long <- dfidx(data, shape="wide", choice = m)
-          Mreg <- mlogit(Mform, data = data_long, reflevel = ref_level)
+          Mreg <- multinom(Mform, data = data, trace = FALSE)
           Yreg <- glm(Yform, data = data, family = binomial(link = "logit"),
                       method = brglmFit, type = "MPL_Jeffreys")
 
@@ -754,8 +766,7 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
         }
       } else {
         coef_estimate <- function(data, Mform, Yform){
-          data_long <- dfidx(data, shape="wide", choice = m)
-          Mreg <- mlogit(Mform, data = data_long, reflevel = ref_level)
+          Mreg <- multinom(Mform, data = data, trace = FALSE)
           Yreg <- glm(Yform, data = data, family = binomial(link = "logit"))
 
           result <- vector("list", length = 2)
@@ -771,10 +782,8 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
       w_case <- yprevalence / prob1
       w_control <- (1 - yprevalence) / (1 - prob1)
       cc_weights <- c(rep(w_case, sum(data[[y]] == 1)), rep(w_control, sum(data[[y]] == 0)))
-      cc_weights_long <- rep(cc_weights, each = n_levels)
       v_data <- c(which(data[[y]] == 1), which(data[[y]] == 0))
       data <- data[v_data, ]
-      rownames(data) <- 1:nrow(data)
 
       repli_data <- function(data, n, y) {
         case_indice <- sample(which(data[[y]] == 1), sum(data[[y]] == 1), replace = TRUE)
@@ -788,8 +797,7 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
 
       if (Firth == TRUE) {
         coef_estimate <- function(data, Mform, Yform){
-          data_long <- dfidx(data, shape="wide", choice = m)
-          Mreg <- mlogit(Mform, data = data_long, reflevel = ref_level, weights = cc_weights_long)
+          Mreg <- multinom(Mform, data = data, weights = cc_weights, trace = FALSE)
           Yreg <- suppress_warnings(glm(Yform, data = data, family = binomial(link = "logit"),
                                         method = brglmFit, type = "MPL_Jeffreys", weights = cc_weights))
 
@@ -802,10 +810,9 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
         }
       } else {
         coef_estimate <- function(data, Mform, Yform){
-          data_long <- dfidx(data, shape="wide", choice = m)
-          Mreg <- mlogit(Mform, data = data_long, reflevel = ref_level, weights = cc_weights_long)
+          Mreg <- multinom(Mform, data = data, weights = cc_weights, trace = FALSE)
           Yreg <- suppress_warnings(glm(Yform, data = data, family = binomial(link = "logit"),
-                                         weights = cc_weights))
+                                        weights = cc_weights))
 
           result <- vector("list", length = 2)
           names(result) <- c('Mreg', 'Yreg')
@@ -822,8 +829,10 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
     betacoef <- coef(beta_theta_coef_ini$Mreg)
     thetacoef <- beta_theta_coef_ini$Yreg$coefficients
 
-    gg <- function(a, b, beta, k, covmv, thetav, covyv, interaction) {
-      beta_mat <- matrix(beta, nrow = k)
+    ggb <- function(a, b, beta_mat, covmv, thetav, covyv, interaction) {
+      if(is.matrix(beta_mat)) {
+        k <- nrow(beta_mat)
+      } else k <- 1
       if (interaction == TRUE) {
         l <- 2 * (k + 1)
         reg_m <- c(1, b, covmv)
@@ -831,11 +840,11 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
         s_prod <- 0
         for( i in 1:k) {
           s_prod <- s_prod + expit(thetav[1] + thetav[2 + i]
-           + (thetav[2] + thetav[2 + k + i]) * a +
-           as.numeric(thetav[-(1:l)] %*% covyv)) * prob_m[i]
+                                   + (thetav[2] + thetav[2 + k + i]) * a +
+                                     as.numeric(thetav[-(1:l)] %*% covyv)) * prob_m[i]
         }
         g_med <- 1 / (1 + sum(prob_m)) * (expit(thetav[1] + thetav[2] * a +
-            as.numeric(thetav[-(1:l)] %*% covyv)) + s_prod)
+                                                  as.numeric(thetav[-(1:l)] %*% covyv)) + s_prod)
 
       } else {
         l <- 2 + k
@@ -844,16 +853,16 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
         s_prod <- 0
         for( i in 1:k) {
           s_prod <- s_prod + expit(thetav[1] + thetav[2 + i]
-           + thetav[2] * a + as.numeric(thetav[-(1:l)] %*% covyv)) * prob_m[i]
+                                   + thetav[2] * a + as.numeric(thetav[-(1:l)] %*% covyv)) * prob_m[i]
         }
         g_med <- 1 / (1 + sum(prob_m)) * (expit(thetav[1] + thetav[2] * a +
-           as.numeric(thetav[-(1:l)] %*% covyv)) + s_prod)
+                                                  as.numeric(thetav[-(1:l)] %*% covyv)) + s_prod)
       }
 
       return(g_med)
     }
 
-    gg_cde <- function(a, astar, mf_ind, thetav, covyv, interaction) {
+    ggb_cde <- function(a, astar, mf_ind, thetav, covyv, interaction) {
 
       if (interaction == TRUE) {
         k <- (length(thetav) - (length(covyv) + 2)) / 2
@@ -866,9 +875,9 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
         thetav4i <- sum(thetav[(3 + k):l] * d)
 
         terms_a <- thetav[1]  + thetav3i  + (thetav[2] +
-          thetav4i) * a + as.numeric(thetav[-(1:l)] %*% covyv)
+                                               thetav4i) * a + as.numeric(thetav[-(1:l)] %*% covyv)
         terms_astar <- thetav[1]  + thetav3i  + (thetav[2] +
-          thetav4i) * astar + as.numeric(thetav[-(1:l)] %*% covyv)
+                                                   thetav4i) * astar + as.numeric(thetav[-(1:l)] %*% covyv)
 
         exp_a <- exp(terms_a)
         exp_astar <- exp(terms_astar)
@@ -910,9 +919,9 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
       return(result)
     }
 
-    P10 <- gg(a1, a0, betacoef, n_levels - 1, mean_covmv, thetacoef, mean_covyv, interaction)
-    P00 <- gg(a0, a0, betacoef, n_levels - 1, mean_covmv, thetacoef, mean_covyv, interaction)
-    P11 <- gg(a1, a1, betacoef, n_levels - 1, mean_covmv, thetacoef, mean_covyv, interaction)
+    P10 <- ggb(a1, a0, betacoef, mean_covmv, thetacoef, mean_covyv, interaction)
+    P00 <- ggb(a0, a0, betacoef, mean_covmv, thetacoef, mean_covyv, interaction)
+    P11 <- ggb(a1, a1, betacoef, mean_covmv, thetacoef, mean_covyv, interaction)
 
     ORd <- (P10 / (1 - P10)) / (P00 / (1 - P00))
     ORi <- (P11 / (1 - P11)) / (P10 / (1 - P10))
@@ -926,7 +935,7 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
     RDi <- P11 - P10
     RDt <- RDd + RDi
 
-    gg_cdem <- gg_cde(a = a1, astar = a0, m = mf_ind, thetav = thetacoef,
+    gg_cdem <- ggb_cde(a = a1, astar = a0, m = mf_ind, thetav = thetacoef,
                       covyv = mean_covyv, interaction = interaction)
 
     ORm <- gg_cdem$OR
@@ -963,9 +972,9 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
       betacoef <- coef(beta_theta_coef$Mreg)
       thetacoef <- beta_theta_coef$Yreg$coefficients
 
-      P10 <- gg(a1, a0, betacoef, n_levels - 1, mean_covmv, thetacoef, mean_covyv, interaction)
-      P00 <- gg(a0, a0, betacoef, n_levels - 1, mean_covmv, thetacoef, mean_covyv, interaction)
-      P11 <- gg(a1, a1, betacoef, n_levels - 1, mean_covmv, thetacoef, mean_covyv, interaction)
+      P10 <- ggb(a1, a0, betacoef, mean_covmv, thetacoef, mean_covyv, interaction)
+      P00 <- ggb(a0, a0, betacoef, mean_covmv, thetacoef, mean_covyv, interaction)
+      P11 <- ggb(a1, a1, betacoef, mean_covmv, thetacoef, mean_covyv, interaction)
 
       ORboot[i, 1] <- (P10 / (1 - P10)) / (P00 / (1 - P00))
       ORboot[i, 2] <- (P11 / (1 - P11)) / (P10 / (1 - P10))
@@ -979,7 +988,7 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
       RDboot[i, 2] <- P11 - P10
       RDboot[i, 3] <- RDboot[i, 1] + RDboot[i, 2]
 
-      gg_cdem <- gg_cde(a = a1, astar = a0, m = mf_ind, thetav = thetacoef,
+      gg_cdem <- ggb_cde(a = a1, astar = a0, m = mf_ind, thetav = thetacoef,
                         covyv = mean_covyv, interaction = interaction)
 
       ORmboot[i] <- gg_cdem$OR
@@ -1065,7 +1074,7 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
     ContEffm[2, ] <- c(RRm, seRRm, CI_RRm)
     ContEffm[3, ] <- c(RDm, seRDm, CI_RDm)
 
-    results <- vector("list", 13)
+    results <- vector("list", 14)
     names(results) <- c(
       "ne.or",
       "ne.rr",
@@ -1079,7 +1088,8 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
       "boot.cde.rd",
       "boot.ind",
       "med.reg",
-      "out.reg"
+      "out.reg",
+      "m.level"
     )
 
     results[[1]] <- round(OR, digits = 5)
@@ -1095,6 +1105,7 @@ exactmed_cat <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_co
     results[[11]] <- indiceboot
     results[[12]] <- beta_theta_coef_ini$Mreg
     results[[13]] <- beta_theta_coef_ini$Yreg
+    results[[14]] <- mf
 
     class(results) <- c("results_cat", "list")
 

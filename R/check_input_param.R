@@ -169,6 +169,16 @@
 
   if (!is.numeric(data[[a]])) stop("Exposure must be numerical variable")
 
+  if (length(unique(data[[a]])) == 2) {
+    if (!a0 %in% data[[a]] && a1 %in% data[[a]]) {
+      warning("The low level of the exposure ('a0') is not an observed value")
+    } else if (a0 %in% data[[a]] && !a1 %in% data[[a]]) {
+      warning("The high level of the exposure ('a1') is not an observed value")
+    } else if(!a0 %in% data[[a]] && !a1 %in% data[[a]]) {
+      warning("The levels of the exposure ('a0' and 'a1') are not observed values")
+    }
+  }
+
   if (!(is.null(hvalue_m) || (is.atomic(hvalue_m) && length(hvalue_m) == 1L && is.null(dim(hvalue_m)) && !is.na(hvalue_m)))) {
     stop("Invalid type or length for input parameter 'hvalue_m'")
   }
