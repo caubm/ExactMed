@@ -86,7 +86,7 @@ accommodates a <em>binary</em> mediator, <code><a href="../reference/exactmed_c.
 <em>continuous</em> mediator and <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> a
 <em>categorical</em> mediator. Details on the use of the function
 <code>exact_med()</code> are provided next. Usage of
-<code><a href="../reference/exactmed_c.html">exactmed_c()</a></code> and <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code>is similar to
+<code><a href="../reference/exactmed_c.html">exactmed_c()</a></code> and <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> is similar to
 that of <code><a href="../reference/exactmed.html">exactmed()</a></code>, but differs on some aspects described
 thereafter.</p>
 <p>In <code><a href="../reference/exactmed.html">exactmed()</a></code>, the user can specify the high levels of
@@ -95,13 +95,13 @@ the outcome and mediator variables using the input parameters
 function help). Controlled direct effects are obtained for both possible
 mediator values (<span class="math inline">\(m=0\)</span> and <span class="math inline">\(m=1\)</span>). Natural and controlled effects can
 either be unadjusted (crude) or adjusted for covariates (that is,
-conditional effects). By default, adjusted effect estimates are obtained
-for covariates fixed at their sample-specific mean values (for numerical
-covariates and categorical covariates through associated dummies).
-Alternatively, adjusted effect estimates can be obtained for specific
-values of the covariates that are user-provided. Also, by default,
-<code><a href="../reference/exactmed.html">exactmed()</a></code> incorporates a mediator-exposure interaction
-term in the outcome model, which can be removed by setting
+conditional effects). By default, adjusted effects estimates are
+obtained for covariates fixed at their sample-specific mean values (for
+numerical covariates and categorical covariates through associated
+dummies). Alternatively, adjusted effects estimates can be obtained for
+specific values of the covariates that are user-provided. Also, by
+default, <code><a href="../reference/exactmed.html">exactmed()</a></code> incorporates a mediator-exposure
+interaction term in the outcome model, which can be removed by setting
 <code>interaction=FALSE</code>. Concerning interval estimates,
 <code><a href="../reference/exactmed.html">exactmed()</a></code> generates, by default, <span class="math inline">\(95\%\)</span> confidence intervals obtained by the
 delta method. Alternatively, bootstrap confidence intervals, instead of
@@ -119,28 +119,28 @@ whereas it is fixed at the reference level of the mediator in
 <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code>, the mediator must be coded as a factor
 variable in the data set. By default, the reference level of the
 mediator is the first level of the corresponding factor variable. The
-extra input parameter <code>blevel_m</code>of the
-<code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code>function allows the user to change the
+extra input parameter <code>blevel_m</code> of the
+<code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> function allows the user to change the
 default reference level to any other level. It is worth noting that
-parameter<code>blevel_m</code> only potentially impacts the value of the
-controlled direct effect (not the natural direct and indirect
+parameter <code>blevel_m</code> only potentially impacts the value of
+the controlled direct effect (not the natural direct and indirect
 effects).</p>
 <p>Due to the similarity between <code><a href="../reference/exactmed.html">exactmed()</a></code>,
-<code><a href="../reference/exactmed_c.html">exactmed_c()</a></code>and <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code>in terms of use
-and options offered to the user, most examples will be presented with
-the <code><a href="../reference/exactmed.html">exactmed()</a></code>function. In all the
+<code><a href="../reference/exactmed_c.html">exactmed_c()</a></code> and <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> in terms of
+use and options offered to the user, most examples will be presented
+with the <code><a href="../reference/exactmed.html">exactmed()</a></code> function. In all the
 <code><a href="../reference/exactmed.html">exactmed()</a></code>examples presented below we use the dataset
 <code>datamed</code>, available after loading the
 <strong>ExactMed</strong> package. Some of the features of this dataset
 can be found in its corresponding help file
 (<code><a href="../reference/datamed.html">help(datamed)</a></code>). A user interested in the
-<code><a href="../reference/exactmed_c.html">exactmed_c()</a></code>or <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code>functions for the
-continuous or categorical mediator cases, respectively, will only need
-to change the name of the function (and dataset) in the calling of these
-examples to understand their use. The datasets <code>datamed_c</code>and
-<code>datamed_cat</code>, which feature a continuous and a categorical
-mediator, respectively, are presented at the end of the document along
-with a few calling examples.</p>
+<code><a href="../reference/exactmed_c.html">exactmed_c()</a></code> or <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> functions for
+the continuous or categorical mediator cases, respectively, will only
+need to change the name of the function (and dataset) in the calling of
+these examples to understand their use. The datasets
+<code>datamed_c</code> and <code>datamed_cat</code>, which feature a
+continuous and a categorical mediator, respectively, are presented at
+the end of the document along with a few calling examples.</p>
 <p>Lastly, we recall that all <strong>ExactMed</strong> functions only
 work on data frames with named columns and no missing values.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">library</span>(ExactMed)</span>
@@ -1312,7 +1312,7 @@ sections are available in the case-control study context.</p>
 </h2>
 <p>As mentioned in the introduction, in the case of a continuous
 mediator, the <strong>ExactMed</strong> package allows the user to
-obtain estimates of the different mediation effects by means of the
+obtain estimates of the different mediation effects using the
 <code><a href="../reference/exactmed_c.html">exactmed_c()</a></code> function, which essentially offers the same
 options as <code><a href="../reference/exactmed.html">exactmed()</a></code>. The only difference is the absence
 of the <code>hvalue_m</code> parameter and the addition of the
@@ -1336,9 +1336,9 @@ named columns and no missing values.</p>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span> <span class="dv">0</span>  <span class="fl">0.9826885</span> <span class="dv">0</span>  <span class="dv">0</span>  <span class="fl">0.7576990</span></span>
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">5</span> <span class="dv">0</span> <span class="sc">-</span><span class="fl">0.5505834</span> <span class="dv">0</span>  <span class="dv">0</span>  <span class="fl">1.2056864</span></span>
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="dv">6</span> <span class="dv">0</span>  <span class="fl">0.3611274</span> <span class="dv">1</span>  <span class="dv">0</span> <span class="sc">-</span><span class="fl">0.5983204</span></span></code></pre></div>
-<p>Example of call to <code><a href="../reference/exactmed_c.html">exactmed_c()</a></code> in order to obtain
-estimates of conditional effects supposing no exposure-mediator
-interaction in the outcome regression model.</p>
+<p>We provide below an example of call to <code><a href="../reference/exactmed_c.html">exactmed_c()</a></code> that
+allows to obtain estimates of conditional mediation effects supposing no
+exposure-mediator interaction in the outcome regression model:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> </span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> results13 <span class="ot">&lt;-</span> <span class="fu">exactmed_c</span>(</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="sc">+</span>   <span class="at">data =</span> datamed_c, <span class="at">a =</span> <span class="st">'X'</span>, <span class="at">m =</span> <span class="st">'M'</span>, <span class="at">y =</span> <span class="st">'Y'</span>, <span class="at">a1 =</span> <span class="dv">1</span>, <span class="at">a0 =</span> <span class="dv">0</span>,  </span>
@@ -1555,18 +1555,18 @@ controlled direct effect at the value <span class="math inline">\(2\)</span> of 
 </h2>
 <p>As mentioned in the introduction, in the case of a categorical
 mediator (coded as factor), the <strong>ExactMed</strong> package allows
-the user to obtain estimates of the different mediation effects through
-the <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> function, which essentially offers the
-same options as <code><a href="../reference/exactmed.html">exactmed()</a></code>. The only difference is the
-absence of the <code>hvalue_m</code> parameter and the addition of two
-extra parameters: <code>blevel_m</code> and <code>mf</code>. The first
-one allows to set the reference level of the mediator, which by default
+the user to obtain estimates of mediation effects through the
+<code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> function, which basically offers the same
+options as <code><a href="../reference/exactmed.html">exactmed()</a></code>. The only difference is the absence
+of the <code>hvalue_m</code> parameter and the addition of two extra
+parameters: <code>blevel_m</code> and <code>mf</code>. The first one
+allows to set the reference level of the mediator, which by default
 corresponds to the first level of the corresponding factor variable. The
-second one allows to specify the level of the mediator in the
+second parameter allows to specify the level of the mediator in the
 calculation of the controlled direct effect. Parameter
 <code>blevel_m</code> will thus impact the mediator regression model and
 associated output by fixing the reference level of the dependent
-variable. Parameter <code>blevel_m</code> will not impact the value of
+variable. Parameter <code>blevel_m</code> will not impact the values of
 the natural effects and will impact the controlled direct effect only if
 the value of the parameter <code>mf</code> is not specified by the user.
 In this case, the value of the parameter <code>mf</code> will by default
@@ -1586,9 +1586,9 @@ named columns and no missing values.</p>
 <span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span> <span class="dv">0</span> d <span class="dv">0</span>  <span class="dv">0</span>  <span class="fl">0.7576990</span></span>
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">5</span> <span class="dv">0</span> c <span class="dv">0</span>  <span class="dv">0</span>  <span class="fl">1.2056864</span></span>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">6</span> <span class="dv">0</span> d <span class="dv">1</span>  <span class="dv">0</span> <span class="sc">-</span><span class="fl">0.5983204</span></span></code></pre></div>
-<p>Example of call to <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> in order to obtain
-estimates of conditional effects supposing no exposure-mediator
-interaction in the outcome regression model.</p>
+<p>We provide below an example of call to <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> to
+obtain estimates of conditional mediation effects supposing no
+exposure-mediator interaction in the outcome regression model:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> results15 <span class="ot">&lt;-</span> <span class="fu">exactmed_cat</span>(</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="sc">+</span>   <span class="at">data =</span> datamed_cat, <span class="at">a =</span> <span class="st">'X'</span>, <span class="at">m =</span> <span class="st">'M'</span>, <span class="at">y =</span> <span class="st">'Y'</span>, <span class="at">a1 =</span> <span class="dv">1</span>, <span class="at">a0 =</span> <span class="dv">0</span>,  </span>
@@ -1824,7 +1824,7 @@ call <code><a href="../reference/exactmed_cat.html">exactmed_cat()</a></code> as
 <span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a>  Number of Fisher Scoring iterations<span class="sc">:</span> <span class="dv">5</span></span></code></pre></div>
 <p>One can note from the previous output that the reference level for
-the mediator is by default the first level of the mediator factor
+the mediator model is by default the first level of the mediator factor
 variable (<code>blevel_m = 'a'</code>).</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

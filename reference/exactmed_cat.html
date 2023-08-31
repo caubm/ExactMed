@@ -261,6 +261,13 @@ The low level of the outcome is treated as the control level.</p></dd>
     <code>exactmed_cat()</code> accounts for the ascertainment in the sample by employing weighted regression techniques that use inverse probability weighting (IPW)
     with robust standard errors. These errors are obtained via the <code><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></code> function of the R package <em>sandwich</em>.
     Specifically, we use the HC3 type covariance matrix estimator (default type of the <code><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></code> function).</p>
+<p>For the mediation effects expressed on the multiplicative scales (odds ratio, OR; risk ratio, RR), the <code>exactmed_cat()</code> function
+    returns delta method confidence intervals by exponentiating the lower and upper limits of the normal confidence intervals obtained
+    for the logarithmic transformations of the effects. The <code>exactmed_cat()</code> function also provides the estimated standard errors of
+    natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion.
+    The function performs Z-tests (null hypothesis: there is no effect) computing the corresponding two-tailed <em>p</em>-values.
+    Note that for the multiplicative scales, the standard scores (test statistics) are obtained by dividing the logarithm of the effect estimator
+    by the estimator of the corresponding standard error. No log-transformation is applied when working on the risk difference scale.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -600,30 +607,30 @@ with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.36539   0.39161 1.70993 3.27211 1.9909e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.75476   0.04921 0.66423 0.85764 1.5916e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.78531   0.27278 1.32330 2.40864 0.00014863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.44620   0.41323 1.75671 3.40629 1.1875e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.74388   0.04931 0.65325 0.84708 8.0604e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.81967   0.28116 1.34423 2.46327 0.00010683</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.42696   0.10168 1.24097 1.64084 6.0452e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.90777   0.02107 0.86739 0.95003 3.0684e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.29535   0.09070 1.12925 1.48589 0.00021902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.48071   0.11397 1.27338 1.72181 3.3979e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.89731   0.02285 0.85363 0.94322 2.0804e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.32865   0.09952 1.14724 1.53875 0.00014831</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error     2.5%    97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.20565   0.03842  0.13034  0.28095 8.6781e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.06339   0.01462 -0.09205 -0.03473 1.4581e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.14226   0.03702  0.06970  0.21481 0.00012162</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.21674   0.03959  0.13915  0.29433 4.3769e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.06856   0.01534 -0.09863 -0.03848 7.8930e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.14818   0.03767  0.07435  0.22201 8.3681e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m='a'): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error     2.5%     97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale 38.53912  19.78325 14.09144 105.40187 1.1298e-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  5.37960   1.14218  3.54835   8.15594 2.2204e-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.71913   0.05628  0.60882   0.82944 &lt; 2.22e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale 38.69225  19.85722 14.15075 105.79581 1.0554e-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  5.91951   1.29010  3.86167   9.07395 4.4409e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.72260   0.05932  0.60633   0.83887 &lt; 2.22e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model: </span>
@@ -639,37 +646,37 @@ with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> nr method</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 iterations, 0h:0m:0s </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g'(-H)^-1g = 2.53E-06 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g'(-H)^-1g = 1.52E-06 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> successive function values within tolerance limits </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                Estimate Std. Error z-value  Pr(&gt;|z|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept):b -0.120111   0.210849 -0.5697 0.5689127    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept):c -0.214100   0.221473 -0.9667 0.3336893    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept):d -0.357411   0.227933 -1.5681 0.1168683    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept):e -1.007902   0.260818 -3.8644 0.0001114 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:b            0.977327   0.227050  4.3045 1.674e-05 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:c            1.600459   0.242857  6.5901 4.394e-11 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:d            2.127644   0.253484  8.3936 &lt; 2.2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:e            2.597795   0.276036  9.4111 &lt; 2.2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b:b          0.179535   0.257886  0.6962 0.4863164    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b:c          0.025551   0.273864  0.0933 0.9256670    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b:d         -0.546035   0.287976 -1.8961 0.0579446 .  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b:e         -0.599548   0.307952 -1.9469 0.0515486 .  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c:b          0.557667   0.262118  2.1275 0.0333751 *  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c:c          0.489139   0.278929  1.7536 0.0794942 .  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c:d          0.413153   0.280616  1.4723 0.1409380    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c:e          0.260109   0.305231  0.8522 0.3941188    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2:b           0.771447   0.131357  5.8729 4.282e-09 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2:c           1.554407   0.149884 10.3707 &lt; 2.2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2:d           1.882981   0.158772 11.8596 &lt; 2.2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2:e           2.752652   0.179571 15.3290 &lt; 2.2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept):b  0.129037   0.200920  0.6422   0.52072    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept):c -0.153100   0.217245 -0.7047   0.48097    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept):d -0.564237   0.234023 -2.4110   0.01591 *  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept):e -1.161236   0.263102 -4.4136 1.017e-05 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:b            0.948486   0.224527  4.2244 2.396e-05 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:c            1.556811   0.240125  6.4833 8.972e-11 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:d            2.064396   0.250357  8.2458 2.220e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:e            2.531431   0.273132  9.2682 &lt; 2.2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b:b          0.155534   0.258293  0.6022   0.54707    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b:c          0.205758   0.279625  0.7358   0.46183    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b:d          0.152653   0.293735  0.5197   0.60327    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b:e          0.162772   0.308472  0.5277   0.59773    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c:b         -0.144241   0.251052 -0.5745   0.56560    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c:c          0.153892   0.267037  0.5763   0.56441    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c:d          0.389369   0.274830  1.4168   0.15655    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c:e          0.050203   0.300509  0.1671   0.86732    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2:b           0.752636   0.130473  5.7685 7.998e-09 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2:c           1.538508   0.148690 10.3471 &lt; 2.2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2:d           1.847036   0.156669 11.7894 &lt; 2.2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2:e           2.704398   0.177438 15.2414 &lt; 2.2e-16 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Log-Likelihood: -1356.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> McFadden R^2:  0.15732 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Likelihood ratio test : chisq = 506.38 (p.value = &lt; 2.22e-16)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Log-Likelihood: -1362.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> McFadden R^2:  0.15323 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Likelihood ratio test : chisq = 493.23 (p.value = &lt; 2.22e-16)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -678,28 +685,28 @@ with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = Yform, family = binomial(link = "logit"), data = data)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              Estimate Std. Error z value Pr(&gt;|z|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.622104   0.243745  -6.655 2.83e-11 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X            3.651674   0.513329   7.114 1.13e-12 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mb           0.717852   0.297300   2.415 0.015754 *  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mc           1.714170   0.313135   5.474 4.39e-08 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Md           2.173848   0.338963   6.413 1.42e-10 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Me           2.402075   0.369842   6.495 8.31e-11 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:Mb        -1.429246   0.618479  -2.311 0.020838 *  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:Mc        -2.888386   0.595483  -4.850 1.23e-06 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:Md        -3.945018   0.595322  -6.627 3.43e-11 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:Me        -4.129874   0.600489  -6.878 6.09e-12 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b          0.005979   0.176221   0.034 0.972932    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c          0.122650   0.170661   0.719 0.472339    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2          -0.319619   0.088154  -3.626 0.000288 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.48695    0.24044  -6.184 6.24e-10 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X            3.65564    0.51321   7.123 1.06e-12 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mb           0.72453    0.29707   2.439  0.01473 *  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mc           1.73032    0.31286   5.531 3.19e-08 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Md           2.20095    0.33945   6.484 8.94e-11 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Me           2.40909    0.36981   6.514 7.30e-11 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:Mb        -1.42254    0.61855  -2.300  0.02146 *  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:Mc        -2.89577    0.59565  -4.862 1.16e-06 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:Md        -3.95473    0.59590  -6.637 3.21e-11 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:Me        -4.11856    0.59977  -6.867 6.56e-12 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b         -0.16435    0.17422  -0.943  0.34548    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.14305    0.17139  -0.835  0.40390    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2          -0.32312    0.08799  -3.672  0.00024 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 1377.4  on 999  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 1187.9  on 987  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1213.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 1187.5  on 987  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1213.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
