@@ -3,7 +3,7 @@ Type: Package
 Title: Exact Mediation Analysis for Binary Outcomes
 Version: 0.2.0.9000
 Authors@R: c(
-    person("Miguel", "Caubet", email = "caubet_fernandez.miguel@uqam.ca", role = c("aut", "cre")),
+    person("Miguel", "Caubet", email = "miguelcaubet@gmail.com", role = c("aut", "cre")),
     person("Mariia", "Samoilenko", role = "aut"),
     person("Jesse", "Gervais", role = "aut"),
     person("Geneviève", "Lefebvre", role = "aut"))

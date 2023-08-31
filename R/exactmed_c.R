@@ -63,6 +63,15 @@
 #'     with robust standard errors. These errors are obtained via the \code{\link[sandwich]{vcovHC}} function of the R package \emph{sandwich}.
 #'     Specifically, we use the HC3 type covariance matrix estimator (default type of the \code{\link[sandwich]{vcovHC}} function).
 #'
+#'     For the mediation effects expressed on the multiplicative scales (odds ratio, OR; risk ratio, RR), the \code{exactmed_c()} function
+#'     returns delta method confidence intervals by exponentiating the lower and upper limits of the normal confidence intervals obtained
+#'     for the logarithmic transformations of the effects. The \code{exactmed_c()} function also provides the estimated standard errors of
+#'     natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion.
+#'     The function performs Z-tests (null hypothesis: there is no effect) computing the corresponding two-tailed \emph{p}-values.
+#'     Note that for the multiplicative scales, the standard scores (test statistics) are obtained by dividing the logarithm of the effect estimator
+#'     by the estimator of the corresponding standard error. No log-transformation is applied when working on the risk difference scale.
+#'
+#'
 #' @return An object of class \code{results_c} is returned:
 #' \item{ne.or}{Natural effects estimates on OR scale.}
 #' \item{ne.rr}{Natural effects estimates on RR scale.}
@@ -248,7 +257,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
           result <- vector("list", length = 8)
           result[[1]] <- Mreg$coefficients
           result[[2]] <- Yreg$coefficients
-          result[[3]] <- sum(Mreg$residuals^2)/Mreg$df.residual
+          result[[3]] <- sum(cc_weights * Mreg$residuals^2)/Mreg$df.residual
           result[[4]] <- Mreg$df.residual
           result[[5]] <- vcovHC(Mreg)
           result[[6]] <- vcovHC(Yreg)
@@ -268,7 +277,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
           result <- vector("list", length = 8)
           result[[1]] <- Mreg$coefficients
           result[[2]] <- Yreg$coefficients
-          result[[3]] <- sum(Mreg$residuals^2)/Mreg$df.residual
+          result[[3]] <- sum(cc_weights * Mreg$residuals^2)/Mreg$df.residual
           result[[4]] <- Mreg$df.residual
           result[[5]] <- vcovHC(Mreg)
           result[[6]] <- vcovHC(Yreg)
@@ -730,6 +739,8 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
   } else {
 
     if(is.null(yprevalence)) {
+      cc_weights <- 1
+
       repli_data <- function(data, n, y) {
         vboot <- sample(1:n, n, replace = TRUE)
         DATAboot <- data[vboot, ]
@@ -816,7 +827,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
 
     betacoef <- beta_theta_coef_ini$Mreg$coefficients
     thetacoef <- beta_theta_coef_ini$Yreg$coefficients
-    varcoef <- sum(beta_theta_coef_ini$Mreg$residuals^2) / beta_theta_coef_ini$Mreg$df.residual
+    varcoef <- sum(cc_weights * beta_theta_coef_ini$Mreg$residuals^2) / beta_theta_coef_ini$Mreg$df.residual
 
     gg <- function(a, b, betav, varcoef, covmv, thetav, covyv, interaction){
 
@@ -948,7 +959,7 @@ exactmed_c <- function(data, a, m, y, a1, a0, m_cov = NULL, y_cov = NULL, m_cov_
 
       betacoef <- beta_theta_coef$Mreg$coefficients
       thetacoef <- beta_theta_coef$Yreg$coefficients
-      varcoef <- sum(beta_theta_coef$Mreg$residuals^2) / beta_theta_coef$Mreg$df.residual
+      varcoef <- sum(cc_weights * beta_theta_coef$Mreg$residuals^2) / beta_theta_coef$Mreg$df.residual
 
       P10 <- gg(a1, a0, betacoef,varcoef, mean_covmv, thetacoef,mean_covyv,interaction)
       P00 <- gg(a0, a0, betacoef,varcoef, mean_covmv, thetacoef,mean_covyv,interaction)

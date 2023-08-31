@@ -126,6 +126,14 @@ By default, \code{exactmed_c()} reports mediation effects evaluated at the sampl
     \code{exactmed_c()} accounts for the ascertainment in the sample by employing weighted regression techniques that use inverse probability weighting (IPW)
     with robust standard errors. These errors are obtained via the \code{\link[sandwich]{vcovHC}} function of the R package \emph{sandwich}.
     Specifically, we use the HC3 type covariance matrix estimator (default type of the \code{\link[sandwich]{vcovHC}} function).
+
+    For the mediation effects expressed on the multiplicative scales (odds ratio, OR; risk ratio, RR), the \code{exactmed_c()} function
+    returns delta method confidence intervals by exponentiating the lower and upper limits of the normal confidence intervals obtained
+    for the logarithmic transformations of the effects. The \code{exactmed_c()} function also provides the estimated standard errors of
+    natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion.
+    The function performs Z-tests (null hypothesis: there is no effect) computing the corresponding two-tailed \emph{p}-values.
+    Note that for the multiplicative scales, the standard scores (test statistics) are obtained by dividing the logarithm of the effect estimator
+    by the estimator of the corresponding standard error. No log-transformation is applied when working on the risk difference scale.
 }
 \note{
 The \code{exactmed_c()} function only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
