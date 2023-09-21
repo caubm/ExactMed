@@ -51,7 +51,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/caubm/ExactMed/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -59,7 +65,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Exact Mediation Effects Computation (Continuous Mediator)</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/caubm/ExactMed/blob/HEAD/R/exactmed_c.R" class="external-link"><code>R/exactmed_c.R</code></a></small>
       <div class="d-none name"><code>exactmed_c.Rd</code></div>
     </div>
 
@@ -168,7 +174,8 @@ by the delta method or by percentile bootstrap.</p></dd>
 
 
 <dt>nboot</dt>
-<dd><p>The number of bootstrap replications used to obtain the confidence intervals if <code>boot = TRUE</code>.</p></dd>
+<dd><p>The number of bootstrap replications used to obtain the confidence intervals if <code>boot = TRUE</code>.
+By default <code>nboot = 1000</code>.</p></dd>
 
 
 <dt>bootseed</dt>
@@ -252,7 +259,7 @@ The low level of the outcome is treated as the control level.</p></dd>
     <code>exactmed_c()</code>'s execution is aborted and an error message is displayed in the R console.</p>
 <p>The Firth parameter allows to reduce the bias of the outcome logistic regression coefficients estimators when facing a problem of
     separation or quasi-separation. The bias reduction is achieved by the <code><a href="https://rdrr.io/pkg/brglm2/man/brglmFit.html" class="external-link">brglmFit</a></code> fitting method of the <em>brglm2</em> package.
-    More precisely, estimates are obtained using a penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
+    More precisely, estimates are obtained via penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
     bias-reducing adjusted score equation approach in Firth (1993).</p>
 <p>When the data come from a case-control study, the <code>yprevalence</code> parameter should be used and its value ideally correspond to the true outcome prevalence.
     <code>exactmed_c()</code> accounts for the ascertainment in the sample by employing weighted regression techniques that use inverse probability weighting (IPW)
@@ -261,10 +268,11 @@ The low level of the outcome is treated as the control level.</p></dd>
 <p>For the mediation effects expressed on the multiplicative scales (odds ratio, OR; risk ratio, RR), the <code>exactmed_c()</code> function
     returns delta method confidence intervals by exponentiating the lower and upper limits of the normal confidence intervals obtained
     for the logarithmic transformations of the effects. The <code>exactmed_c()</code> function also provides the estimated standard errors of
-    natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion.
-    The function performs Z-tests (null hypothesis: there is no effect) computing the corresponding two-tailed <em>p</em>-values.
-    Note that for the multiplicative scales, the standard scores (test statistics) are obtained by dividing the logarithm of the effect estimator
-    by the estimator of the corresponding standard error. No log-transformation is applied when working on the risk difference scale.</p>
+    natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion
+    (e.g., \(\hat{SE}(\hat{OR})=\hat{OR} \times \hat{SE}(\log(\hat{OR}))\)). The function performs Z-tests (null hypothesis: there is no effect)
+    computing the corresponding two-tailed <em>p</em>-values. Note that for the multiplicative scales, the standard scores (test statistics)
+    are obtained by dividing the logarithm of an effect estimator by the estimator of the corresponding standard error
+    (e.g., \(\log(\hat{OR}) / \hat{SE}(\log(\hat{OR}))\)). No log-transformation is applied when working on the risk difference scale.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -277,10 +285,10 @@ The low level of the outcome is treated as the control level.</p></dd>
 binary mediators and rare binary outcomes: evidence to support cross-checking of mediation results in practice.
 <em>Observational Studies</em>.2018;4(1):193-216.</p>
 <p>Samoilenko M, Lefebvre G. Parametric-regression-based causal mediation analysis of binary outcomes and binary mediators:
-moving beyond the rareness or commonness of the outcome, <em>American Journal of Epidemiology</em>.2021;190(9):1846-1858. <a href="https://doi.org/10.1093/aje/kwab055" class="external-link">doi:10.1093/aje/kwab055</a>
+moving beyond the rareness or commonness of the outcome. <em>American Journal of Epidemiology</em>.2021;190(9):1846-1858. <a href="https://doi.org/10.1093/aje/kwab055" class="external-link">doi:10.1093/aje/kwab055</a>
 .</p>
 <p>Samoilenko M, Lefebvre G. An exact regression-based approach for the estimation of the natural direct and indirect effects
-with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>.2022;1-35. <a href="https://doi.org/10.1002/sim.9621" class="external-link">doi:10.1002/sim.9621</a>
+with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>.2023; 42(3): 353–387. <a href="https://doi.org/10.1002/sim.9621" class="external-link">doi:10.1002/sim.9621</a>
 .</p>
 <p>Firth D. Bias reduction of maximum likelihood estimates.
 <em>Biometrika</em>.1993;80:27-38. <a href="https://doi.org/10.2307/2336755" class="external-link">doi:10.2307/2336755</a>
@@ -540,30 +548,30 @@ with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.76316   0.43844 2.02462 3.77110 1.4986e-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.72856   0.05127 0.63469 0.83630 6.7873e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     2.01312   0.29986 1.50342 2.69562 2.6354e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    3.07280   0.48187 2.25971 4.17847 8.1490e-13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.73043   0.05137 0.63637 0.83838 7.9561e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     2.24446   0.32624 1.68806 2.98425 2.6651e-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.58426   0.11871 1.36786 1.83488 8.2350e-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.89011   0.02367 0.84490 0.93774 1.2038e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.41016   0.10597 1.21704 1.63392 4.7886e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.62361   0.11325 1.41616 1.86146 3.6924e-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.90006   0.02169 0.85854 0.94360 1.2491e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.46135   0.10187 1.27473 1.67530 5.2687e-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error     2.5%    97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.24658   0.03670  0.17465  0.31852 1.8389e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.07348   0.01612 -0.10507 -0.04189 5.1475e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.17311   0.03610  0.10236  0.24385 1.6203e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.26853   0.03524  0.19946  0.33761 2.5535e-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.06987   0.01543 -0.10011 -0.03963 5.9311e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.19866   0.03467  0.13071  0.26661 1.0030e-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=-0.5107948): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.99557   0.46108 2.21544 4.05040 1.0194e-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.64585   0.12317 1.42132 1.90586 2.7731e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.26541   0.03522 0.19638 0.33444 4.8628e-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.98772   0.46132 2.20755 4.04363 1.3554e-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.59797   0.11062 1.39523 1.83017 1.2763e-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.26163   0.03480 0.19342 0.32984 5.5733e-14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model: </span>
@@ -574,21 +582,21 @@ with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Residuals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Min      1Q  Median      3Q     Max </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -6.7263 -1.4244  0.0347  1.3426  7.7721 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -6.6791 -1.4073  0.0123  1.3590  7.6535 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.23516    0.13163  -9.384   &lt;2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X            1.54458    0.13090  11.800   &lt;2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b         -0.04302    0.15741  -0.273    0.785    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c          0.08907    0.16508   0.540    0.590    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2           1.62843    0.06539  24.904   &lt;2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.18606    0.14336  -8.273 4.15e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X            1.53327    0.13148  11.661  &lt; 2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b          0.06668    0.16435   0.406    0.685    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.15141    0.16281  -0.930    0.353    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2           1.63228    0.06545  24.940  &lt; 2e-16 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual standard error: 2.065 on 995 degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Multiple R-squared:  0.427,	Adjusted R-squared:  0.4247 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F-statistic: 185.4 on 4 and 995 DF,  p-value: &lt; 2.2e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual standard error: 2.063 on 995 degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Multiple R-squared:  0.4278,	Adjusted R-squared:  0.4255 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F-statistic:   186 on 4 and 995 DF,  p-value: &lt; 2.2e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Outcome model: </span>
@@ -598,22 +606,22 @@ with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = Yform, family = binomial(link = "logit"), data = data)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.10282    0.14878   0.691 0.489497    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X            0.80100    0.15195   5.272 1.35e-07 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> M            0.36575    0.04700   7.781 7.17e-15 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:M         -0.57974    0.06011  -9.645  &lt; 2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b         -0.04090    0.16965  -0.241 0.809491    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.13825    0.17659  -0.783 0.433695    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2          -0.34453    0.09135  -3.771 0.000162 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               Estimate Std. Error z value Pr(&gt;|z|)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.0731122  0.1582016   0.462 0.643977    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X            0.7993341  0.1523998   5.245 1.56e-07 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M            0.3644397  0.0469033   7.770 7.85e-15 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:M         -0.5778799  0.0600477  -9.624  &lt; 2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b         -0.0807890  0.1766742  -0.457 0.647472    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.0009211  0.1755436  -0.005 0.995814    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2          -0.3430297  0.0915507  -3.747 0.000179 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 1377.4  on 999  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 1183.8  on 993  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1197.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 1184.1  on 993  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1198.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

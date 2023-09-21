@@ -49,7 +49,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/caubm/ExactMed/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -57,7 +63,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Exact Mediation Effects Computation (Binary Mediator)</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/caubm/ExactMed/blob/HEAD/R/exactmed.R" class="external-link"><code>R/exactmed.R</code></a></small>
       <div class="d-none name"><code>exactmed.Rd</code></div>
     </div>
 
@@ -165,7 +171,8 @@ by the delta method or by percentile bootstrap.</p></dd>
 
 
 <dt>nboot</dt>
-<dd><p>The number of bootstrap replications used to obtain the confidence intervals if <code>boot = TRUE</code>.</p></dd>
+<dd><p>The number of bootstrap replications used to obtain the confidence intervals if <code>boot = TRUE</code>.
+By default <code>nboot = 1000</code>.</p></dd>
 
 
 <dt>bootseed</dt>
@@ -261,7 +268,7 @@ The low level of the outcome is treated as the control level.</p></dd>
     <code>exactmed()</code>'s execution is aborted and an error message is displayed in the R console.</p>
 <p>The Firth parameter allows to reduce the bias of the regression coefficients estimators when facing a problem of
     separation or quasi-separation. The bias reduction is achieved by the <code><a href="https://rdrr.io/pkg/brglm2/man/brglmFit.html" class="external-link">brglmFit</a></code> fitting method of the <em>brglm2</em> package.
-    More precisely, estimates are obtained using a penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
+    More precisely, estimates are obtained via penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
     bias-reducing adjusted score equation approach in Firth (1993).</p>
 <p>When the data come from a case-control study, the <code>yprevalence</code> parameter should be used and its value ideally correspond to the true outcome prevalence.
     <code>exactmed()</code> accounts for the ascertainment in the sample by employing weighted regression techniques that use inverse probability weighting (IPW)
@@ -270,10 +277,11 @@ The low level of the outcome is treated as the control level.</p></dd>
 <p>For the mediation effects expressed on the multiplicative scales (odds ratio, OR; risk ratio, RR), the <code>exactmed()</code> function
     returns delta method confidence intervals by exponentiating the lower and upper limits of the normal confidence intervals obtained
     for the logarithmic transformations of the effects. The <code>exactmed()</code> function also provides the estimated standard errors of
-    natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion.
-    The function performs Z-tests (null hypothesis: there is no effect) computing the corresponding two-tailed <em>p</em>-values.
-    Note that for the multiplicative scales, the standard scores (test statistics) are obtained by dividing the logarithm of the effect estimator
-    by the estimator of the corresponding standard error. No log-transformation is applied when working on the risk difference scale.</p>
+    natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion
+    (e.g., \(\hat{SE}(\hat{OR})=\hat{OR} \times \hat{SE}(\log(\hat{OR}))\)). The function performs Z-tests (null hypothesis: there is no effect)
+    computing the corresponding two-tailed <em>p</em>-values. Note that for the multiplicative scales, the standard scores (test statistics)
+    are obtained by dividing the logarithm of an effect estimator by the estimator of the corresponding standard error
+    (e.g., \(\log(\hat{OR}) / \hat{SE}(\log(\hat{OR}))\)). No log-transformation is applied when working on the risk difference scale.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -287,7 +295,10 @@ binary mediators and rare binary outcomes: evidence to support cross-checking of
 <em>Observational Studies</em>.2018;4(1):193-216. <a href="https://doi.org/10.1353/obs.2018.0013" class="external-link">doi:10.1353/obs.2018.0013</a>
 .</p>
 <p>Samoilenko M, Lefebvre G. Parametric-regression-based causal mediation analysis of binary outcomes and binary mediators:
-moving beyond the rareness or commonness of the outcome, <em>American Journal of Epidemiology</em>.2021;190(9):1846-1858. <a href="https://doi.org/10.1093/aje/kwab055" class="external-link">doi:10.1093/aje/kwab055</a>
+moving beyond the rareness or commonness of the outcome. <em>American Journal of Epidemiology</em>.2021;190(9):1846-1858. <a href="https://doi.org/10.1093/aje/kwab055" class="external-link">doi:10.1093/aje/kwab055</a>
+.</p>
+<p>Samoilenko M, Lefebvre G. An exact regression-based approach for the estimation of the natural direct and indirect effects
+with a binary outcome and a continuous mediator. <em>Statistics in Medicine</em>.2023; 42(3): 353–387. <a href="https://doi.org/10.1002/sim.9621" class="external-link">doi:10.1002/sim.9621</a>
 .</p>
 <p>Firth D. Bias reduction of maximum likelihood estimates.
 <em>Biometrika</em>.1993;80:27-38. <a href="https://doi.org/10.2307/2336755" class="external-link">doi:10.2307/2336755</a>
@@ -568,37 +579,37 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on OR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.04742   0.28819 1.55380 2.69786 3.5629e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.79669   0.05765 0.69135 0.91808 0.00168314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.63117   0.22311 1.24759 2.13266 0.00034713</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    2.03684   0.28480 1.54859 2.67903 3.6237e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.79939   0.05726 0.69469 0.91988 0.00177206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.62824   0.22372 1.24383 2.13145 0.00038821</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RR scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.33717   0.07880 1.19131 1.50088 8.2042e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.92409   0.02343 0.87929 0.97117 0.00184738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.23566   0.07457 1.09783 1.39080 0.00045391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    1.30109   0.07001 1.17087 1.44580 1.0001e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect  0.93208   0.02137 0.89111 0.97492 0.00215816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     1.21272   0.06727 1.08779 1.35199 0.00050681</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Natural effects on RD scale: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Estimate Std.error     2.5%    97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.17098   0.03278  0.10673  0.23524 1.8323e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.05147   0.01626 -0.08335 -0.01960 0.00154866</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.11951   0.03307  0.05468  0.18433 0.00030229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Direct effect    0.16421   0.03164  0.10220  0.22622 2.0991e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Indirect effect -0.04820   0.01539 -0.07836 -0.01804 0.00173420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total effect     0.11601   0.03239  0.05252  0.17951 0.00034195</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=0): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error    2.5%   97.5%      P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.62270   0.50173 1.80264 3.81582 4.6516e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.43342   0.10249 1.24599 1.64904 4.7537e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.22161   0.04135 0.14056 0.30265 8.3602e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  2.62313   0.50182 1.80293 3.81646 4.6324e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.38609   0.09125 1.21829 1.57699 7.0817e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.21229   0.03984 0.13421 0.29037 9.8741e-08</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Controlled direct effect (m=1): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate Std.error     2.5%   97.5%   P.val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  1.37300   0.28582  0.91300 2.06475 0.12782</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.15737   0.11455  0.95330 1.40513 0.13975</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.07860   0.05160 -0.02253 0.17974 0.12766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OR scale  1.38528   0.28854  0.92096 2.08370 0.11766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RR scale  1.14761   0.10418  0.96056 1.37109 0.12934</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RD scale  0.07935   0.05085 -0.02032 0.17901 0.11867</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mediator model: </span>
@@ -609,19 +620,19 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.14443    0.16427  -6.967 3.25e-12 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X            1.38532    0.16475   8.408  &lt; 2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b          0.07257    0.19213   0.378    0.706    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.07630    0.18863  -0.404    0.686    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2           1.54813    0.10991  14.086  &lt; 2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.16009    0.16604  -6.987 2.81e-12 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X            1.38451    0.16466   8.408  &lt; 2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b          0.06838    0.19309   0.354    0.723    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.02868    0.19120  -0.150    0.881    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2           1.55107    0.10996  14.106  &lt; 2e-16 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 1359.28  on 999  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance:  989.97  on 995  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 999.97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance:  990.29  on 995  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1000.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -634,21 +645,21 @@ moving beyond the rareness or commonness of the outcome, <em>American Journal of
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(&gt;|z|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.29308    0.14865   1.972   0.0487 *  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X            0.96420    0.19130   5.040 4.65e-07 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> M           -0.04724    0.21724  -0.217   0.8278    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X:M         -0.64721    0.28136  -2.300   0.0214 *  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1b         -0.09970    0.16511  -0.604   0.5460    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C1c         -0.16656    0.16197  -1.028   0.3038    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2          -0.20331    0.07913  -2.569   0.0102 *  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.13264    0.14616   0.907   0.3642    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X            0.96437    0.19131   5.041 4.63e-07 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M           -0.04967    0.21722  -0.229   0.8191    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X:M         -0.63846    0.28155  -2.268   0.0234 *  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1b          0.05981    0.16434   0.364   0.7159    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C1c          0.14850    0.16275   0.912   0.3615    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2          -0.20272    0.07909  -2.563   0.0104 *  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 1330.1  on 999  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 1279.4  on 993  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1293.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 1279.6  on 993  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 1293.6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
