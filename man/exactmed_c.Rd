@@ -63,7 +63,8 @@ for the outcome logistic regression model.}
 \item{boot}{A logical value specifying whether the confidence intervals are obtained
 by the delta method or by percentile bootstrap.}
 
-\item{nboot}{The number of bootstrap replications used to obtain the confidence intervals if \code{boot = TRUE}.}
+\item{nboot}{The number of bootstrap replications used to obtain the confidence intervals if \code{boot = TRUE}.
+By default \code{nboot = 1000}.}
 
 \item{bootseed}{The value of the initial seed (positive integer) for random number generation if \code{boot = TRUE}.}
 
@@ -119,7 +120,7 @@ By default, \code{exactmed_c()} reports mediation effects evaluated at the sampl
 
     The Firth parameter allows to reduce the bias of the outcome logistic regression coefficients estimators when facing a problem of
     separation or quasi-separation. The bias reduction is achieved by the \code{\link[brglm2]{brglmFit}} fitting method of the \emph{brglm2} package.
-    More precisely, estimates are obtained using a penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
+    More precisely, estimates are obtained via penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
     bias-reducing adjusted score equation approach in Firth (1993).
 
     When the data come from a case-control study, the \code{yprevalence} parameter should be used and its value ideally correspond to the true outcome prevalence.
@@ -130,10 +131,11 @@ By default, \code{exactmed_c()} reports mediation effects evaluated at the sampl
     For the mediation effects expressed on the multiplicative scales (odds ratio, OR; risk ratio, RR), the \code{exactmed_c()} function
     returns delta method confidence intervals by exponentiating the lower and upper limits of the normal confidence intervals obtained
     for the logarithmic transformations of the effects. The \code{exactmed_c()} function also provides the estimated standard errors of
-    natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion.
-    The function performs Z-tests (null hypothesis: there is no effect) computing the corresponding two-tailed \emph{p}-values.
-    Note that for the multiplicative scales, the standard scores (test statistics) are obtained by dividing the logarithm of the effect estimator
-    by the estimator of the corresponding standard error. No log-transformation is applied when working on the risk difference scale.
+    natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion
+    (e.g., \eqn{\hat{SE}(\hat{OR})=\hat{OR} \times \hat{SE}(\log(\hat{OR}))}). The function performs Z-tests (null hypothesis: there is no effect)
+    computing the corresponding two-tailed \emph{p}-values. Note that for the multiplicative scales, the standard scores (test statistics)
+    are obtained by dividing the logarithm of an effect estimator by the estimator of the corresponding standard error
+    (e.g., \eqn{\log(\hat{OR}) / \hat{SE}(\log(\hat{OR}))}). No log-transformation is applied when working on the risk difference scale.
 }
 \note{
 The \code{exactmed_c()} function only works for complete data. Users can apply multiple imputation techniques (e.g., R package \emph{mice})
@@ -177,10 +179,10 @@ binary mediators and rare binary outcomes: evidence to support cross-checking of
 \emph{Observational Studies}.2018;4(1):193-216.
 
 Samoilenko M, Lefebvre G. Parametric-regression-based causal mediation analysis of binary outcomes and binary mediators:
-moving beyond the rareness or commonness of the outcome, \emph{American Journal of Epidemiology}.2021;190(9):1846-1858. \doi{10.1093/aje/kwab055}.
+moving beyond the rareness or commonness of the outcome. \emph{American Journal of Epidemiology}.2021;190(9):1846-1858. \doi{10.1093/aje/kwab055}.
 
 Samoilenko M, Lefebvre G. An exact regression-based approach for the estimation of the natural direct and indirect effects
-with a binary outcome and a continuous mediator. \emph{Statistics in Medicine}.2022;1-35. \doi{10.1002/sim.9621}.
+with a binary outcome and a continuous mediator. \emph{Statistics in Medicine}.2023; 42(3): 353–387. \doi{10.1002/sim.9621}.
 
 Firth D. Bias reduction of maximum likelihood estimates.
 \emph{Biometrika}.1993;80:27-38. \doi{10.2307/2336755}.

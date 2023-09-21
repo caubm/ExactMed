@@ -30,6 +30,7 @@
 #' @param boot A logical value specifying whether the confidence intervals are obtained
 #'     by the delta method or by percentile bootstrap.
 #' @param nboot   The number of bootstrap replications used to obtain the confidence intervals if \code{boot = TRUE}.
+#'     By default \code{nboot = 1000}.
 #' @param bootseed The value of the initial seed (positive integer) for random number generation if \code{boot = TRUE}.
 #' @param confcoef A number between 0 and 1 for the confidence coefficient (ex.: 0.95) of the interval estimates.
 #' @param blevel_m The reference level of the mediator. If it is not specified \code{blevel_m} is fixed to the first level
@@ -40,7 +41,7 @@
 #'     Option used when case-control data are used.
 #'     The low level of the outcome is treated as the control level.
 #' @param mf The level of the mediator at which the conditional controlled direct effect is computed. If it is not specified,
-#'      \code{mf} is fixed at the reference level of the mediator (default).
+#'      \code{mf} is fixed at the reference level (\code{blevel_m}) of the mediator (default).
 #' @importFrom stats as.formula binomial glm qnorm quantile terms vcov na.omit pnorm sd integrate lm coef relevel
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom sandwich vcovHC estfun
@@ -59,7 +60,7 @@
 #'
 #'     The Firth parameter allows to reduce the bias of the outcome logistic regression coefficients estimators when facing a problem of
 #'     separation or quasi-separation. The bias reduction is achieved by the \code{\link[brglm2]{brglmFit}} fitting method of the \emph{brglm2} package.
-#'     More precisely, estimates are obtained using a penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
+#'     More precisely, estimates are obtained via penalized maximum likelihood with a Jeffreys prior penalty, which is equivalent to the mean
 #'     bias-reducing adjusted score equation approach in Firth (1993).
 #'
 #'     When the data come from a case-control study, the \code{yprevalence} parameter should be used and its value ideally correspond to the true outcome prevalence.
@@ -70,10 +71,11 @@
 #'     For the mediation effects expressed on the multiplicative scales (odds ratio, OR; risk ratio, RR), the \code{exactmed_cat()} function
 #'     returns delta method confidence intervals by exponentiating the lower and upper limits of the normal confidence intervals obtained
 #'     for the logarithmic transformations of the effects. The \code{exactmed_cat()} function also provides the estimated standard errors of
-#'     natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion.
-#'     The function performs Z-tests (null hypothesis: there is no effect) computing the corresponding two-tailed \emph{p}-values.
-#'     Note that for the multiplicative scales, the standard scores (test statistics) are obtained by dividing the logarithm of the effect estimator
-#'     by the estimator of the corresponding standard error. No log-transformation is applied when working on the risk difference scale.
+#'     natural and controlled direct effects estimators that are not log-transformed, where those are derived using a first order Taylor expansion
+#'     (e.g., \eqn{\hat{SE}(\hat{OR})=\hat{OR} \times \hat{SE}(\log(\hat{OR}))}). The function performs Z-tests (null hypothesis: there is no effect)
+#'     computing the corresponding two-tailed \emph{p}-values. Note that for the multiplicative scales, the standard scores (test statistics)
+#'     are obtained by dividing the logarithm of an effect estimator by the estimator of the corresponding standard error
+#'     (e.g., \eqn{\log(\hat{OR}) / \hat{SE}(\log(\hat{OR}))}). No log-transformation is applied when working on the risk difference scale.
 #'
 #' @return An object of class \code{results_cat} is returned:
 #' \item{ne.or}{Natural effects estimates on OR scale.}
@@ -100,10 +102,10 @@
 #' \emph{Observational Studies}.2018;4(1):193-216.
 #'
 #' Samoilenko M, Lefebvre G. Parametric-regression-based causal mediation analysis of binary outcomes and binary mediators:
-#' moving beyond the rareness or commonness of the outcome, \emph{American Journal of Epidemiology}.2021;190(9):1846-1858. \doi{10.1093/aje/kwab055}.
+#' moving beyond the rareness or commonness of the outcome. \emph{American Journal of Epidemiology}.2021;190(9):1846-1858. \doi{10.1093/aje/kwab055}.
 #'
 #' Samoilenko M, Lefebvre G. An exact regression-based approach for the estimation of the natural direct and indirect effects
-#' with a binary outcome and a continuous mediator. \emph{Statistics in Medicine}.2022;1-35. \doi{10.1002/sim.9621}.
+#' with a binary outcome and a continuous mediator. \emph{Statistics in Medicine}.2023; 42(3): 353–387. \doi{10.1002/sim.9621}.
 #'
 #' Firth D. Bias reduction of maximum likelihood estimates.
 #' \emph{Biometrika}.1993;80:27-38. \doi{10.2307/2336755}.
