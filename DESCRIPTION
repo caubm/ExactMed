@@ -1,7 +1,7 @@
 Package: ExactMed
 Type: Package
 Title: Exact Mediation Analysis for Binary Outcomes
-Version: 0.2.0.9000
+Version: 0.3.0
 Authors@R: c(
     person("Miguel", "Caubet", email = "miguelcaubet@gmail.com", role = c("aut", "cre")),
     person("Mariia", "Samoilenko", role = "aut"),

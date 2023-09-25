@@ -1,4 +1,4 @@
-# ExactMed 0.2.0.9000
+# ExactMed 0.3.0
 
 * Added the new function `exactmed_cat()`, which computes mediation effects when the mediator is categorical.
 
